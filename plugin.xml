@@ -14,21 +14,55 @@
             </command>
          </toolbar>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+         <command
+               commandId="br.usp.each.saeg.badua.dataflow.handler"
+               label="Dataflow Coverage"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeMenuSelection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <adapt
+                           type="org.eclipse.jdt.core.ICompilationUnit">
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="toolbarHandler"
             id="br.usp.each.saeg.badua.command1"
-            name="Sample Command">
+            name="ToolbarCommand">
+      </command>
+      <command
+            defaultHandler="DataflowHandler"
+            id="br.usp.each.saeg.badua.dataflow.handler"
+            name="DataflowViewHandler">
       </command>
    </extension>
    <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="toolbarHandler"
-            commandId="br.usp.each.saeg.badua.handler1">
-      </handler>
+         point="org.eclipse.ui.views">
+      <category
+            id="br.usp.each.saeg.badua.coverage"
+            name="Coverage">
+      </category>
+      <view
+            category="br.usp.each.saeg.badua.coverage"
+            class="DataflowMethodView"
+            id="br.usp.each.saeg.badua.DataFlowView"
+            name="DataflowView"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>
