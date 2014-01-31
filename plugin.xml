@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="br.usp.each.saeg.badua.toolbar1">
+            <command
+                  commandId="br.usp.each.saeg.badua.command1"
+                  icon="src/main/resources/br/com/ooboo/asm/defuse/viz/swing/class.png"
+                  style="push">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="toolbarHandler"
+            id="br.usp.each.saeg.badua.command1"
+            name="Sample Command">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="toolbarHandler"
+            commandId="br.usp.each.saeg.badua.handler1">
+      </handler>
+   </extension>
+
+</plugin>
