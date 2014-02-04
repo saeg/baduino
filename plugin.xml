@@ -58,8 +58,8 @@
       </category>
       <view
             category="br.usp.each.saeg.badua.coverage"
-            class="DataflowMethodView"
-            id="br.usp.each.saeg.badua.DataFlowView"
+            class="DataFlowMethodView"
+            id="br.usp.each.saeg.badua.DataflowView"
             name="DataflowView"
             restorable="true">
       </view>
