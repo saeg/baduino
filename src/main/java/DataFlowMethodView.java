@@ -54,10 +54,11 @@ public class DataFlowMethodView extends ViewPart {
 		super();
 		methods=DataflowHandler.methods;
 	}
-	@Override
+
 //	public void init(IViewSite site,IMemento memento) throws PartInitException{
 //		
 //	}
+
 	/**
 	 * This is a callback that will allow us
 	 * to create the viewer and initialize it.
@@ -70,6 +71,7 @@ public class DataFlowMethodView extends ViewPart {
 		// viewer.setAutoExpandLevel(2);
 		// provide the input to the ContentProvider
 		viewer.setInput(new TodoMockModel());
+		viewer.refresh();
 		
 
 		//	    adicionar uma nova categoria
@@ -179,5 +181,18 @@ public class DataFlowMethodView extends ViewPart {
 	public void setFocus() {
 		//label.setFocus();
 		viewer.getControl().setFocus();
+	}
+	
+	public void dispose(){
+		super.dispose();
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		if (page != null) {
+			IViewReference[] viewReferences = page.getViewReferences();
+			for (IViewReference ivr : viewReferences) {
+				if (ivr.getId().startsWith("br.usp.each.saeg.badua")) {
+					page.hideView(ivr);
+				}
+			}
+		}
 	}
 }

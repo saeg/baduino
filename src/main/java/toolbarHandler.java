@@ -22,6 +22,7 @@ import br.com.ooboo.asm.defuse.viz.Project;
 import br.com.ooboo.asm.defuse.viz.SourceViz;
 import br.com.ooboo.asm.defuse.viz.swing.DisplayUtils;
 
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -49,7 +50,7 @@ public class toolbarHandler extends AbstractHandler {
 ////			System.out.println(methods[i]);
 //		}
 
-
+		
 		final Path root = Paths.get("/home/louiz/coverage/TestInSS");
 		final List<Path> classPaths = Collections.singletonList(Paths.get("/home/louiz/coverage/TestInSS/build/java"));
 		final List<Path> sourcePaths = Collections.singletonList(Paths.get("/home/louiz/coverage/TestInSS/src/java"));

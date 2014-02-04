@@ -14,6 +14,7 @@ import org.eclipse.jdt.internal.core.CompilationUnit;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -40,7 +41,7 @@ public class DataflowHandler extends AbstractHandler {
 			IType[] classes = cu.getTypes();
 			methods = classes[0].getMethods(); // get only the fist selected class
 			for(int j = 0; j< methods.length;j++){
-				System.out.println(methods[j]);
+				//System.out.println(methods[j]);
 			}
 			
 //			for(IType i:a){
@@ -65,7 +66,9 @@ public class DataflowHandler extends AbstractHandler {
 
 			//System.out.println(a.getName());
 			
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(DataFlowMethodView.ID);
+			IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			page.showView(DataFlowMethodView.ID);
+			
 			DataFlowMethodView.methods = methods;
 
 		} catch (Exception e) {

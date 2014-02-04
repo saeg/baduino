@@ -15,6 +15,7 @@ public class TodoLabelProvider extends LabelProvider {
   
   private static final Image FOLDER = getImage("folder.gif");
   private static final Image FILE = getImage("file.gif");
+  private static final Image PUBLIC_CO = getImage("public_co.gif");
   
   
   @Override
@@ -29,7 +30,7 @@ public class TodoLabelProvider extends LabelProvider {
   @Override
   public Image getImage(Object element) {
     if (element instanceof Category) {
-      return FOLDER;
+      return PUBLIC_CO;
     }
     return FILE;
   }
