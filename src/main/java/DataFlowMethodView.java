@@ -56,7 +56,7 @@ public class DataFlowMethodView extends ViewPart {
 	}
 	@Override
 //	public void init(IViewSite site,IMemento memento) throws PartInitException{
-//
+//		
 //	}
 	/**
 	 * This is a callback that will allow us
@@ -69,8 +69,7 @@ public class DataFlowMethodView extends ViewPart {
 		// Expand the tree
 		// viewer.setAutoExpandLevel(2);
 		// provide the input to the ContentProvider
-		viewer.setInput(null);
-		
+		viewer.setInput(new TodoMockModel());
 		
 
 		//	    adicionar uma nova categoria
@@ -166,12 +165,10 @@ public class DataFlowMethodView extends ViewPart {
 			for (IViewReference ivr : viewReferences) {
 				if (ivr.getId().startsWith("br.usp.each.saeg.badua")) {
 					page.hideView(ivr);
-					
 				}
 			}
 		}
 	}
-
 	@Override
 	public void saveState(IMemento memento){
 		closeViews();
