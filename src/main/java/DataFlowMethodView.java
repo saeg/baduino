@@ -1,5 +1,9 @@
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.LinkedList;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -16,6 +20,19 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.LineNumberNode;
+import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.analysis.AnalyzerException;
+
+import br.com.ooboo.asm.defuse.DefUseAnalyzer;
+import br.com.ooboo.asm.defuse.DefUseChain;
+import br.com.ooboo.asm.defuse.Field;
+import br.com.ooboo.asm.defuse.Local;
+import br.com.ooboo.asm.defuse.Variable;
 
 
 /**
@@ -43,8 +60,9 @@ public class DataFlowMethodView extends ViewPart {
 	 */
 	public static final String ID = "br.usp.each.saeg.badua.DataflowView";
 	public static IMethod[] methods;
+	public static Path classFile;
+
 	private TreeViewer viewer;
-	private Label label;
 
 
 	/**
@@ -53,11 +71,13 @@ public class DataFlowMethodView extends ViewPart {
 	public DataFlowMethodView() {
 		super();
 		methods=DataflowHandler.methods;
+		classFile=DataflowHandler.path;
+
 	}
 
-//	public void init(IViewSite site,IMemento memento) throws PartInitException{
-//		
-//	}
+	//	public void init(IViewSite site,IMemento memento) throws PartInitException{
+	//		
+	//	}
 
 	/**
 	 * This is a callback that will allow us
@@ -65,14 +85,13 @@ public class DataFlowMethodView extends ViewPart {
 	 */
 	public void createPartControl(Composite parent) {
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		viewer.setContentProvider(new TodoContentProvider());
-		viewer.setLabelProvider(new TodoLabelProvider());
+		viewer.setContentProvider(new CoverageContentProvider());
+		viewer.setLabelProvider(new CoverageLabelProvider());
 		// Expand the tree
 		// viewer.setAutoExpandLevel(2);
 		// provide the input to the ContentProvider
-		viewer.setInput(new TodoMockModel());
-		viewer.refresh();
-		
+		viewer.setInput(new CoverageMockModel());
+
 
 		//	    adicionar uma nova categoria
 		//	    Category c = new Category();
@@ -85,11 +104,6 @@ public class DataFlowMethodView extends ViewPart {
 
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
-
-				IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-				Category a = (Category) selection.getFirstElement();
-
-
 				TreeViewer viewer = (TreeViewer) event.getViewer();
 				IStructuredSelection thisSelection = (IStructuredSelection) event
 						.getSelection();
@@ -121,8 +135,8 @@ public class DataFlowMethodView extends ViewPart {
 				if (e.keyCode == SWT.DEL) {
 					final IStructuredSelection selection = (IStructuredSelection) viewer
 							.getSelection();
-					if (selection.getFirstElement() instanceof Todo) {
-						Todo o = (Todo) selection.getFirstElement();
+					if (selection.getFirstElement() instanceof DUA) {
+						DUA o = (DUA) selection.getFirstElement();
 						// TODO Delete the selected element from the model
 					}
 
@@ -130,35 +144,8 @@ public class DataFlowMethodView extends ViewPart {
 			}
 		});
 
-
-
-		//		ISelection serv = getSite().getWorkbenchWindow().getSelectionService().getSelection("org.eclipse.jdt.ui.PackageExplorer");
-
-		//ISelection a = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService().getSelection("org.eclipse.jdt.ui.PackageExplorer");
-		//System.out.println(serv.toString());
-		//		IStructuredSelection st = (IStructuredSelection) serv; 
-		//		IFile file = (IFile) st.getFirstElement();
-		//		IPath path = file.getLocation();
-		//		System.out.println(path.toPortableString());
-		//		if(!a.isEmpty()){
-		//			Class classe = st.getClass();
-		//			Method[] methods = classe.getDeclaredMethods();
-		//			for(int i = 0; i< methods.length;i++){
-		//				System.out.println(methods[i]);
-		//			}
-		//		}
-		//		label = new Label(parent, 0);
-		//		label.setText("Hello world");
-
-		//		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		//		viewer.setContentProvider(new ViewContentProvider());
-		//		viewer.setLabelProvider(new ViewLabelProvider());
-		//		viewer.setSorter(new NameSorter());
-		//		viewer.setInput(getViewSite());
-		//
-	
 	}
-	
+
 	//close the view, when workbench is closed, and changed
 	static void closeViews() {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -182,7 +169,7 @@ public class DataFlowMethodView extends ViewPart {
 		//label.setFocus();
 		viewer.getControl().setFocus();
 	}
-	
+
 	public void dispose(){
 		super.dispose();
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -195,4 +182,5 @@ public class DataFlowMethodView extends ViewPart {
 			}
 		}
 	}
+
 }
