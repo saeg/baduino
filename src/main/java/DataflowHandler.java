@@ -59,7 +59,7 @@ public class DataflowHandler extends AbstractHandler {
 			//				System.out.println(methods[i]);
 			//			}
 
-
+			//nao usado no momento
 			IType[] classes = cu.getTypes();
 			methods = classes[0].getMethods(); // get only the fist selected class
 			for(int j = 0; j< methods.length;j++){

@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.part.*;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
@@ -70,8 +71,10 @@ public class DataFlowMethodView extends ViewPart {
 	 */
 	public DataFlowMethodView() {
 		super();
+		
 		methods=DataflowHandler.methods;
 		classFile=DataflowHandler.path;
+
 
 	}
 
@@ -91,6 +94,7 @@ public class DataFlowMethodView extends ViewPart {
 		// viewer.setAutoExpandLevel(2);
 		// provide the input to the ContentProvider
 		viewer.setInput(new CoverageMockModel());
+		
 
 
 		//	    adicionar uma nova categoria
@@ -166,7 +170,6 @@ public class DataFlowMethodView extends ViewPart {
 	 * Passing the focus request to the viewer's control.
 	 */
 	public void setFocus() {
-		//label.setFocus();
 		viewer.getControl().setFocus();
 	}
 

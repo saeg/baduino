@@ -3,7 +3,6 @@ import java.util.List;
 
 public class Methods {
   private String name;
-  private int sort;
   private List<DUA> duas = new ArrayList<DUA>();
 
   public String getName() {
