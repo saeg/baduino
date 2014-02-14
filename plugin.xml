@@ -64,5 +64,79 @@
             restorable="true">
       </view>
    </extension>
+   <extension
+         id="br.usp.each.saeg.badua.markers.definition"
+         name="Definition Marker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+      <persistent
+            value="false">
+      </persistent>
+   </extension>
+   <extension
+         id="br.usp.each.saeg.badua.markers.use"
+         name="Use Marker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+      <persistent
+            value="false">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="br.usp.each.saeg.badua.definitionAnnotation"
+            colorPreferenceKey="definition_color"
+            colorPreferenceValue="192,255,192"
+            contributesToHeader="false"
+            highlightPreferenceKey="definition_highlight"
+            highlightPreferenceValue="true"
+            icon="icons/empty.gif"
+            includeOnPreferencePage="true"
+            label="Definition Annotation"
+            overviewRulerPreferenceKey="definition_overviewRuler"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            textPreferenceKey="definition_text"
+            textPreferenceValue="true"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="definition_verticalRuler"
+            verticalRulerPreferenceValue="false">
+      </specification>
+      <specification
+            annotationType="br.usp.each.saeg.badua.useAnnotation"
+            colorPreferenceKey="use_color"
+            colorPreferenceValue="255,160,160"
+            contributesToHeader="false"
+            highlightPreferenceKey="use_highlight"
+            highlightPreferenceValue="true"
+            icon="icons/empty.gif"
+            includeOnPreferencePage="true"
+            label="Use Annotation"
+            overviewRulerPreferenceKey="use_overviewRuler"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            textPreferenceKey="use_text"
+            textPreferenceValue="true"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="use_verticalRuler"
+            verticalRulerPreferenceValue="false">
+      </specification>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.annotationTypes">
+      <type
+            markerType="br.usp.each.saeg.badua.markers.definition"
+            name="br.usp.each.saeg.badua.definitionAnnotation">
+      </type>
+      <type
+            markerType="br.usp.each.saeg.badua.markers.use"
+            name="br.usp.each.saeg.badua.useAnnotation">
+      </type>
+   </extension>
 
 </plugin>
