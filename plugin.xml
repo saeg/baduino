@@ -4,17 +4,6 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="br.usp.each.saeg.badua.toolbar1">
-            <command
-                  commandId="br.usp.each.saeg.badua.command1"
-                  icon="src/main/resources/br/com/ooboo/asm/defuse/viz/swing/class.png"
-                  style="push">
-            </command>
-         </toolbar>
-      </menuContribution>
-      <menuContribution
             allPopups="false"
             locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
          <command
@@ -39,11 +28,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.commands">
-      <command
-            defaultHandler="toolbarHandler"
-            id="br.usp.each.saeg.badua.command1"
-            name="ToolbarCommand">
-      </command>
       <command
             defaultHandler="DataflowHandler"
             id="br.usp.each.saeg.badua.dataflow.handler"
