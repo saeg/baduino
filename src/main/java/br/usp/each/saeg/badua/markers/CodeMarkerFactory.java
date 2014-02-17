@@ -25,19 +25,35 @@ public class CodeMarkerFactory {
 
 	public static final String DEFINITION_MARKER = "br.usp.each.saeg.badua.markers.definition";
 	public static final String USE_MARKER = "br.usp.each.saeg.badua.markers.use";
+	public static final String SAMELINE_MARKER = "br.usp.each.saeg.badua.markers.sameLine";
+	
 	public static IMarker defMarker;
-
+	public static IMarker useMarker;
+	
+	
 	public static void mark(final IResource resource, final int[] defOffset, final int[] useOffset) throws PartInitException {
 
 		try {
-			defMarker = resource.createMarker(DEFINITION_MARKER);
-			defMarker.setAttribute(IMarker.CHAR_START, defOffset[0]);
-			defMarker.setAttribute(IMarker.CHAR_END, defOffset[1]);
+			//if Definition and use are in the same line
+			if(defOffset[1] == useOffset[1]){
+				
+				defMarker = resource.createMarker(SAMELINE_MARKER);
+				
+				defMarker.setAttribute(IMarker.CHAR_START, defOffset[0]);
+				defMarker.setAttribute(IMarker.CHAR_END, defOffset[1]);
+				
 
+			}else{
+				defMarker = resource.createMarker(DEFINITION_MARKER);
+				useMarker = resource.createMarker(USE_MARKER);
+				
+				defMarker.setAttribute(IMarker.CHAR_START, defOffset[0]);
+				defMarker.setAttribute(IMarker.CHAR_END, defOffset[1]);
 
-			IMarker useMarker = resource.createMarker(USE_MARKER);
-			useMarker.setAttribute(IMarker.CHAR_START, useOffset[0]);
-			useMarker.setAttribute(IMarker.CHAR_END, useOffset[1]);
+				useMarker.setAttribute(IMarker.CHAR_START, useOffset[0]);
+				useMarker.setAttribute(IMarker.CHAR_END, useOffset[1]);
+			}
+			
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -47,7 +63,9 @@ public class CodeMarkerFactory {
 		
 	}
 	
-	
+	/* 
+	 * Metodo com workspaceJob, porem dando bug 
+	 
 	public static void scheduleMarkerCreation(final IResource resource, final int[] defOffset, final int[] useOffset) throws PartInitException {
 
 		WorkspaceJob job = new WorkspaceJob("addMarkers " + new Date().toString()) {
@@ -62,20 +80,6 @@ public class CodeMarkerFactory {
 				useMarker.setAttribute(IMarker.CHAR_START, useOffset[0]);
 				useMarker.setAttribute(IMarker.CHAR_END, useOffset[1]);
 
-
-
-				//                for (Entry<IResource, List<Map<String, Object>>> entry : resourceMarkerProps.entrySet()) {
-				//                    for (Map<String, Object> prop : entry.getValue()) {
-				//                        try {
-				//                            String markerName = getMarkerNameOf((String)prop.get("score"));
-				//                            IMarker marker = entry.getKey().createMarker(markerName);
-				//                            marker.setAttributes(prop);
-				//
-				//                        } catch (Exception e) {
-				//                            e.printStackTrace();
-				//                        }
-				//                    }
-				//                }
 				return Status.OK_STATUS;
 			}
 		};
@@ -83,12 +87,14 @@ public class CodeMarkerFactory {
 		job.schedule();
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),defMarker);
 	}
+	*/
 	
 	public static List<IMarker> findMarkers(IResource resource) {
         try {
             List<IMarker> result = new ArrayList<IMarker>();
             result.addAll(asList(resource.findMarkers(DEFINITION_MARKER, false, IResource.DEPTH_ZERO)));
             result.addAll(asList(resource.findMarkers(USE_MARKER, false, IResource.DEPTH_ZERO)));
+            result.addAll(asList(resource.findMarkers(SAMELINE_MARKER, false, IResource.DEPTH_ZERO)));
 
             return result;
         } catch (CoreException e) {

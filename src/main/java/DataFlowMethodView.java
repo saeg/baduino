@@ -128,7 +128,7 @@ public class DataFlowMethodView extends ViewPart {
 		// add a doubleclicklistener
 		
 
-		
+		//double click event
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			@Override

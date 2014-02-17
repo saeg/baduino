@@ -87,6 +87,17 @@
       </persistent>
    </extension>
    <extension
+         id="br.usp.each.saeg.badua.markers.sameLine"
+         name="Same Line Marker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+      <persistent
+            value="false">
+      </persistent>
+   </extension>
+   <extension
          point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
             annotationType="br.usp.each.saeg.badua.definitionAnnotation"
@@ -123,7 +134,26 @@
             textPreferenceKey="use_text"
             textPreferenceValue="true"
             textStylePreferenceValue="BOX"
-            verticalRulerPreferenceKey="use_verticalRuler"
+            verticalRulerPreferenceKey="use_overviewRuler"
+            verticalRulerPreferenceValue="false">
+      </specification>
+      <specification
+            annotationType="br.usp.each.saeg.badua.sameLineAnnotation"
+            colorPreferenceKey="sameLine_color"
+            colorPreferenceValue="200,120,50"
+            contributesToHeader="false"
+            highlightPreferenceKey="sameLine_highlight"
+            highlightPreferenceValue="true"
+            icon="icons/empty.gif"
+            includeOnPreferencePage="true"
+            label="SameLine Annotation"
+            overviewRulerPreferenceKey="sameLine_overviewRuler"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            textPreferenceKey="sameLine_text"
+            textPreferenceValue="true"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="sameLine_verticalRuler"
             verticalRulerPreferenceValue="false">
       </specification>
    </extension>
@@ -136,6 +166,10 @@
       <type
             markerType="br.usp.each.saeg.badua.markers.use"
             name="br.usp.each.saeg.badua.useAnnotation">
+      </type>
+      <type
+            markerType="br.usp.each.saeg.badua.markers.sameLine"
+            name="br.usp.each.saeg.badua.sameLineAnnotation">
       </type>
    </extension>
 
