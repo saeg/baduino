@@ -1,11 +1,11 @@
 import java.io.IOException;
+
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LocalVariableNode;
@@ -17,7 +17,6 @@ import br.com.ooboo.asm.defuse.DefUseChain;
 import br.com.ooboo.asm.defuse.Field;
 import br.com.ooboo.asm.defuse.Local;
 import br.com.ooboo.asm.defuse.Variable;
-import br.com.ooboo.asm.defuse.viz.swing.NodeType;
 
 public class CoverageMockModel  {
 	private DefUseAnalyzer analyzer = new DefUseAnalyzer();
