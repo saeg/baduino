@@ -29,7 +29,7 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="DataflowHandler"
+            defaultHandler="br.usp.each.saeg.badua.handlers.DataflowHandler"
             id="br.usp.each.saeg.badua.dataflow.handler"
             name="DataflowViewHandler">
       </command>
@@ -42,7 +42,7 @@
       </category>
       <view
             category="br.usp.each.saeg.badua.coverage"
-            class="DataFlowMethodView"
+            class="br.usp.each.saeg.badua.views.DataFlowMethodView"
             id="br.usp.each.saeg.badua.DataflowView"
             name="DataflowView"
             restorable="true">

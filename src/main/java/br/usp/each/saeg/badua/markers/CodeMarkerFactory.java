@@ -89,6 +89,7 @@ public class CodeMarkerFactory {
 	}
 	*/
 	
+	//create a list with all markers 
 	public static List<IMarker> findMarkers(IResource resource) {
         try {
             List<IMarker> result = new ArrayList<IMarker>();
@@ -110,7 +111,7 @@ public class CodeMarkerFactory {
         return Arrays.asList(arg);
     }
 
-
+	//delete all markers from the resource
 	public static void removeMarkers(final Collection<IMarker> toDelete) {
 		if (toDelete == null || toDelete.isEmpty()) {
 			return;
