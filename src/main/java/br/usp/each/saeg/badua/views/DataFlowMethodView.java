@@ -96,20 +96,22 @@ public class DataFlowMethodView extends ViewPart {
 
 		//first column
 		TreeColumn column1 = new TreeColumn(tree, SWT.LEFT);
-		column1.setText("Methods/Duas");
-		column1.setWidth(250);
+		column1.setText("Methods -> Def-Use Assicioations");
+		column1.setWidth(300);
 
 		//second column
 		TreeColumn column2 = new TreeColumn(tree, SWT.LEFT);
 		column2.setText("Coverage");
-		column2.setWidth(50);
+		column2.setWidth(150);
 
 
 		viewer.setContentProvider(new CoverageContentProvider());
 		viewer.setLabelProvider(new CoverageLabelProvider());
+		
 		// provide the input to the ContentProvider
 		viewer.setInput(new CoverageMockModel());
-
+		
+		//change selection event
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
@@ -117,20 +119,22 @@ public class DataFlowMethodView extends ViewPart {
 				IStructuredSelection thisSelection = (IStructuredSelection) event
 						.getSelection();
 				Object selectedNode = thisSelection.getFirstElement();
-				if(selectedNode instanceof DUA){
-					//show DUAS if is instace of DUA
-					String dua = (String)selectedNode.toString();
-					int defLine = Integer.parseInt(getDef(dua)); //Definition line
-					int useLine = Integer.parseInt(getUse(dua)); //Use line
-					int[] defOffset = new int[2];
-					int[] useOffset = new int[2];
 
+				if(selectedNode instanceof DUA){
 					try {
-						defOffset = parserLine(cu.getSource(),defLine,defOffset);
-						useOffset = parserLine(cu.getSource(), useLine, useOffset);
-						List<IMarker> toDelete = CodeMarkerFactory.findMarkers(cu.getUnderlyingResource());
-						CodeMarkerFactory.removeMarkers(toDelete);
-						CodeMarkerFactory.mark(cu.getUnderlyingResource(),defOffset,useOffset);
+						//get the first and last char of definition line to draw
+						int[] defOffset = parserLine(cu.getSource(),((DUA) selectedNode).getDef(),new int[2]);
+						//get the first and last char of c-use line to draw
+						int[] useOffset = parserLine(cu.getSource(), ((DUA) selectedNode).getUse(), new int[2]);
+						//get the first and last char of target line to draw
+						int[] targetOffset = null;
+						if(((DUA) selectedNode).getTarget() != 1){
+							targetOffset = parserLine(cu.getSource(),((DUA) selectedNode).getTarget(),new int[2]);
+						}
+						//remove old markers
+						CodeMarkerFactory.removeMarkers(CodeMarkerFactory.findMarkers(cu.getUnderlyingResource()));
+						//create new markers based on selected DUA
+						CodeMarkerFactory.mark(cu.getUnderlyingResource(),defOffset,useOffset,targetOffset);
 					} catch (JavaModelException e1) {
 						e1.printStackTrace();
 					} catch (PartInitException e) {
@@ -140,6 +144,8 @@ public class DataFlowMethodView extends ViewPart {
 
 			}
 		});
+
+		
 		//double click event
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -149,30 +155,10 @@ public class DataFlowMethodView extends ViewPart {
 				IStructuredSelection thisSelection = (IStructuredSelection) event
 						.getSelection();
 				Object selectedNode = thisSelection.getFirstElement();
-				//expand if is instace of Methods
+
 				if(selectedNode instanceof Methods){
 					viewer.setExpandedState(selectedNode,
 							!viewer.getExpandedState(selectedNode));
-				}else{
-					//show DUAS if is instace of DUA
-					String dua = (String)selectedNode.toString();
-					int defLine = Integer.parseInt(getDef(dua)); //Definition line
-					int useLine = Integer.parseInt(getUse(dua)); //Use line
-					int[] defOffset = new int[2];
-					int[] useOffset = new int[2];
-
-					try {
-						defOffset = parserLine(cu.getSource(),defLine,defOffset);
-						useOffset = parserLine(cu.getSource(), useLine, useOffset);
-						List<IMarker> toDelete = CodeMarkerFactory.findMarkers(cu.getUnderlyingResource());
-						CodeMarkerFactory.removeMarkers(toDelete);
-						CodeMarkerFactory.mark(cu.getUnderlyingResource(),defOffset,useOffset);
-					} catch (JavaModelException e1) {
-						e1.printStackTrace();
-					} catch (PartInitException e) {
-						e.printStackTrace();
-					}
-
 				}
 
 			}
@@ -181,26 +167,15 @@ public class DataFlowMethodView extends ViewPart {
 
 	}
 
-	private String getDef(String dua) {
-		dua = dua.substring(1, dua.length()-1);
-		dua = dua.replace(" ", "");
-		return dua.split(",")[0];
-	}
-
-	private String getUse(String dua) {
-		dua = dua.substring(1, dua.length()-1);
-		dua = dua.replace(" ", "");
-		return dua.split(",")[1];
-	}
 	//search for the line , and get the position of the first char and last char
 	protected int[] parserLine(String source, int Line, int[] Offset) {
 		String[] Source = source.split("\n");
 		int actualLine = 1;
 		int counterChar = 0;
 		for(String src:Source){
-			if(actualLine == Line){
-				Offset[0] = counterChar;
-				Offset[1] = counterChar+src.length()+1;
+			if(actualLine == Line){ // desired line
+				Offset[0] = counterChar; //first char
+				Offset[1] = counterChar+src.length()+1; //last char
 				return Offset;
 			}
 			counterChar+=src.length()+1;
@@ -216,7 +191,6 @@ public class DataFlowMethodView extends ViewPart {
 			IViewReference[] viewReferences = page.getViewReferences();
 			for (IViewReference ivr : viewReferences) {
 				if (ivr.getId().startsWith("br.usp.each.saeg.badua")) {
-					System.out.println("Fechando a view");
 					page.hideView(ivr);
 				}
 			}
@@ -228,10 +202,10 @@ public class DataFlowMethodView extends ViewPart {
 		closeViews();
 	}
 
-	@Override
-	public void dispose(){
-		//closeViews();
-	}
+//	@Override
+//	public void dispose(){
+//		//closeViews();
+//	}
 
 	/**
 	 * Passing the focus request to the viewer's control.

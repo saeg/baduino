@@ -71,6 +71,17 @@
       </persistent>
    </extension>
    <extension
+         id="br.usp.each.saeg.badua.markers.target"
+         name="Target Marker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+      <persistent
+            value="false">
+      </persistent>
+   </extension>
+   <extension
          id="br.usp.each.saeg.badua.markers.sameLine"
          name="Same Line Marker"
          point="org.eclipse.core.resources.markers">
@@ -122,6 +133,25 @@
             verticalRulerPreferenceValue="false">
       </specification>
       <specification
+            annotationType="br.usp.each.saeg.badua.targetAnnotation"
+            colorPreferenceKey="target_color"
+            colorPreferenceValue="255,160,160"
+            contributesToHeader="false"
+            highlightPreferenceKey="target_highlight"
+            highlightPreferenceValue="true"
+            icon="icons/empty.gif"
+            includeOnPreferencePage="true"
+            label="Target Annotation"
+            overviewRulerPreferenceKey="target_overviewRuler"
+            overviewRulerPreferenceValue="true"
+            presentationLayer="0"
+            textPreferenceKey="target_text"
+            textPreferenceValue="true"
+            textStylePreferenceValue="BOX"
+            verticalRulerPreferenceKey="target_overviewRuler"
+            verticalRulerPreferenceValue="false">
+      </specification>
+      <specification
             annotationType="br.usp.each.saeg.badua.sameLineAnnotation"
             colorPreferenceKey="sameLine_color"
             colorPreferenceValue="200,120,50"
@@ -150,6 +180,10 @@
       <type
             markerType="br.usp.each.saeg.badua.markers.use"
             name="br.usp.each.saeg.badua.useAnnotation">
+      </type>
+       <type
+            markerType="br.usp.each.saeg.badua.markers.target"
+            name="br.usp.each.saeg.badua.targetAnnotation">
       </type>
       <type
             markerType="br.usp.each.saeg.badua.markers.sameLine"

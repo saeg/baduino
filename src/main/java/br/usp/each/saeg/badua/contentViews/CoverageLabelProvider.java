@@ -22,14 +22,14 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 	private static final Image FILE = getImage("file.gif");
 	private static final Image PUBLIC_CO = getImage("public_co.gif");
 
-	  // Helper Method to load the images
-	  private static Image getImage(String file) {
-	    Bundle bundle = FrameworkUtil.getBundle(CoverageLabelProvider.class);
-	    URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
-	    ImageDescriptor image = ImageDescriptor.createFromURL(url);
-	    return image.createImage();
-	
-	  }
+	// Helper Method to load the images
+	private static Image getImage(String file) {
+		Bundle bundle = FrameworkUtil.getBundle(CoverageLabelProvider.class);
+		URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+		ImageDescriptor image = ImageDescriptor.createFromURL(url);
+		return image.createImage();
+
+	}
 
 	@Override
 	public void addListener(ILabelProviderListener listener) {
@@ -58,7 +58,12 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 		switch(columnIndex){
-		case 0: 
+		case 0://first column
+			if (element instanceof Methods) {
+				return PUBLIC_CO;
+			}
+			return FILE;
+		case 1://first column
 			if (element instanceof Methods) {
 				return PUBLIC_CO;
 			}
@@ -70,12 +75,20 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 		switch(columnIndex){
-		case 0: 
+		case 0://first column
 			if (element instanceof Methods) {
 				Methods method = (Methods) element;
 				return method.getName();
 			}
 			return ((DUA) element).toString();
+		case 1://second column
+			if (element instanceof Methods) {
+				Methods method = (Methods) element;
+				return method.getCoverage();
+			}
+			DUA dua = (DUA)element;
+			return dua.getCovered();
+
 		}
 		return null;
 	} 

@@ -4,6 +4,9 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
@@ -26,15 +29,19 @@ public class CoverageMockModel  {
 	private Variable[] vars;
 	private List<Methods> methods = new ArrayList<Methods>();
 	private final DepthFirstDefUseChainSearch dfducs = new DepthFirstDefUseChainSearch();
+	private IMethod[] methodList;
 
 	public List<Methods> getMethods(){
 		//get class bytecode
 		ClassNode classNode = new ClassNode(Opcodes.ASM4);
 		ClassReader classReader = null;
-		
+
 		try {
+			methodList = DataflowHandler.cu.getTypes()[0].getMethods();
 			classReader = new ClassReader(Files.readAllBytes(DataflowHandler.path));
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JavaModelException e) {
 			e.printStackTrace();
 		}
 		
@@ -49,19 +56,39 @@ public class CoverageMockModel  {
 	}
 
 //usado para o type.getMethods
-//	private String formatName(String method){
-//		int finish = method.indexOf(")");
-//		method =  (String) method.subSequence(0, finish+1);
-//		return method;
-//
-//	}
+	private String formatName(String method){
+		int finish = method.indexOf(")");
+		method =  (String) method.subSequence(0, finish+1);
+		return method;
+
+	}
 	
 	
 	private void methodDuas(ClassNode classNode, int posMethod) {
-		
+
 		MethodNode methodNode = classNode.methods.get(posMethod);
 		Methods newMethod = new Methods();
+		
+		
+//		if(methodNode.name.equals("<init>")){
+//			newMethod.setName(DataflowHandler.cu.getResource().getName());
+//			newMethod.setSignature(methodNode.desc);
+//		}else{
+//			for (int i = 0; i < methodList.length; i++) {
+//				try {
+//					if(methodNode.name.equals(methodList[i].getElementName()) && methodNode.desc.equals(methodList[i].getSignature())){
+//						newMethod.setName(formatName(methodList[i].toString()));
+//						newMethod.setSignature(methodNode.desc);
+//						break;
+//					}
+//				} catch (JavaModelException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+		
 		newMethod.setName(methodNode.name);
+		
 		methods.add(newMethod);
 		
 		int[] lines = new int[methodNode.instructions.size()];
@@ -101,6 +128,10 @@ public class CoverageMockModel  {
 			final Variable var = vars[dua.var];
 			final int def = lines[dua.def];
 			final int use = lines[dua.use];
+			int target = dua.target;
+			if(target != -1){
+				target = lines[dua.target];
+			}
 			String name;
 			if (var instanceof Field) {
 				name = ((Field) var).name;
@@ -111,7 +142,14 @@ public class CoverageMockModel  {
 					name = var.toString();
 				}
 			}
-			DUA newDua = new DUA(def, use, name);
+			
+			DUA newDua = new DUA(def, use, target, name);
+			
+			//DELETAR - GERAR DADOS ALEATORIOS PARA COBERTURA
+			if(Math.random() > 0.5){
+				newDua.setCovered(true);
+			}else newDua.setCovered(false);
+
 			newMethod.getDUAS().add(newDua);
 
 		}

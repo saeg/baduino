@@ -25,13 +25,15 @@ public class CodeMarkerFactory {
 
 	public static final String DEFINITION_MARKER = "br.usp.each.saeg.badua.markers.definition";
 	public static final String USE_MARKER = "br.usp.each.saeg.badua.markers.use";
+	public static final String TARGET_MARKER = "br.usp.each.saeg.badua.markers.target";
 	public static final String SAMELINE_MARKER = "br.usp.each.saeg.badua.markers.sameLine";
 	
 	public static IMarker defMarker;
 	public static IMarker useMarker;
+	public static IMarker targetMarker;
 	
 	
-	public static void mark(final IResource resource, final int[] defOffset, final int[] useOffset) throws PartInitException {
+	public static void mark(final IResource resource, final int[] defOffset, final int[] useOffset, int[] targetOffset) throws PartInitException {
 
 		try {
 			//if Definition and use are in the same line
@@ -42,7 +44,6 @@ public class CodeMarkerFactory {
 				defMarker.setAttribute(IMarker.CHAR_START, defOffset[0]);
 				defMarker.setAttribute(IMarker.CHAR_END, defOffset[1]);
 				
-
 			}else{
 				defMarker = resource.createMarker(DEFINITION_MARKER);
 				useMarker = resource.createMarker(USE_MARKER);
@@ -53,6 +54,13 @@ public class CodeMarkerFactory {
 				useMarker.setAttribute(IMarker.CHAR_START, useOffset[0]);
 				useMarker.setAttribute(IMarker.CHAR_END, useOffset[1]);
 			}
+			
+			if(targetOffset != null){
+				targetMarker = resource.createMarker(TARGET_MARKER);
+				targetMarker.setAttribute(IMarker.CHAR_START, targetOffset[0]);
+				targetMarker.setAttribute(IMarker.CHAR_END, targetOffset[1]);
+			}
+			
 			
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
@@ -96,17 +104,18 @@ public class CodeMarkerFactory {
             result.addAll(asList(resource.findMarkers(DEFINITION_MARKER, false, IResource.DEPTH_ZERO)));
             result.addAll(asList(resource.findMarkers(USE_MARKER, false, IResource.DEPTH_ZERO)));
             result.addAll(asList(resource.findMarkers(SAMELINE_MARKER, false, IResource.DEPTH_ZERO)));
+            result.addAll(asList(resource.findMarkers(TARGET_MARKER, false, IResource.DEPTH_ZERO)));
 
             return result;
         } catch (CoreException e) {
             e.printStackTrace();
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
     }
 	
 	private static List<IMarker> asList(IMarker[] arg) {
         if (arg == null || arg.length == 0) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         return Arrays.asList(arg);
     }
