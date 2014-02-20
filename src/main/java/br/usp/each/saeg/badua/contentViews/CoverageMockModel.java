@@ -14,6 +14,7 @@ import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 import br.com.ooboo.asm.defuse.DefUseAnalyzer;
 import br.com.ooboo.asm.defuse.DefUseChain;
+import br.com.ooboo.asm.defuse.DepthFirstDefUseChainSearch;
 import br.com.ooboo.asm.defuse.Field;
 import br.com.ooboo.asm.defuse.Local;
 import br.com.ooboo.asm.defuse.Variable;
@@ -24,6 +25,7 @@ public class CoverageMockModel  {
 	private DefUseChain[] duas;
 	private Variable[] vars;
 	private List<Methods> methods = new ArrayList<Methods>();
+	private final DepthFirstDefUseChainSearch dfducs = new DepthFirstDefUseChainSearch();
 
 	public List<Methods> getMethods(){
 		//get class bytecode
@@ -76,11 +78,20 @@ public class CoverageMockModel  {
 			else
 				line = lines[i];
 		}
-
+		
+		
 		try {
 			analyzer.analyze(classNode.name,methodNode); // right ?
-			duas = analyzer.getDefUseChains();
+			
+			// find all definition-use chains
+			duas = dfducs.search(analyzer.getDefUseFrames(), analyzer.getVariables(),
+					analyzer.getSuccessors(), analyzer.getPredecessors());
+			
+			// only global definition-use chains
+			duas = DefUseChain.globals(duas, analyzer.getLeaders(), analyzer.getBasicBlocks());
+			
 			vars = analyzer.getVariables();
+			
 		} catch (final AnalyzerException ignore) {
 			duas = new DefUseChain[0];
 			vars = new Variable[0];
