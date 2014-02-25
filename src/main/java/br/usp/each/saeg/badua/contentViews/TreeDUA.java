@@ -1,18 +1,23 @@
 package br.usp.each.saeg.badua.contentViews;
-public class DUA {
+
+import org.eclipse.jdt.core.ICompilationUnit;
+
+public class TreeDUA {
 
 	private final int def;
 	private final int use;
 	private final int target;
 	private final String var;
-	private boolean covered = false; 
+	private boolean covered = false;
+	private final ICompilationUnit cu;
 
 
-	public DUA(final int def, final int use, final int target, final String var) {
+	public TreeDUA(final int def, final int use, final int target, final String var, ICompilationUnit cu) {
 		this.def = def;
 		this.use = use;
 		this.target = target;
 		this.var = var;
+		this.cu = cu;
 	}
 	
 	public int getDef() {
@@ -49,4 +54,7 @@ public class DUA {
 		
 	}
 
+	public ICompilationUnit getCu() {
+		return cu;
+	}
 }

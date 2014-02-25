@@ -1,27 +1,14 @@
 package br.usp.each.saeg.badua.views;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.nio.file.Path;
-import java.util.List;
-
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
@@ -30,14 +17,17 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
 import br.usp.each.saeg.badua.contentViews.CoverageContentProvider;
 import br.usp.each.saeg.badua.contentViews.CoverageLabelProvider;
 import br.usp.each.saeg.badua.contentViews.CoverageMockModel;
-import br.usp.each.saeg.badua.contentViews.DUA;
-import br.usp.each.saeg.badua.contentViews.Methods;
+import br.usp.each.saeg.badua.contentViews.TreeClass;
+import br.usp.each.saeg.badua.contentViews.TreeDUA;
+import br.usp.each.saeg.badua.contentViews.TreeFolder;
+import br.usp.each.saeg.badua.contentViews.TreeMethod;
+import br.usp.each.saeg.badua.contentViews.TreePackage;
+import br.usp.each.saeg.badua.contentViews.TreeProject;
 import br.usp.each.saeg.badua.handlers.DataflowHandler;
 import br.usp.each.saeg.badua.markers.CodeMarkerFactory;
 
@@ -67,8 +57,6 @@ public class DataFlowMethodView extends ViewPart {
 	 */
 	public static final String ID = "br.usp.each.saeg.badua.DataflowView";
 
-	private static ICompilationUnit cu;
-
 	private TreeViewer viewer;
 
 
@@ -77,7 +65,6 @@ public class DataFlowMethodView extends ViewPart {
 	 */
 	public DataFlowMethodView() {
 		super();
-		cu=DataflowHandler.getCu();
 	}
 
 	/**
@@ -116,16 +103,17 @@ public class DataFlowMethodView extends ViewPart {
 						.getSelection();
 				Object selectedNode = thisSelection.getFirstElement();
 
-				if(selectedNode instanceof DUA){
+				if(selectedNode instanceof TreeDUA){
+					ICompilationUnit cu = ((TreeDUA) selectedNode).getCu();
 					try {
 						//get the first and last char of definition line to draw
-						int[] defOffset = parserLine(cu.getSource(),((DUA) selectedNode).getDef(),new int[2]);
+						int[] defOffset = parserLine(cu.getSource(),((TreeDUA) selectedNode).getDef(),new int[2]);
 						//get the first and last char of c-use line to draw
-						int[] useOffset = parserLine(cu.getSource(), ((DUA) selectedNode).getUse(), new int[2]);
+						int[] useOffset = parserLine(cu.getSource(), ((TreeDUA) selectedNode).getUse(), new int[2]);
 						//get the first and last char of target line to draw
 						int[] targetOffset = null;
-						if(((DUA) selectedNode).getTarget() != 1){
-							targetOffset = parserLine(cu.getSource(),((DUA) selectedNode).getTarget(),new int[2]);
+						if(((TreeDUA) selectedNode).getTarget() != 1){
+							targetOffset = parserLine(cu.getSource(),((TreeDUA) selectedNode).getTarget(),new int[2]);
 						}
 						//remove old markers
 						CodeMarkerFactory.removeMarkers(CodeMarkerFactory.findMarkers(cu.getUnderlyingResource()));
@@ -153,7 +141,12 @@ public class DataFlowMethodView extends ViewPart {
 						.getSelection();
 				Object selectedNode = thisSelection.getFirstElement();
 
-				if(selectedNode instanceof Methods){
+				if(selectedNode instanceof TreeMethod 
+						|| selectedNode instanceof TreeClass 
+						|| selectedNode instanceof TreePackage 
+						|| selectedNode instanceof TreeFolder 
+						|| selectedNode instanceof TreeProject){
+					
 					viewer.setExpandedState(selectedNode,
 							!viewer.getExpandedState(selectedNode));
 				}

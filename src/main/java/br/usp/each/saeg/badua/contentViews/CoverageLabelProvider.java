@@ -20,11 +20,14 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 
 	private static final Image FOLDER = getImage("folder.gif");
 	private static final Image FILE = getImage("file.gif");
-	private static final Image PUBLIC_CO = getImage("public_co.gif");
+
 	private static final Image COVERED = getImage("check.png");
 	private static final Image UNCOVERED = getImage("uncheck.png");
 	private static final Image PERCENT = getImage("percent.png");
-	
+
+	private static final Image PACKAGE = getImage("package.gif");
+	private static final Image CLASSES = getImage("classes.gif");
+	private static final Image PUBLIC_CO = getImage("public_co.gif");
 
 	// Helper Method to load the images
 	private static Image getImage(String file) {
@@ -62,16 +65,45 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 		switch(columnIndex){
+		
 		case 0://first column
-			if (element instanceof Methods) {
+			if(element instanceof TreeProject){
+				return CLASSES;//mudar icon
+				
+			}else if(element instanceof TreeFolder){
+				return CLASSES;//mudar icon
+				
+			}else if(element instanceof TreePackage){
+				return PACKAGE;
+				
+			}else if(element instanceof TreeClass){
+				return CLASSES;
+				
+			}else  if (element instanceof TreeMethod) {
 				return PUBLIC_CO;
 			}
+			
 			return FILE;
-		case 1://sec columnond
-			if (element instanceof Methods) {
+			
+		case 1://second column
+			
+			if(element instanceof TreeProject){
 				return PERCENT;
+				
+			}else if(element instanceof TreeFolder){
+				return PERCENT;
+				
+			}else if(element instanceof TreePackage){
+				return PERCENT;
+				
+			}else if(element instanceof TreeClass){
+				return PERCENT;
+				
+			}else if (element instanceof TreeMethod) {
+				return PERCENT;
+				
 			}else{
-				DUA dua = (DUA) element;
+				TreeDUA dua = (TreeDUA) element;
 				if(dua.getCovered().equals("true")){
 					return COVERED;
 				}else {
@@ -85,20 +117,58 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 		switch(columnIndex){
+		
 		case 0://first column
-			if (element instanceof Methods) {
-				Methods method = (Methods) element;
-				return method.getName();
+			
+			if(element instanceof TreeProject){
+				TreeProject Project = (TreeProject) element;
+				return Project.getName();
+				
+			}else if(element instanceof TreeFolder){
+				TreeFolder Folder = (TreeFolder) element;
+				return Folder.getName();
+				
+			}else if(element instanceof TreePackage){
+				TreePackage Package = (TreePackage) element;
+				return Package.getName();
+				
+			}else if(element instanceof TreeClass){
+				TreeClass Class = (TreeClass) element;
+				return Class.getName();
+				
+			}else if (element instanceof TreeMethod) {
+				TreeMethod Method = (TreeMethod) element;
+				return Method.getName();
+				
+			}else {
+				return ((TreeDUA) element).toString();
 			}
-			return ((DUA) element).toString();
+			
 		case 1://second column
-			if (element instanceof Methods) {
-				Methods method = (Methods) element;
+			if(element instanceof TreeProject){
+				TreeProject Project = (TreeProject) element;
+				return Project.getCoverage();
+				
+			}else if(element instanceof TreeFolder){
+				TreeFolder Folder = (TreeFolder) element;
+				return Folder.getCoverage();
+				
+			}else if(element instanceof TreePackage){
+				TreePackage Package = (TreePackage) element;
+				return Package.getCoverage();
+				
+			}else if(element instanceof TreeClass){
+				TreeClass Class = (TreeClass) element;
+				return Class.getCoverage();
+				
+			}else if (element instanceof TreeMethod) {
+				TreeMethod method = (TreeMethod) element;
 				return method.getCoverage();
+				
+			}else{
+				TreeDUA dua = (TreeDUA)element;
+				return dua.getCovered();
 			}
-			DUA dua = (DUA)element;
-			return dua.getCovered();
-
 		}
 		return null;
 	} 

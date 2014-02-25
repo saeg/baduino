@@ -1,14 +1,18 @@
 package br.usp.each.saeg.badua.contentViews;
 import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jdt.core.IClassFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IRegion;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.objectweb.asm.ClassReader;
@@ -31,50 +35,87 @@ public class CoverageMockModel  {
 	private DefUseAnalyzer analyzer = new DefUseAnalyzer();
 	private DefUseChain[] duas;
 	private Variable[] vars;
-	private List<Methods> methods = new ArrayList<Methods>();
 	private final DepthFirstDefUseChainSearch dfducs = new DepthFirstDefUseChainSearch();
 	private IMethod[] methodList;
 
-	public List<Methods> getMethods(){
+	List<TreeClass> Class = new ArrayList<TreeClass>();
+	List<TreePackage> Package = new ArrayList<TreePackage>();
+
+
+
+
+	public List<?> getTree() {
+		if(DataflowHandler.getType() instanceof IPackageFragment){
+			return getPackageNode((IPackageFragment) DataflowHandler.getType());
+		}
+		if(DataflowHandler.getType() instanceof ICompilationUnit){
+			return getClassNode((ICompilationUnit) DataflowHandler.getType(),null);
+		}
+		return null;
+	}
+
+	public List<TreePackage> getPackageNode(IPackageFragment pf) {
+
+
+		TreePackage newPackage = new TreePackage();
+		newPackage.setName(pf.getElementName());
+
+		try {
+			IJavaElement[] children = pf.getChildren();
+			List<TreeClass> Classes;
+			for (int i = 0; i < children.length; i++) {
+				ICompilationUnit child = (ICompilationUnit) children[i]; //tratar o caso se nao for ICompilationUnit
+				Classes = getClassNode(child, newPackage);
+				newPackage.getClasses().addAll(Classes);
+				Classes.clear();
+			}
+
+		} catch (JavaModelException e) {
+			e.printStackTrace();
+		}
+		Package.add(newPackage);
+		return Package;
+	}
+
+	public List<TreeClass> getClassNode(ICompilationUnit cu,TreePackage newPackage){
+
+
 		//get class bytecode
 		ClassNode classNode = new ClassNode(Opcodes.ASM4);
 		ClassReader classReader = null;
 
 		try {
-			methodList = DataflowHandler.getCu().getAllTypes()[0].getMethods();
-			classReader = new ClassReader(Files.readAllBytes(DataflowHandler.getPath()));
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JavaModelException e) {
+			methodList = cu.getAllTypes()[0].getMethods();
+			classReader = new ClassReader(Files.readAllBytes(getClassPaths(cu)));
+		} catch (JavaModelException | IOException e) {
 			e.printStackTrace();
 		}
-		
+
+
+
 		classReader.accept(classNode, ClassReader.SKIP_FRAMES);
-		
+
+		TreeClass newClass = new TreeClass();
+		newClass.setName(classNode.name);
+
+
+		Class.add(newClass);
+
 		// for each method in the class
 		for (int posMethod = 0; posMethod < classNode.methods.size(); posMethod++) {
-			methodDuas(classNode, posMethod);
+			methodDuas(classNode, posMethod,newClass,cu);
 		}
 
-		return methods;
+		return Class;
 	}
 
-//usado para o type.getMethods
-	private String formatName(String method){
-		int finish = method.indexOf(")");
-		method =  (String) method.subSequence(0, finish+1);
-		return method;
-
-	}
-	
-	
-	private void methodDuas(ClassNode classNode, int posMethod) {
+	private void methodDuas(ClassNode classNode, int posMethod, TreeClass newClass,ICompilationUnit cu) {
 
 		MethodNode methodNode = classNode.methods.get(posMethod);
-		Methods newMethod = new Methods();
-		
-	
+
+		TreeMethod newMethod = new TreeMethod(); // cria um novo method
+
+
 		//System.out.println(methodList.length);
 		if(!methodNode.name.equals("<init>") && !methodNode.name.equals("<clinit>")){
 			for (int i = 0; i < methodList.length; i++) {
@@ -96,9 +137,9 @@ public class CoverageMockModel  {
 		else{
 			newMethod.setName(methodNode.name);		
 		}
-		
-		methods.add(newMethod);
-		
+
+		newClass.getMethods().add(newMethod);//adiciona aos metodos existentes
+
 		int[] lines = new int[methodNode.instructions.size()];
 		for (int i = 0; i < lines.length; i++) {
 			if (methodNode.instructions.get(i) instanceof LineNumberNode) {
@@ -113,20 +154,20 @@ public class CoverageMockModel  {
 			else
 				line = lines[i];
 		}
-		
-		
+
+
 		try {
 			analyzer.analyze(classNode.name,methodNode); // right ?
-			
+
 			// find all definition-use chains
 			duas = dfducs.search(analyzer.getDefUseFrames(), analyzer.getVariables(),
 					analyzer.getSuccessors(), analyzer.getPredecessors());
-			
+
 			// only global definition-use chains
 			duas = DefUseChain.globals(duas, analyzer.getLeaders(), analyzer.getBasicBlocks());
-			
+
 			vars = analyzer.getVariables();
-			
+
 		} catch (final AnalyzerException ignore) {
 			duas = new DefUseChain[0];
 			vars = new Variable[0];
@@ -150,20 +191,28 @@ public class CoverageMockModel  {
 					name = var.toString();
 				}
 			}
-			
-			DUA newDua = new DUA(def, use, target, name);
-			
+
+			TreeDUA newDua = new TreeDUA(def, use, target, name, cu); //cria uma dua
+
 			//DELETAR - GERAR DADOS ALEATORIOS PARA COBERTURA
 			if(Math.random() > 0.5){
 				newDua.setCovered(true);
 			}else newDua.setCovered(false);
 
-			newMethod.getDUAS().add(newDua);
+			newMethod.getDUAS().add(newDua); //adiciona nas duas existentes
 
 		}
-		
+
 	}
-	
+
+	//usado para o type.getMethods
+	private String formatName(String method){
+		int finish = method.indexOf(")");
+		method =  (String) method.subSequence(0, finish+1);
+		return method;
+
+	}
+
 	private String varName(final int insn, final int index, MethodNode methodNode) {
 		for (final LocalVariableNode local : methodNode.localVariables) {
 			if (local.index == index) {
@@ -175,5 +224,65 @@ public class CoverageMockModel  {
 			}
 		}
 		throw new RuntimeException("Variable not found");
+	}
+
+
+	private Path getClassPaths(ICompilationUnit cu) throws JavaModelException, IOException {
+
+		IRegion region = JavaCore.newRegion();
+		//		for(ICompilationUnit compilationUnit : cu){
+		//			region.add(compilationUnit.getPrimaryElement());
+		//		}
+		region.add(cu.getPrimaryElement());
+		IResource[] r = JavaCore.getGeneratedResources(region, false);
+
+
+		//		IFile file = (IFile) r[0];
+		//		IClassFile b = (IClassFile) JavaCore.createClassFileFrom(file);
+		//		System.out.println(b.getSource()); 		//null
+		//		IMethod[] met = b.getType().getMethods();
+		//		System.out.println(met.length);			//Java Model Status [bin/source [in Max] is not on its project's build path]
+
+
+
+
+		IPath ipath = r[0].getLocation();
+		//		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(ipath);
+		//		IClassFile f = JavaCore.createClassFileFrom(file);
+
+
+		//		
+		//		ASTParser p = ASTParser.newParser(AST.JLS4);
+		//		p.setSource(cu);
+		//		p.setKind(ASTParser.K_COMPILATION_UNIT);
+		//
+		//		CompilationUnit cu = (CompilationUnit)p.createAST(null);
+		//		cu.accept(new ASTVisitor() {
+		//			public boolean visit(MethodDeclaration node){
+		//				SimpleName n = node.getName();
+		//				System.out.println(n.getFullyQualifiedName());
+		//				return false;
+		//
+		//			}
+		//			public boolean visit(Initializer node){
+		//				int modifiers = node.getModifiers();
+		//				if(Modifier.isStatic(modifiers)){
+		//					System.out.println("tem modifier static");
+		//				}else{
+		//					System.out.println("tem modifier");
+		//				}
+		//
+		//				return false;
+		//
+		//			}
+		//		});
+
+
+
+
+		return Paths.get(ipath.toFile().toURI());
+
+		//byte[] buffer2 = Files.readAllBytes(getPath());
+
 	}
 } 
