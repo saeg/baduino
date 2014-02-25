@@ -26,7 +26,6 @@ public class Methods {
 				if(d.getCovered().equals(String.valueOf(true))) {
 					covered++;
 				}
-				System.out.println("tem dua "+d.getCovered());
 			}
 			return String.format("%.2f", (double)covered/(double)duas.size()*100)+"%";
 		}else return "No Def-Use Associations";

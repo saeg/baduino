@@ -27,10 +27,12 @@ public class CodeMarkerFactory {
 	public static final String USE_MARKER = "br.usp.each.saeg.badua.markers.use";
 	public static final String TARGET_MARKER = "br.usp.each.saeg.badua.markers.target";
 	public static final String SAMELINE_MARKER = "br.usp.each.saeg.badua.markers.sameLine";
+	public static final String POINTER_MARKER = "br.usp.each.saeg.badua.markers.pointer";
 	
 	public static IMarker defMarker;
 	public static IMarker useMarker;
 	public static IMarker targetMarker;
+	public static IMarker pointerMarker;
 	
 	
 	public static void mark(final IResource resource, final int[] defOffset, final int[] useOffset, int[] targetOffset) throws PartInitException {
@@ -61,12 +63,18 @@ public class CodeMarkerFactory {
 				targetMarker.setAttribute(IMarker.CHAR_END, targetOffset[1]);
 			}
 			
+			pointerMarker = resource.createMarker(POINTER_MARKER);
+			pointerMarker.setAttribute(IMarker.CHAR_START,defOffset[0]);
+			pointerMarker.setAttribute(IMarker.CHAR_END,defOffset[0]);
+			
 			
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),defMarker);
+		
+		
+		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),pointerMarker);
 		
 		
 	}
@@ -105,6 +113,7 @@ public class CodeMarkerFactory {
             result.addAll(asList(resource.findMarkers(USE_MARKER, false, IResource.DEPTH_ZERO)));
             result.addAll(asList(resource.findMarkers(SAMELINE_MARKER, false, IResource.DEPTH_ZERO)));
             result.addAll(asList(resource.findMarkers(TARGET_MARKER, false, IResource.DEPTH_ZERO)));
+            result.addAll(asList(resource.findMarkers(POINTER_MARKER, false, IResource.DEPTH_ZERO)));
 
             return result;
         } catch (CoreException e) {

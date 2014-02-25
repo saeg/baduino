@@ -21,6 +21,10 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 	private static final Image FOLDER = getImage("folder.gif");
 	private static final Image FILE = getImage("file.gif");
 	private static final Image PUBLIC_CO = getImage("public_co.gif");
+	private static final Image COVERED = getImage("check.png");
+	private static final Image UNCOVERED = getImage("uncheck.png");
+	private static final Image PERCENT = getImage("percent.png");
+	
 
 	// Helper Method to load the images
 	private static Image getImage(String file) {
@@ -63,11 +67,17 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 				return PUBLIC_CO;
 			}
 			return FILE;
-		case 1://first column
+		case 1://sec columnond
 			if (element instanceof Methods) {
-				return PUBLIC_CO;
+				return PERCENT;
+			}else{
+				DUA dua = (DUA) element;
+				if(dua.getCovered().equals("true")){
+					return COVERED;
+				}else {
+					return UNCOVERED;
+				}
 			}
-			return FILE;
 		}
 		return null;
 	}

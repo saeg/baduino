@@ -1,11 +1,15 @@
 package br.usp.each.saeg.badua.contentViews;
 import java.io.IOException;
+import java.io.ObjectInputStream.GetField;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jdt.core.IClassFile;
 import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -37,8 +41,9 @@ public class CoverageMockModel  {
 		ClassReader classReader = null;
 
 		try {
-			methodList = DataflowHandler.cu.getTypes()[0].getMethods();
-			classReader = new ClassReader(Files.readAllBytes(DataflowHandler.path));
+			methodList = DataflowHandler.getCu().getAllTypes()[0].getMethods();
+			classReader = new ClassReader(Files.readAllBytes(DataflowHandler.getPath()));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (JavaModelException e) {
@@ -69,25 +74,28 @@ public class CoverageMockModel  {
 		MethodNode methodNode = classNode.methods.get(posMethod);
 		Methods newMethod = new Methods();
 		
-		
-//		if(methodNode.name.equals("<init>")){
-//			newMethod.setName(DataflowHandler.cu.getResource().getName());
-//			newMethod.setSignature(methodNode.desc);
-//		}else{
-//			for (int i = 0; i < methodList.length; i++) {
-//				try {
-//					if(methodNode.name.equals(methodList[i].getElementName()) && methodNode.desc.equals(methodList[i].getSignature())){
-//						newMethod.setName(formatName(methodList[i].toString()));
-//						newMethod.setSignature(methodNode.desc);
-//						break;
-//					}
-//				} catch (JavaModelException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-		
-		newMethod.setName(methodNode.name);
+	
+		//System.out.println(methodList.length);
+		if(!methodNode.name.equals("<init>") && !methodNode.name.equals("<clinit>")){
+			for (int i = 0; i < methodList.length; i++) {
+				try {
+					if(methodNode.name.equals(methodList[i].getElementName()) && methodNode.desc.equals(methodList[i].getSignature())){
+						newMethod.setName(formatName(methodList[i].toString()));
+						newMethod.setSignature(methodNode.desc);
+						break;
+					}
+					else{
+						newMethod.setName(methodNode.name);
+						//System.out.println(methodNode.desc + " " + methodList[i].getSignature());
+					}
+				} catch (JavaModelException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		else{
+			newMethod.setName(methodNode.name);		
+		}
 		
 		methods.add(newMethod);
 		

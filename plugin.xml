@@ -93,6 +93,17 @@
       </persistent>
    </extension>
    <extension
+         id="br.usp.each.saeg.badua.markers.pointer"
+         name="Pointer Marker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.textmarker">
+      </super>
+      <persistent
+            value="false">
+      </persistent>
+   </extension>
+   <extension
          point="org.eclipse.ui.editors.markerAnnotationSpecification">
       <specification
             annotationType="br.usp.each.saeg.badua.definitionAnnotation"

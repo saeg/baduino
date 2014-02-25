@@ -67,8 +67,6 @@ public class DataFlowMethodView extends ViewPart {
 	 */
 	public static final String ID = "br.usp.each.saeg.badua.DataflowView";
 
-	public static IMethod[] methods;
-	public static Path classFile;
 	private static ICompilationUnit cu;
 
 	private TreeViewer viewer;
@@ -79,9 +77,7 @@ public class DataFlowMethodView extends ViewPart {
 	 */
 	public DataFlowMethodView() {
 		super();
-		methods=DataflowHandler.methods;
-		classFile=DataflowHandler.path;
-		cu=DataflowHandler.cu;
+		cu=DataflowHandler.getCu();
 	}
 
 	/**
@@ -135,6 +131,7 @@ public class DataFlowMethodView extends ViewPart {
 						CodeMarkerFactory.removeMarkers(CodeMarkerFactory.findMarkers(cu.getUnderlyingResource()));
 						//create new markers based on selected DUA
 						CodeMarkerFactory.mark(cu.getUnderlyingResource(),defOffset,useOffset,targetOffset);
+						setFocus();
 					} catch (JavaModelException e1) {
 						e1.printStackTrace();
 					} catch (PartInitException e) {
