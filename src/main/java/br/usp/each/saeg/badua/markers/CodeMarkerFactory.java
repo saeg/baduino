@@ -1,13 +1,12 @@
 package br.usp.each.saeg.badua.markers;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -68,10 +67,7 @@ public class CodeMarkerFactory {
 			pointerMarker.setAttribute(IMarker.CHAR_END,defOffset[0]);
 			
 			
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (CoreException e) {e.printStackTrace();}
 		
 		
 		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),pointerMarker);

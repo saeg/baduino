@@ -22,30 +22,56 @@ public class TreeClass {
 	}
 
 	public String getCoverage(){
-		covered = 0;
-		total = 0;
-		if(Methods.size() != 0){
-			for (TreeMethod method : Methods) {
-				covered += method.getCoveredDuasCounter();
-				total += method.getTotalDuas();
-			}
-			if(total != 0){
-				return "("+covered+"/"+total+") "+String.format("%.2f", (double)covered/(double)total*100)+"%";
-			}else{
-				return "No Def-Use Associations";
-			}
-
-		}else return "No Def-Use Associations";
-
-	}
-
-	public int getCoveredDuasCounter() {
+		if(covered == 0 && total == 0){
+			getCoverageRecursive();
+		}
 		
-		return covered;
+		if(covered != 0 && total != 0){
+			return "("+covered+"/"+total+") "+String.format("%.2f", (double)covered/(double)total*100)+"%";
+		}else{
+			return "No Def-Use Associations";
+		}
+//		covered = 0;
+//		total = 0;
+//		if(Methods.size() != 0){
+//			for (TreeMethod method : Methods) {
+//				covered += method.getCoveredDuasCounter();
+//				total += method.getTotalDuas();
+//			}
+//			if(total != 0){
+//				return "("+covered+"/"+total+") "+String.format("%.2f", (double)covered/(double)total*100)+"%";
+//			}else{
+//				return "No Def-Use Associations";
+//			}
+//
+//		}else return "No Def-Use Associations";
+		
+		
+
 	}
 
-	public int getTotalDuas() {
-		return total;
+//	public int getCoveredDuasCounter() {
+//		
+//		return covered;
+//	}
+//
+//	public int getTotalDuas() {
+//		return total;
+//	}
+
+	public int[] getCoverageRecursive() {
+		if(covered == 0 && total == 0){
+			if(Methods.size() != 0){
+				for(TreeMethod methods: Methods){
+					int[] cover = methods.getCoverageRecursive();
+					if((cover[0] != -1) && (cover[1] != -1)){
+						covered += cover[0];
+						total += cover[1];
+					}
+				}
+			}
+		}
+		return new int[]{covered,total};
 	}
 
 }

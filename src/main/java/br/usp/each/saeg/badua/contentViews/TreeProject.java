@@ -6,9 +6,11 @@ import java.util.List;
 public class TreeProject {
 	private String name;
 	private List<TreeFolder> Folders = new ArrayList<TreeFolder>();
-	
+	int covered = 0;
+	int total = 0;
+
 	public String getName() {
-		return null;
+		return name;
 	}
 
 	public void setName(String name) {
@@ -20,7 +22,19 @@ public class TreeProject {
 	}
 
 	public String getCoverage() {
-		return null;
+		if(Folders.size() != 0){
+			for(TreeFolder folders: Folders){
+				int[] cover = folders.getCoverageRecursive();
+				covered += cover[0];
+				total += cover[1];
+			}
+			if(covered == 0 && total == 0){
+				return "No Def-Use Associations";
+			}else{
+				return "("+covered+"/"+total+") "+String.format("%.2f", (double)covered/(double)total*100)+"%";
+			}
+		}
+		return "No Def-Use Associations";
 	}
 
 }

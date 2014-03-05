@@ -1,33 +1,30 @@
 package br.usp.each.saeg.badua.contentViews;
+
 import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.objectweb.asm.Opcodes;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
+import org.eclipse.jdt.ui.ISharedImages;
+import org.eclipse.jdt.ui.JavaUI;
 
 
 public class CoverageLabelProvider implements ITableLabelProvider {
-
-	private static final Image FOLDER = getImage("folder.gif");
-	private static final Image FILE = getImage("file.gif");
 
 	private static final Image COVERED = getImage("check.png");
 	private static final Image UNCOVERED = getImage("uncheck.png");
 	private static final Image PERCENT = getImage("percent.png");
 
+	private static final Image PROJECT = getImage("projects.gif");
+	private static final Image FOLDER = getImage("folder.gif");
 	private static final Image PACKAGE = getImage("package.gif");
-	private static final Image CLASSES = getImage("classes.gif");
-	private static final Image PUBLIC_CO = getImage("public_co.gif");
+	private static final Image CLASS = getImage("classes.gif");
 
 	// Helper Method to load the images
 	private static Image getImage(String file) {
@@ -39,28 +36,18 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 	}
 
 	@Override
-	public void addListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
-
-	}
+	public void addListener(ILabelProviderListener listener) {}
 
 	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-
-	}
+	public void dispose() {}
 
 	@Override
 	public boolean isLabelProperty(Object element, String property) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void removeListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
-
-	}
+	public void removeListener(ILabelProviderListener listener) {}
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
@@ -68,22 +55,32 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 		
 		case 0://first column
 			if(element instanceof TreeProject){
-				return CLASSES;//mudar icon
+				return PROJECT;
 				
 			}else if(element instanceof TreeFolder){
-				return CLASSES;//mudar icon
+				return FOLDER;
 				
 			}else if(element instanceof TreePackage){
 				return PACKAGE;
 				
 			}else if(element instanceof TreeClass){
-				return CLASSES;
+				return CLASS;
 				
 			}else  if (element instanceof TreeMethod) {
-				return PUBLIC_CO;
+				ISharedImages images = JavaUI.getSharedImages();
+				TreeMethod method = (TreeMethod)element;
+				if(method.getAccess() == Opcodes.ACC_PUBLIC){
+					return images.getImage(ISharedImages.IMG_OBJS_PUBLIC);
+				}else if(method.getAccess() == Opcodes.ACC_PROTECTED){
+					return images.getImage(ISharedImages.IMG_OBJS_PROTECTED);
+				}else if(method.getAccess() == Opcodes.ACC_PRIVATE){
+					return images.getImage(ISharedImages.IMG_OBJS_PRIVATE);
+				}else{
+					return images.getImage(ISharedImages.IMG_OBJS_DEFAULT);
+				}
 			}
 			
-			return FILE;
+			return null;
 			
 		case 1://second column
 			

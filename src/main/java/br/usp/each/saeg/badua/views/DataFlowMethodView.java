@@ -14,6 +14,8 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -28,7 +30,6 @@ import br.usp.each.saeg.badua.contentViews.TreeFolder;
 import br.usp.each.saeg.badua.contentViews.TreeMethod;
 import br.usp.each.saeg.badua.contentViews.TreePackage;
 import br.usp.each.saeg.badua.contentViews.TreeProject;
-import br.usp.each.saeg.badua.handlers.DataflowHandler;
 import br.usp.each.saeg.badua.markers.CodeMarkerFactory;
 
 
@@ -80,19 +81,21 @@ public class DataFlowMethodView extends ViewPart {
 		//first column
 		TreeColumn column1 = new TreeColumn(tree, SWT.LEFT);
 		column1.setText("Methods -> Def-Use Assicioations");
-		column1.setWidth(300);
+		column1.setWidth(500);
 
 		//second column
 		TreeColumn column2 = new TreeColumn(tree, SWT.LEFT);
 		column2.setText("Coverage");
-		column2.setWidth(150);
+		column2.setWidth(200);
 
-
+		long start = System.currentTimeMillis();
+		
 		viewer.setContentProvider(new CoverageContentProvider());
 		viewer.setLabelProvider(new CoverageLabelProvider());
 		
 		// provide the input to the ContentProvider
 		viewer.setInput(new CoverageMockModel());
+		System.out.println("Time to show view: "+(System.currentTimeMillis()-start)/1000.0);
 		
 		//change selection event
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -131,9 +134,8 @@ public class DataFlowMethodView extends ViewPart {
 		});
 
 		
-		//double click event
+		//double click event to expand state
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
-
 			@Override
 			public void doubleClick(DoubleClickEvent event) {
 				TreeViewer viewer = (TreeViewer) event.getViewer();
@@ -153,6 +155,20 @@ public class DataFlowMethodView extends ViewPart {
 
 			}
 
+		});
+		
+		//Listener to closing view in workbench shutdown
+		PlatformUI.getWorkbench().addWorkbenchListener(new IWorkbenchListener() {
+
+			@Override
+			public boolean preShutdown(IWorkbench workbench, boolean forced) {
+				closeViews();
+				return true;
+			}
+
+			@Override
+			public void postShutdown(IWorkbench workbench) {
+			}
 		});
 
 	}
@@ -187,15 +203,6 @@ public class DataFlowMethodView extends ViewPart {
 		}
 	}
 
-	@Override
-	public void saveState(IMemento memento){
-		closeViews();
-	}
-
-//	@Override
-//	public void dispose(){
-//		//closeViews();
-//	}
 
 	/**
 	 * Passing the focus request to the viewer's control.
