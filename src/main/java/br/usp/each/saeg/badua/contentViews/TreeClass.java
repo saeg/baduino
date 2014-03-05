@@ -25,39 +25,13 @@ public class TreeClass {
 		if(covered == 0 && total == 0){
 			getCoverageRecursive();
 		}
-		
+
 		if(covered != 0 && total != 0){
 			return "("+covered+"/"+total+") "+String.format("%.2f", (double)covered/(double)total*100)+"%";
 		}else{
 			return "No Def-Use Associations";
 		}
-//		covered = 0;
-//		total = 0;
-//		if(Methods.size() != 0){
-//			for (TreeMethod method : Methods) {
-//				covered += method.getCoveredDuasCounter();
-//				total += method.getTotalDuas();
-//			}
-//			if(total != 0){
-//				return "("+covered+"/"+total+") "+String.format("%.2f", (double)covered/(double)total*100)+"%";
-//			}else{
-//				return "No Def-Use Associations";
-//			}
-//
-//		}else return "No Def-Use Associations";
-		
-		
-
 	}
-
-//	public int getCoveredDuasCounter() {
-//		
-//		return covered;
-//	}
-//
-//	public int getTotalDuas() {
-//		return total;
-//	}
 
 	public int[] getCoverageRecursive() {
 		if(covered == 0 && total == 0){
@@ -73,5 +47,4 @@ public class TreeClass {
 		}
 		return new int[]{covered,total};
 	}
-
 }

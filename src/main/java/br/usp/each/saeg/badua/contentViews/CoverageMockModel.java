@@ -35,7 +35,14 @@ import br.com.ooboo.asm.defuse.Local;
 import br.com.ooboo.asm.defuse.Variable;
 import br.usp.each.saeg.badua.handlers.DataflowHandler;
 
+//Structure layers  
+//layer 0: IJavaProject(Project)|
+//layer 1:						|->IPackageFragmentRoot(Folders)|
+//layer 2: 														|->IPackageFragment(Packages)|
+//layer 3: 																					 |->ICompilationUnit(Classes)
+
 public class CoverageMockModel  {
+
 	private DefUseAnalyzer analyzer = new DefUseAnalyzer();
 	private DefUseChain[] duas;
 	private Variable[] vars;
@@ -43,7 +50,7 @@ public class CoverageMockModel  {
 	//	private IMethod[] methodList;
 
 	public List<?> getTree() {
-
+		//use the selection type to show the type level and below 
 		if(DataflowHandler.getType() instanceof IJavaProject){
 			return getProjectNode((IJavaProject) DataflowHandler.getType());
 		}
@@ -63,7 +70,7 @@ public class CoverageMockModel  {
 	}
 
 
-	//get coverage from Project Layer
+	//get coverage from Project Layer and below
 	private List<TreeProject> getProjectNode(IJavaProject jp) {
 		List<TreeProject> Project = new ArrayList<TreeProject>();
 		TreeProject newProject = new TreeProject();
@@ -169,6 +176,7 @@ public class CoverageMockModel  {
 		return Class;
 	}
 
+	//transform class bytes in ClassNode form from ASM
 	private ClassNode getASMClassNode(ClassNode classNode, ICompilationUnit cu) {
 
 		classNode = new ClassNode(Opcodes.ASM4);
@@ -176,7 +184,7 @@ public class CoverageMockModel  {
 
 		try {
 			//	methodList = cu.getAllTypes()[0].getMethods();
-			classReader = new ClassReader(Files.readAllBytes(getClassPaths(cu)));
+			classReader = new ClassReader(Files.readAllBytes(getClassPath(cu)));
 		} catch (JavaModelException | IOException e) {
 			e.printStackTrace();
 		}
@@ -187,12 +195,12 @@ public class CoverageMockModel  {
 	}
 
 
-
+	
 	private void methodDuas(ClassNode classNode, int posMethod, TreeClass newClass,ICompilationUnit cu) {
 
 		MethodNode methodNode = classNode.methods.get(posMethod);
 
-		TreeMethod newMethod = new TreeMethod(); // cria um novo method
+		TreeMethod newMethod = new TreeMethod(); //create new method
 
 		if((methodNode.access & Opcodes.ACC_SYNTHETIC) != 0){
 			return;
@@ -226,9 +234,6 @@ public class CoverageMockModel  {
 		}else{
 			newMethod.setAccess(-1);//default methods;
 		}
-
-
-
 		//		System.out.println("methodNode: "+methodNode.name + " " + methodNode.desc);
 		//		
 		//		String s = Signature.toString(methodNode.desc);
@@ -259,9 +264,6 @@ public class CoverageMockModel  {
 		//				
 		//			} catch (JavaModelException e) {e.printStackTrace();}
 		//		}
-
-
-
 		newClass.getMethods().add(newMethod);//adiciona aos metodos existentes
 
 		int[] lines = new int[methodNode.instructions.size()];
@@ -350,32 +352,21 @@ public class CoverageMockModel  {
 		throw new RuntimeException("Variable not found");
 	}
 
-
-	private Path getClassPaths(ICompilationUnit cu) throws JavaModelException, IOException {
+	
+	private Path getClassPath(ICompilationUnit cu) throws JavaModelException, IOException {
 
 		IRegion region = JavaCore.newRegion();
-		//		for(ICompilationUnit compilationUnit : cu){
-		//			region.add(compilationUnit.getPrimaryElement());
-		//		}
 		region.add(cu.getPrimaryElement());
 		IResource[] r = JavaCore.getGeneratedResources(region, false);
-
-
 		//		IFile file = (IFile) r[0];
 		//		IClassFile b = (IClassFile) JavaCore.createClassFileFrom(file);
 		//		System.out.println(b.getSource()); 		//null
 		//		IMethod[] met = b.getType().getMethods();
 		//		System.out.println(met.length);			//Java Model Status [bin/source [in Max] is not on its project's build path]
-
-
-
-
 		IPath ipath = r[0].getLocation();
 		//		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(ipath);
 		//		IClassFile f = JavaCore.createClassFileFrom(file);
 
-
-		//		
 		//		ASTParser p = ASTParser.newParser(AST.JLS4);
 		//		p.setSource(cu);
 		//		p.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -400,13 +391,6 @@ public class CoverageMockModel  {
 		//
 		//			}
 		//		});
-
-
-
-
 		return Paths.get(ipath.toFile().toURI());
-
-		//byte[] buffer2 = Files.readAllBytes(getPath());
-
 	}
 } 

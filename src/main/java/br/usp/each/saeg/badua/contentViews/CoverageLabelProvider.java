@@ -32,7 +32,6 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 		URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
 		ImageDescriptor image = ImageDescriptor.createFromURL(url);
 		return image.createImage();
-
 	}
 
 	@Override
@@ -79,7 +78,6 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 					return images.getImage(ISharedImages.IMG_OBJS_DEFAULT);
 				}
 			}
-			
 			return null;
 			
 		case 1://second column

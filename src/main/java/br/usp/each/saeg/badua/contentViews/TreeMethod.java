@@ -6,7 +6,7 @@ public class TreeMethod {
 	private String name;
 	private List<TreeDUA> Duas = new ArrayList<TreeDUA>();
 	private int access;
-	
+
 	private int covered = 0;
 	private int total = 0;
 
@@ -17,7 +17,7 @@ public class TreeMethod {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public int getAccess() {
 		return access;
 	}
@@ -29,45 +29,18 @@ public class TreeMethod {
 	public List<TreeDUA> getDUAS() {
 		return Duas;
 	}
-	
 
 	public String getCoverage(){
 		if(covered == 0 && total == 0){
 			getCoverageRecursive();
 		}
-		
+
 		if(covered != 0 && total != 0){
 			return "("+covered+"/"+total+") "+String.format("%.2f", (double)covered/(double)total*100)+"%";
 		}else{
 			return "No Def-Use Associations";
 		}
-		
-//		if(Duas.size() != 0){
-//			int covered = 0;
-//			for (TreeDUA d : Duas) {
-//				if(d.getCovered().equals(String.valueOf(true))) {
-//					covered++;
-//				}
-//			}
-//			return "("+covered+"/"+Duas.size()+") "+String.format("%.2f", (double)covered/(double)Duas.size()*100)+"%";
-//		}else return "No Def-Use Associations";
-//		
 	}
-	
-
-//	public int getCoveredDuasCounter() {
-//		int covered = 0;
-//		for (TreeDUA d : Duas) {
-//			if(d.getCovered().equals(String.valueOf(true))) {
-//				covered++;
-//			}
-//		}
-//		return covered;
-//	}
-//
-//	public int getTotalDuas() {
-//		return Duas.size();
-//	}
 
 	public int[] getCoverageRecursive() {
 		if(covered == 0 && total == 0){
@@ -82,7 +55,4 @@ public class TreeMethod {
 		}
 		return new int[]{covered,total};
 	}
-
-
-
 } 

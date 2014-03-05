@@ -51,7 +51,6 @@ public class TreeDUA {
 		}else{
 			return String.format("(%d , (%d , %d) , %s)", def, use, target, var);
 		}
-		
 	}
 
 	public ICompilationUnit getCu() {

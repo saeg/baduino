@@ -1,6 +1,7 @@
 package br.usp.each.saeg.badua.views;
 
 import org.eclipse.jdt.core.ICompilationUnit;
+
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -12,7 +13,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchListener;
@@ -32,24 +32,6 @@ import br.usp.each.saeg.badua.contentViews.TreePackage;
 import br.usp.each.saeg.badua.contentViews.TreeProject;
 import br.usp.each.saeg.badua.markers.CodeMarkerFactory;
 
-
-/**
- * This sample class demonstrates how to plug-in a new
- * workbench view. The view shows data obtained from the
- * model. The sample creates a dummy model on the fly,
- * but a real implementation would connect to the model
- * available either in this or another plug-in (e.g. the workspace).
- * The view is connected to the model using a content provider.
- * <p>
- * The view uses a label provider to define how model
- * objects should be presented in the view. Each
- * view can present the same model objects using
- * different labels and icons, if needed. Alternatively,
- * a single label provider can be shared between views
- * in order to ensure that objects of the same type are
- * presented in the same way everywhere.
- * <p>
- */
 
 public class DataFlowMethodView extends ViewPart {
 
@@ -92,9 +74,8 @@ public class DataFlowMethodView extends ViewPart {
 		
 		viewer.setContentProvider(new CoverageContentProvider());
 		viewer.setLabelProvider(new CoverageLabelProvider());
+		viewer.setInput(new CoverageMockModel());		// provide the input to the ContentProvider
 		
-		// provide the input to the ContentProvider
-		viewer.setInput(new CoverageMockModel());
 		System.out.println("Time to show view: "+(System.currentTimeMillis()-start)/1000.0);
 		
 		//change selection event
@@ -202,11 +183,7 @@ public class DataFlowMethodView extends ViewPart {
 			}
 		}
 	}
-
-
-	/**
-	 * Passing the focus request to the viewer's control.
-	 */
+	
 	public void setFocus() {
 		viewer.getControl().setFocus();
 	}

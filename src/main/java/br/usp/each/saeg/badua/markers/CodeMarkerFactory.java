@@ -39,19 +39,16 @@ public class CodeMarkerFactory {
 		try {
 			//if Definition and use are in the same line
 			if(defOffset[1] == useOffset[1]){
-				
 				defMarker = resource.createMarker(SAMELINE_MARKER);
-				
 				defMarker.setAttribute(IMarker.CHAR_START, defOffset[0]);
 				defMarker.setAttribute(IMarker.CHAR_END, defOffset[1]);
 				
 			}else{
 				defMarker = resource.createMarker(DEFINITION_MARKER);
-				useMarker = resource.createMarker(USE_MARKER);
-				
 				defMarker.setAttribute(IMarker.CHAR_START, defOffset[0]);
 				defMarker.setAttribute(IMarker.CHAR_END, defOffset[1]);
-
+				
+				useMarker = resource.createMarker(USE_MARKER);
 				useMarker.setAttribute(IMarker.CHAR_START, useOffset[0]);
 				useMarker.setAttribute(IMarker.CHAR_END, useOffset[1]);
 			}
@@ -69,9 +66,7 @@ public class CodeMarkerFactory {
 			
 		} catch (CoreException e) {e.printStackTrace();}
 		
-		
-		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),pointerMarker);
-		
+		IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),pointerMarker); //open view
 		
 	}
 	

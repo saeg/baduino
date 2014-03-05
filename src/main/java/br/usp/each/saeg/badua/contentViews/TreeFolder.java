@@ -30,7 +30,6 @@ public class TreeFolder {
 		}else{
 			return "No Def-Use Associations";
 		}
-
 	}
 
 	public int[] getCoverageRecursive(){
@@ -47,5 +46,4 @@ public class TreeFolder {
 		}
 		return new int[]{covered,total};
 	}
-
 }

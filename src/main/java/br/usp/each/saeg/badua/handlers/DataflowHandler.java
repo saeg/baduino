@@ -24,7 +24,7 @@ public class DataflowHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		try {
-
+			//get selection type
 			ISelection sel = HandlerUtil.getActiveMenuSelection(event);
 			IStructuredSelection selection = (IStructuredSelection) sel;
 
@@ -47,8 +47,8 @@ public class DataflowHandler extends AbstractHandler {
 	}
 
 	private void openView() throws PartInitException {
-		DataFlowMethodView.closeViews();
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(DataFlowMethodView.ID);
+		DataFlowMethodView.closeViews(); // close view if it was already open
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(DataFlowMethodView.ID);//open view DataFlowMethodView.createPartControl()
 	}
 
 	public static Object getType() {
