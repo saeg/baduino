@@ -195,7 +195,7 @@ public class CoverageMockModel  {
 	}
 
 
-	
+
 	private void methodDuas(ClassNode classNode, int posMethod, TreeClass newClass,ICompilationUnit cu) {
 
 		MethodNode methodNode = classNode.methods.get(posMethod);
@@ -209,7 +209,11 @@ public class CoverageMockModel  {
 		String[] fullClassName = classNode.name.split("/");
 		String className = fullClassName[fullClassName.length-1];
 		System.out.println(methodNode.name + " " + methodNode.desc);
-		if(methodNode.name.equals("<init>")){
+		if(methodNode.name.equals("<clinit>")){
+			String name = Signature.toString(methodNode.desc, className, null, false, false);
+			newMethod.setName("static "+name);
+			System.out.println("<clinit> vira: static "+name);
+		}else if(methodNode.name.equals("<init>")){
 			String name = Signature.toString(methodNode.desc, className, null, false, false);
 			newMethod.setName(name);
 			System.out.println("<init> vira: "+name);
@@ -352,7 +356,7 @@ public class CoverageMockModel  {
 		throw new RuntimeException("Variable not found");
 	}
 
-	
+
 	private Path getClassPath(ICompilationUnit cu) throws JavaModelException, IOException {
 
 		IRegion region = JavaCore.newRegion();

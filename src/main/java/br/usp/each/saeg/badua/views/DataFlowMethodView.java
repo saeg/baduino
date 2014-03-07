@@ -102,7 +102,7 @@ public class DataFlowMethodView extends ViewPart {
 						//remove old markers
 						CodeMarkerFactory.removeMarkers(CodeMarkerFactory.findMarkers(cu.getUnderlyingResource()));
 						//create new markers based on selected DUA
-						CodeMarkerFactory.mark(cu.getUnderlyingResource(),defOffset,useOffset,targetOffset);
+						CodeMarkerFactory.mark(cu.getUnderlyingResource(),defOffset,useOffset,targetOffset,((TreeDUA) selectedNode).getCovered());
 						setFocus();
 					} catch (JavaModelException e1) {
 						e1.printStackTrace();
