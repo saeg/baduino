@@ -1,6 +1,5 @@
 package br.usp.each.saeg.badua.contentViews;
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -367,7 +366,11 @@ public class CoverageMockModel  {
 		//		System.out.println(b.getSource()); 		//null
 		//		IMethod[] met = b.getType().getMethods();
 		//		System.out.println(met.length);			//Java Model Status [bin/source [in Max] is not on its project's build path]
+		if(r.length == 0){
+			System.exit(0);
+		}
 		IPath ipath = r[0].getLocation();
+		
 		//		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(ipath);
 		//		IClassFile f = JavaCore.createClassFileFrom(file);
 

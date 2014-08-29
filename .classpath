@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="icons"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="/home/louiz/workspace/br.usp.each.saeg.badua/lib/asm-debug-all-4.2.jar"/>
 	<classpathentry kind="lib" path="lib/asm-defuse-0.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/asm-debug-all-4.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

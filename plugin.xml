@@ -22,7 +22,7 @@
                      </adapt>
                   </iterate>
                </with>
-            </visibleWhen>
+            </visibleWhen> 
          </command>
          <command
                commandId="br.usp.each.saeg.badua.dataflow.handler"
