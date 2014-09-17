@@ -6,88 +6,115 @@
       <menuContribution
             allPopups="false"
             locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
-         <command
-               commandId="br.usp.each.saeg.badua.dataflow.handler"
-               label="Project Dataflow Coverage"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeMenuSelection">
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <adapt
-                           type="org.eclipse.jdt.core.IJavaProject">
-                     </adapt>
-                  </iterate>
-               </with>
-            </visibleWhen> 
-         </command>
-         <command
-               commandId="br.usp.each.saeg.badua.dataflow.handler"
-               label="Diretory Dataflow Coverage"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeMenuSelection">
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <adapt
-                           type="org.eclipse.jdt.core.IPackageFragmentRoot">
-                     </adapt>
-                  </iterate>
-               </with>
-            </visibleWhen>
-         </command>
-         <command
-               commandId="br.usp.each.saeg.badua.dataflow.handler"
-               label="Package Dataflow Coverage"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeMenuSelection">
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <adapt
-                           type="org.eclipse.jdt.core.IPackageFragment">
-                     </adapt>
-                  </iterate>
-               </with>
-            </visibleWhen>
-         </command>
-         <command
-               commandId="br.usp.each.saeg.badua.dataflow.handler"
-               label="Class Dataflow Coverage"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeMenuSelection">
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <adapt
-                           type="org.eclipse.jdt.core.ICompilationUnit">
-                     </adapt>
-                  </iterate>
-               </with>
-            </visibleWhen>
-         </command>
+         <menu
+         	id="br.usp.each.saeg.badua.ui"
+         	label="BADUINO">
+         	</menu>   
       </menuContribution>
+      
+          <menuContribution 
+          locationURI= "popup:br.usp.each.saeg.badua.ui?after=additions">
+             <command
+                   commandId="br.usp.each.saeg.badua.dataflow.handler"
+                   label="Project DUAs Visualization"
+                   style="push">
+                <visibleWhen
+                      checkEnabled="false">
+                   <with
+                         variable="activeMenuSelection">
+                      <iterate
+                            ifEmpty="false"
+                            operator="or">
+                         <adapt
+                               type="org.eclipse.jdt.core.IJavaProject">
+                         </adapt>
+                      </iterate>
+                   </with>
+                </visibleWhen>
+             </command>
+             <command
+                   commandId="br.usp.each.saeg.badua.dataflow.handler"
+                   label="Folder DUAs Visualization"
+                   style="push">
+                <visibleWhen
+                      checkEnabled="false">
+                   <with
+                         variable="activeMenuSelection">
+                      <iterate
+                            ifEmpty="false"
+                            operator="or">
+                         <adapt
+                               type="org.eclipse.jdt.core.IPackageFragmentRoot">
+                         </adapt>
+                      </iterate>
+                   </with>
+                </visibleWhen>
+             </command>
+             <command
+                   commandId="br.usp.each.saeg.badua.dataflow.handler"
+                   label="Package DUAs Visualization"
+                   style="push">
+                <visibleWhen
+                      checkEnabled="false">
+                   <with
+                         variable="activeMenuSelection">
+                      <iterate
+                            ifEmpty="false"
+                            operator="or">
+                         <adapt
+                               type="org.eclipse.jdt.core.IPackageFragment">
+                         </adapt>
+                      </iterate>
+                   </with>
+                </visibleWhen>
+             </command>
+             <command
+                   commandId="br.usp.each.saeg.badua.dataflow.handler"
+                   label="Class DUAs Visualization"
+                   style="push">
+                <visibleWhen
+                      checkEnabled="false">
+                   <with
+                         variable="activeMenuSelection">
+                      <iterate
+                            ifEmpty="false"
+                            operator="or">
+                         <adapt
+                               type="org.eclipse.jdt.core.ICompilationUnit">
+                         </adapt>
+                      </iterate>
+                   </with>
+                </visibleWhen>
+             </command>
+            <command
+                commandId="br.usp.each.saeg.badua.commands.runJaguar"
+                id="br.usp.each.saeg.badua.menu.item.runJaguar"
+                label="Run Tests">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeMenuSelection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <adapt
+                              type="org.eclipse.jdt.core.IJavaProject">
+                        </adapt>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+      </menuContribution>
+      
    </extension>
-   <extension
+<!--   <extension
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="br.usp.each.saeg.badua.handlers.DataflowHandler"
             id="br.usp.each.saeg.badua.dataflow.handler"
             name="DataflowViewHandler">
       </command>
-   </extension>
+   </extension> -->
    <extension
          point="org.eclipse.ui.views">
       <category
@@ -254,6 +281,18 @@
             markerType="br.usp.each.saeg.badua.markers.sameLine"
             name="br.usp.each.saeg.badua.sameLineAnnotation">
       </type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="br.usp.each.saeg.badua.handlers.RunTestsHandler"
+            commandId="br.usp.each.saeg.badua.commands.runJaguar"
+            helpContextId="RunTests Handler">
+      </handler>
+      <handler
+            class="br.usp.each.saeg.badua.handlers.VisualizationHandler"
+            commandId="br.usp.each.saeg.badua.dataflow.handler">
+      </handler>
    </extension>
 
 </plugin>

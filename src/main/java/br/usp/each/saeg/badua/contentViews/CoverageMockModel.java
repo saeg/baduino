@@ -26,13 +26,19 @@ import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.analysis.AnalyzerException;
 
-import br.com.ooboo.asm.defuse.DefUseAnalyzer;
-import br.com.ooboo.asm.defuse.DefUseChain;
-import br.com.ooboo.asm.defuse.DepthFirstDefUseChainSearch;
-import br.com.ooboo.asm.defuse.Field;
-import br.com.ooboo.asm.defuse.Local;
-import br.com.ooboo.asm.defuse.Variable;
-import br.usp.each.saeg.badua.handlers.DataflowHandler;
+import br.usp.each.saeg.asm.defuse.DefUseAnalyzer;
+import br.usp.each.saeg.asm.defuse.DefUseChain;
+import br.usp.each.saeg.asm.defuse.DepthFirstDefUseChainSearch;
+import br.usp.each.saeg.asm.defuse.Field;
+import br.usp.each.saeg.asm.defuse.Local;
+import br.usp.each.saeg.asm.defuse.Variable;
+import br.usp.each.saeg.badua.handlers.VisualizationHandler;
+import br.usp.each.saeg.badua.xml.XmlClass;
+import br.usp.each.saeg.badua.xml.XmlInput;
+import br.usp.each.saeg.badua.xml.XmlMethod;
+import br.usp.each.saeg.badua.xml.XmlObject;
+import br.usp.each.saeg.badua.xml.XmlPackage;
+import br.usp.each.saeg.badua.xml.XmlStatement;
 
 //Structure layers  
 //layer 0: IJavaProject(Project)|
@@ -46,24 +52,27 @@ public class CoverageMockModel  {
 	private DefUseChain[] duas;
 	private Variable[] vars;
 	private final DepthFirstDefUseChainSearch dfducs = new DepthFirstDefUseChainSearch();
+	private static XmlInput information;
+
 	//	private IMethod[] methodList;
 
 	public List<?> getTree() {
+		information = XmlObject.getInstance();
 		//use the selection type to show the type level and below 
-		if(DataflowHandler.getType() instanceof IJavaProject){
-			return getProjectNode((IJavaProject) DataflowHandler.getType());
+		if(VisualizationHandler.getType() instanceof IJavaProject){
+			return getProjectNode((IJavaProject) VisualizationHandler.getType());
 		}
 
-		if(DataflowHandler.getType() instanceof IPackageFragmentRoot){
-			return getFolderNode((IPackageFragmentRoot) DataflowHandler.getType());
+		if(VisualizationHandler.getType() instanceof IPackageFragmentRoot){
+			return getFolderNode((IPackageFragmentRoot) VisualizationHandler.getType());
 		}
 
-		if(DataflowHandler.getType() instanceof IPackageFragment){
-			return getPackageNode((IPackageFragment) DataflowHandler.getType());
+		if(VisualizationHandler.getType() instanceof IPackageFragment){
+			return getPackageNode((IPackageFragment) VisualizationHandler.getType());
 		}
 
-		if(DataflowHandler.getType() instanceof ICompilationUnit){
-			return getClassNode((ICompilationUnit) DataflowHandler.getType());
+		if(VisualizationHandler.getType() instanceof ICompilationUnit){
+			return getClassNode((ICompilationUnit) VisualizationHandler.getType());
 		}
 		return null;
 	}
@@ -158,16 +167,46 @@ public class CoverageMockModel  {
 
 	//get coverage from Class Layer
 	public List<TreeClass> getClassNode(ICompilationUnit cu){
+
 		List<TreeClass> Class = new ArrayList<TreeClass>(); //create a list
 		TreeClass newClass = new TreeClass();
 		newClass.setName(cu.getElementName());
 
+		List<XmlPackage> listPackage = information.getPackages();
+		XmlPackage Package = null;
+		for(XmlPackage l:listPackage ){
+			try {
+				if((cu.getPackageDeclarations()[0].toString().contains(l.getName()))){
+					//package name
+					Package = l;
+					break;
+				}
+			} catch (JavaModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	
 		ClassNode classNode = null;
 		classNode = getASMClassNode(classNode,cu);
+		
+		
+		XmlClass Clazz = null;
+		if(Package != null){
+			String clazzName = classNode.name.replace('/', '.');
+			for (XmlClass classes : Package.getClasses()) {
+				System.out.println(clazzName +" "+classes.getName());
+				if(clazzName.equals(classes.getName())){
+					Clazz = classes;
+					break;
+				}
+			}
+		}
 
+		
 		// for each method in the class
 		for (int posMethod = 0; posMethod < classNode.methods.size(); posMethod++) {
-			methodDuas(classNode, posMethod, newClass, cu);
+			methodDuas(classNode, posMethod, newClass, cu, Clazz);
 		}
 
 		Class.add(newClass);
@@ -195,7 +234,7 @@ public class CoverageMockModel  {
 
 
 
-	private void methodDuas(ClassNode classNode, int posMethod, TreeClass newClass,ICompilationUnit cu) {
+	private void methodDuas(ClassNode classNode, int posMethod, TreeClass newClass,ICompilationUnit cu, XmlClass clazz) {
 
 		MethodNode methodNode = classNode.methods.get(posMethod);
 
@@ -205,29 +244,44 @@ public class CoverageMockModel  {
 			return;
 		}
 
+
 		String[] fullClassName = classNode.name.split("/");
 		String className = fullClassName[fullClassName.length-1];
-		System.out.println(methodNode.name + " " + methodNode.desc);
+		//System.out.println(methodNode.name + " " + methodNode.desc);
 		if(methodNode.name.equals("<clinit>")){
 			String name = Signature.toString(methodNode.desc, className, null, false, false);
 			newMethod.setName("static "+name);
-			System.out.println("<clinit> vira: static "+name);
+			//System.out.println("<clinit> vira: static "+name);
 		}else if(methodNode.name.equals("<init>")){
 			String name = Signature.toString(methodNode.desc, className, null, false, false);
 			newMethod.setName(name);
-			System.out.println("<init> vira: "+name);
+			//System.out.println("<init> vira: "+name);
 		}else{
 			String name = Signature.toString(methodNode.desc, methodNode.name, null, false,true);
 			if((methodNode.access & Opcodes.ACC_STATIC) != 0){
 				newMethod.setName("static " + name);
-				System.out.println("com flag ACC_STATIC vira: static "+name);
+				//	System.out.println("com flag ACC_STATIC vira: static "+name);
 			}else{
 				newMethod.setName(name);
-				System.out.println("Default: "+name);
+				//	System.out.println("Default: "+name);
 			}
 		}
-		System.out.println();
+		//System.out.println()
+		
+		XmlMethod Methods = null;
+		if(clazz!= null){
+			for (XmlMethod m: clazz.getMethods()) {
+				System.out.println(m.getName()+" "+ newMethod.getName());
+				if(newMethod.getName().contains(m.getName())){
+					System.out.println("entrooo: "+m.getName()+" "+ newMethod.getName());
+					Methods = m;
+					break;
+				}
+				System.out.println("vai dar null com:"+m.getName());
+			}
+		}
 
+		
 		if((methodNode.access & Opcodes.ACC_PUBLIC) != 0){
 			newMethod.setAccess(Opcodes.ACC_PUBLIC);
 		}else if((methodNode.access & Opcodes.ACC_PROTECTED) != 0){
@@ -322,11 +376,21 @@ public class CoverageMockModel  {
 			}
 
 			TreeDUA newDua = new TreeDUA(def, use, target, name, cu); //cria uma dua
+			if(Methods != null){
+				for (XmlStatement duas : Methods.getStatements()) {
+					System.out.println(duas.getDef()+" "+ duas.getUse()+" "+ duas.getTarget()+" "+ duas.getVar()+"    "+def+" "+use+" "+target+" "+name);
+					if(duas.getDef() == def && duas.getUse() == use && duas.getTarget() == target && duas.getVar().equals(name)){
+						System.out.println("sao iguais");
+						newDua.setCovered(duas.getCovered());
+						break;
+					}
+				}
+			}
 
-			//DELETAR - GERAR DADOS ALEATORIOS PARA COBERTURA
-			if(Math.random() > 0.5){
-				newDua.setCovered(true);
-			}else newDua.setCovered(false);
+//			//DELETAR - GERAR DADOS ALEATORIOS PARA COBERTURA
+//			if(Math.random() > 0.5){
+//				newDua.setCovered(true);
+//			}else newDua.setCovered(false);
 
 			newMethod.getDUAS().add(newDua); //adiciona nas duas existentes
 
@@ -358,8 +422,12 @@ public class CoverageMockModel  {
 
 	private Path getClassPath(ICompilationUnit cu) throws JavaModelException, IOException {
 
+		//		System.out.println("getClassPath "+cu.toString());		//nao pode ser not open nem working copy
+		//		cu.open(null);
+		//		System.out.println("getClassPath "+cu.toString());
+		//		System.out.println("primariElement: "+cu.getPrimary());
 		IRegion region = JavaCore.newRegion();
-		region.add(cu.getPrimaryElement());
+		region.add(cu);
 		IResource[] r = JavaCore.getGeneratedResources(region, false);
 		//		IFile file = (IFile) r[0];
 		//		IClassFile b = (IClassFile) JavaCore.createClassFileFrom(file);
@@ -370,7 +438,7 @@ public class CoverageMockModel  {
 			System.exit(0);
 		}
 		IPath ipath = r[0].getLocation();
-		
+
 		//		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(ipath);
 		//		IClassFile f = JavaCore.createClassFileFrom(file);
 

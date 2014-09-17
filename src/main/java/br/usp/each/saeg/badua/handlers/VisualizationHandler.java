@@ -1,9 +1,11 @@
 package br.usp.each.saeg.badua.handlers;
 
-import org.eclipse.core.commands.AbstractHandler;
+import java.util.List;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -14,15 +16,41 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import br.usp.each.saeg.badua.views.*;
+import br.usp.each.saeg.badua.views.DataFlowMethodView;
+import br.usp.each.saeg.badua.xml.XmlClass;
+import br.usp.each.saeg.badua.xml.XmlInput;
+import br.usp.each.saeg.badua.xml.XmlMethod;
+import br.usp.each.saeg.badua.xml.XmlObject;
+import br.usp.each.saeg.badua.xml.XmlPackage;
+import br.usp.each.saeg.badua.xml.XmlStatement;
 
 
-public class DataflowHandler extends AbstractHandler {
+public class VisualizationHandler extends AbstractHandler {
 
 	private static Object type;
 
+	//method called when we want open the plugin visualization
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+
+//		XmlInput xmlInput = XmlObject.getInstance();
+//		List<XmlPackage> listPackage = xmlInput.getPackages();
+//		for(XmlPackage l:listPackage ){
+//			System.out.println(l.getName());
+//			List<XmlClass>listClass = l.getClasses();
+//			for(XmlClass l2:listClass){
+//				System.out.println("\t"+l2.getName());
+//				List<XmlMethod>listMethod = l2.getMethods();
+//				for(XmlMethod l3:listMethod){
+//					System.out.println("\t"+"\t"+l3.getName());
+//					List<XmlStatement>listStatement = l3.getStatements();
+//					for(XmlStatement l4:listStatement){
+//						System.out.println(l4.getDef()+" "+l4.getUse()+" "+l4.getTarget()+" "+l4.getVar()+" "+l4.getCovered());
+//					}
+//				}
+//			}
+//		}
+		
 		try {
 			//get selection type
 			ISelection sel = HandlerUtil.getActiveMenuSelection(event);
@@ -56,10 +84,9 @@ public class DataflowHandler extends AbstractHandler {
 	}
 
 	public static void setType(Object type) {
-		DataflowHandler.type = type;
+		VisualizationHandler.type = type;
 	}
-
-
+	
 }
 
 

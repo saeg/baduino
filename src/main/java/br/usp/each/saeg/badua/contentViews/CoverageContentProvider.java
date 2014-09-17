@@ -1,6 +1,12 @@
 package br.usp.each.saeg.badua.contentViews;
+import java.util.InputMismatchException;
+
+import javax.swing.JOptionPane;
+
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+
+import br.usp.each.saeg.badua.views.DataFlowMethodView;
 
 public class CoverageContentProvider implements ITreeContentProvider {
 
@@ -17,7 +23,15 @@ public class CoverageContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-		return model.getTree().toArray();
+		if(model.getTree() != null){
+			return model.getTree().toArray();
+		}
+		else{
+			//gerando varias exception pois ele nao termina o programa.
+			//correto seria fechar a view e nao fazer mais nada.
+			DataFlowMethodView.closeViews();
+			throw new IllegalStateException("open an Dataflow empty view");
+		}
 	}
 
 	@Override

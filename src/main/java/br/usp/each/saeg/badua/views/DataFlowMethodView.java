@@ -62,7 +62,7 @@ public class DataFlowMethodView extends ViewPart {
 
 		//first column
 		TreeColumn column1 = new TreeColumn(tree, SWT.LEFT);
-		column1.setText("Methods -> Def-Use Assicioations");
+		column1.setText("Methods -> Def-Use Associations");
 		column1.setWidth(500);
 
 		//second column
@@ -75,7 +75,6 @@ public class DataFlowMethodView extends ViewPart {
 		viewer.setContentProvider(new CoverageContentProvider());
 		viewer.setLabelProvider(new CoverageLabelProvider());
 		viewer.setInput(new CoverageMockModel());		// provide the input to the ContentProvider
-		
 		System.out.println("Time to show view: "+(System.currentTimeMillis()-start)/1000.0);
 		
 		//change selection event
