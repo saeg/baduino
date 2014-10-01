@@ -26,7 +26,7 @@ public class TreeClass {
 			getCoverageRecursive();
 		}
 
-		if(covered != 0 && total != 0){
+		if(total != 0){
 			return "("+covered+"/"+total+") "+String.format("%.2f", (double)covered/(double)total*100)+"%";
 		}else{
 			return "No Def-Use Associations";

@@ -6,7 +6,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/asm-defuse-0.0.1.jar" sourcepath="/home/louiz91/Downloads/asm-defuse-asm-defuse-0.0.1/target/asm-defuse-0.0.1-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="lib/asm-debug-all-4.2.jar"/>
+	<classpathentry kind="lib" path="lib/asm-debug-all-4.2.jar" sourcepath="/home/louiz91/.m2/repository/org/ow2/asm/asm-debug-all/4.2/asm-debug-all-4.2-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

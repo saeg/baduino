@@ -1,5 +1,6 @@
 package br.usp.each.saeg.badua.contentViews;
 import java.util.InputMismatchException;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -23,8 +24,9 @@ public class CoverageContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-		if(model.getTree() != null){
-			return model.getTree().toArray();
+		List<?> tree = model.getTree();
+		if(tree != null){
+			return tree.toArray();
 		}
 		else{
 			//gerando varias exception pois ele nao termina o programa.

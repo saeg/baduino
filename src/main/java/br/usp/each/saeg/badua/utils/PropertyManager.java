@@ -9,12 +9,6 @@ import java.util.Properties;
 public class PropertyManager {
 
 	private static final String FOLDER_SEPARATOR = System.getProperty("file.separator");
-	private static final String PROJECT_DIR = ProjectUtils.getCurrentSelectedProject().getLocation().toString();
-	private static final String COMPILED_CLASSES_DIR = ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "classes";
-	private static final String COMPILED_TESTS_DIR = ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "test-classes";
-	private static final String JAGUAR_JAR = ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "jaguar.jar";
-	private static final String JACOCO_AGENT_JAR = ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "jacocoagent.jar";
-	private static final String HEURISTIC = "Tarantula";
 	private static final String CONFIG_FILE = "codeforest.properties";
 	
 	private String jacocoAgentJar;
@@ -22,32 +16,29 @@ public class PropertyManager {
 	private String compiledTestsDir;
 	private String compiledClassesDir;
 	private String projectDir;
-	private String heuristic;
 
 	public PropertyManager() {
 		super();
 		loadProperties();
 	}
 
-	private void loadProperties() {
+	public void loadProperties() {
 		Properties prop = getPropertyFile(ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + CONFIG_FILE);
 		if (prop == null) {
 			System.out.println("Using default properties!");
-			setJacocoAgentJar(JACOCO_AGENT_JAR);
-			setJaguarJar(JAGUAR_JAR);
-			setCompiledTestsDir(COMPILED_TESTS_DIR);
-			setCompiledClassesDir(COMPILED_CLASSES_DIR);
-			setProjectDir(PROJECT_DIR);
-			setHeuristic(HEURISTIC);
+			setJacocoAgentJar(ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "jacocoagent.jar");
+			setJaguarJar(ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "jaguar.jar");
+			setCompiledTestsDir(ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "test-classes");
+			setCompiledClassesDir(ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "classes");
+			setProjectDir(ProjectUtils.getCurrentSelectedProject().getLocation().toString());
 			return;
 		}
 		
-		setJacocoAgentJar(prop.getProperty("jacoco.agent.jar", JACOCO_AGENT_JAR));
-		setJaguarJar(prop.getProperty("jaguar.jar", JAGUAR_JAR));
-		setCompiledTestsDir(prop.getProperty("compiled.tests.dir", COMPILED_TESTS_DIR));
-		setCompiledClassesDir(prop.getProperty("compiled.classes.dir", COMPILED_CLASSES_DIR));
-		setProjectDir(prop.getProperty("project.dir", PROJECT_DIR));
-		setHeuristic(prop.getProperty("heuristic", HEURISTIC));
+		setJacocoAgentJar(prop.getProperty("jacoco.agent.jar", ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "jacocoagent.jar"));
+		setJaguarJar(prop.getProperty("jaguar.jar", ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "jaguar.jar"));
+		setCompiledTestsDir(prop.getProperty("compiled.tests.dir", ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "test-classes"));
+		setCompiledClassesDir(prop.getProperty("compiled.classes.dir", ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "classes"));
+		setProjectDir(prop.getProperty("project.dir", ProjectUtils.getCurrentSelectedProject().getLocation().toString()));
 	}
 
 	public String getJacocoAgentJar() {
@@ -68,10 +59,6 @@ public class PropertyManager {
 
 	public String getProjectDir() {
 		return projectDir;
-	}
-
-	public String getHeuristic() {
-		return heuristic;
 	}
 
 	public void setJacocoAgentJar(String jacocoAgentJar) {
@@ -99,11 +86,6 @@ public class PropertyManager {
 		System.out.println("projectDir = " + projectDir);
 	}
 	
-	public void setHeuristic(String heuristic) {
-		this.heuristic = heuristic;
-		System.out.println("heuristic = " + heuristic);
-	}
-
 	public String getProperty(String propertyName) {
 		return getProperty(propertyName, ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + CONFIG_FILE);
 	}

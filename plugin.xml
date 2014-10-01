@@ -105,6 +105,18 @@
                </visibleWhen>
             </command>
       </menuContribution>
+          <menuContribution
+                allPopups="false"
+                locationURI="toolbar:br.usp.each.saeg.badua.DataflowView">
+             <command
+                   commandId="br.usp.each.badua.toolbar.handler"
+                   hoverIcon="icons/classes.gif"
+                   icon="icons/public_co.gif"
+                   label="Remove highlight"
+                   style="push"
+                   tooltip="Remove highlight">
+             </command>
+          </menuContribution>
       
    </extension>
 <!--   <extension
@@ -293,6 +305,18 @@
             class="br.usp.each.saeg.badua.handlers.VisualizationHandler"
             commandId="br.usp.each.saeg.badua.dataflow.handler">
       </handler>
+      <handler
+            class="br.usp.each.saeg.badua.handlers.CleanAllHighlightHandler"
+            commandId="br.usp.each.badua.toolbar.handler">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="br.usp.each.saeg.badua.commands.runJaguar"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="CTRL+1">
+      </key>
    </extension>
 
 </plugin>

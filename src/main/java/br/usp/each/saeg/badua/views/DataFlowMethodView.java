@@ -55,6 +55,7 @@ public class DataFlowMethodView extends ViewPart {
 	 * to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
+		
 		Tree tree = new Tree(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL); //create a tree 
 		tree.setHeaderVisible(true);//show header in interface
 		tree.setLinesVisible(true); //show lines in interface

@@ -4,10 +4,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -143,8 +145,6 @@ public class CoverageMockModel  {
 		}else{
 			newPackage.setName(pf.getElementName());
 		}
-
-
 		try {
 			IJavaElement[] children = pf.getChildren();
 			if(children.length == 0){
@@ -165,85 +165,116 @@ public class CoverageMockModel  {
 		return Package;
 	}
 
+
 	//get coverage from Class Layer
 	public List<TreeClass> getClassNode(ICompilationUnit cu){
-
 		List<TreeClass> Class = new ArrayList<TreeClass>(); //create a list
-		TreeClass newClass = new TreeClass();
-		newClass.setName(cu.getElementName());
+		LinkedList<ClassNode> classNodes = getASMClassNode(cu);
+		for (ClassNode classNode : classNodes) {
+			TreeClass newClass = new TreeClass();
 
-		List<XmlPackage> listPackage = information.getPackages();
-		XmlPackage Package = null;
-		for(XmlPackage l:listPackage ){
-			try {
-				if((cu.getPackageDeclarations()[0].toString().contains(l.getName()))){
-					//package name
-					Package = l;
-					break;
+			String[] name = classNode.name.split("/");
+			newClass.setName(name[name.length-1]+".java");
+			
+			XmlClass Clazz = null;
+			if(information != null){
+				List<XmlPackage> listPackage = information.getPackages();
+				XmlPackage Package = null;
+				for(XmlPackage l:listPackage ){
+					try {
+						String packageName = extractPackageName(cu.getPackageDeclarations()[0].toString());
+						if(packageName.equals(l.getName())){
+							Package = l;
+							break;
+						}
+					} catch (JavaModelException e) {
+						e.printStackTrace();
+					}
 				}
-			} catch (JavaModelException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	
-		ClassNode classNode = null;
-		classNode = getASMClassNode(classNode,cu);
-		
-		
-		XmlClass Clazz = null;
-		if(Package != null){
-			String clazzName = classNode.name.replace('/', '.');
-			for (XmlClass classes : Package.getClasses()) {
-				System.out.println(clazzName +" "+classes.getName());
-				if(clazzName.equals(classes.getName())){
-					Clazz = classes;
-					break;
+				
+				if(Package != null){
+					String clazzName = classNode.name.replace('/', '.');
+					for (XmlClass classes : Package.getClasses()) {
+						//System.out.println(clazzName +" "+classes.getName());
+						if(clazzName.equals(classes.getName())){
+							Clazz = classes;
+							break;
+						}
+					}
 				}
 			}
-		}
-
 		
-		// for each method in the class
-		for (int posMethod = 0; posMethod < classNode.methods.size(); posMethod++) {
-			methodDuas(classNode, posMethod, newClass, cu, Clazz);
+
+			// for each method in the class
+			for (int posMethod = 0; posMethod < classNode.methods.size(); posMethod++) {
+				methodDuas(classNode, posMethod, newClass, cu, Clazz);
+			}
+			Class.add(newClass);
 		}
-
-		Class.add(newClass);
-
 		return Class;
 	}
 
-	//transform class bytes in ClassNode form from ASM
-	private ClassNode getASMClassNode(ClassNode classNode, ICompilationUnit cu) {
-
-		classNode = new ClassNode(Opcodes.ASM4);
-		ClassReader classReader = null;
-
-		try {
-			//	methodList = cu.getAllTypes()[0].getMethods();
-			classReader = new ClassReader(Files.readAllBytes(getClassPath(cu)));
-		} catch (JavaModelException | IOException e) {
-			e.printStackTrace();
-		}
-
-		classReader.accept(classNode, ClassReader.SKIP_FRAMES);
-
-		return classNode;
+	private String extractPackageName(String Package) {
+		return Package.substring(8, Package.indexOf(" ["));
 	}
 
 
+	//transform class bytes in ClassNode form from ASM
+	private LinkedList<ClassNode> getASMClassNode(ICompilationUnit cu) {
+		LinkedList<ClassNode> classNodes = new LinkedList<ClassNode>();
+		try {
+			LinkedList<Path> paths = getClasspath(cu); // path for the inner class and mainly class
+			for (Path path : paths) {
+				ClassNode classNode = new ClassNode(Opcodes.ASM4);
+				ClassReader classReader = new ClassReader(Files.readAllBytes(path));
+				classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
+				//do not analyze interfaces
+				if ((classNode.access & Opcodes.ACC_INTERFACE) == 0) {
+					classNodes.add(classNode);
+				}
+			}
+		} catch (JavaModelException |IOException e) {
+			e.printStackTrace();
+		}
+		return classNodes;
+	}
 
+	private LinkedList<Path> getClasspath(ICompilationUnit cu) throws JavaModelException, IOException {
+		IRegion region = JavaCore.newRegion();
+		region.add(cu);
+		IResource[] r = JavaCore.getGeneratedResources(region, false);
+		LinkedList<Path> path = new LinkedList<Path>();
+		for (IResource iResource : r) {
+			path.add(Paths.get(iResource.getLocation().toFile().toURI()));
+		}
+		return path;
+	}
+
+
+	@SuppressWarnings("unchecked")
 	private void methodDuas(ClassNode classNode, int posMethod, TreeClass newClass,ICompilationUnit cu, XmlClass clazz) {
 
 		MethodNode methodNode = classNode.methods.get(posMethod);
 
 		TreeMethod newMethod = new TreeMethod(); //create new method
 
+		// Does not instrument:
+		// 1. Abstract methods
+		if ((methodNode.access & Opcodes.ACC_ABSTRACT) != 0) {
+			return;
+		}
+		// 2. Interfaces
+		if((methodNode.access & Opcodes.ACC_INTERFACE) != 0){
+			return;
+		}
+		// 3. Synthetic methods
 		if((methodNode.access & Opcodes.ACC_SYNTHETIC) != 0){
 			return;
 		}
-
+		// 4. Static class initialization
+		if (methodNode.name.equals("<clinit>")) {
+			return;
+		}
 
 		String[] fullClassName = classNode.name.split("/");
 		String className = fullClassName[fullClassName.length-1];
@@ -266,22 +297,19 @@ public class CoverageMockModel  {
 				//	System.out.println("Default: "+name);
 			}
 		}
-		//System.out.println()
-		
+
+
 		XmlMethod Methods = null;
 		if(clazz!= null){
 			for (XmlMethod m: clazz.getMethods()) {
-				System.out.println(m.getName()+" "+ newMethod.getName());
-				if(newMethod.getName().contains(m.getName())){
-					System.out.println("entrooo: "+m.getName()+" "+ newMethod.getName());
+				if(newMethod.getName().equals(m.getName())){
 					Methods = m;
 					break;
 				}
-				System.out.println("vai dar null com:"+m.getName());
 			}
 		}
 
-		
+
 		if((methodNode.access & Opcodes.ACC_PUBLIC) != 0){
 			newMethod.setAccess(Opcodes.ACC_PUBLIC);
 		}else if((methodNode.access & Opcodes.ACC_PROTECTED) != 0){
@@ -291,36 +319,7 @@ public class CoverageMockModel  {
 		}else{
 			newMethod.setAccess(-1);//default methods;
 		}
-		//		System.out.println("methodNode: "+methodNode.name + " " + methodNode.desc);
-		//		
-		//		String s = Signature.toString(methodNode.desc);
-		//		String b = Signature.toString(methodNode.desc, methodNode.name, null, false, true);
-		//		if((methodNode.access & Opcodes.ACC_STATIC) != 0){
-		//		}
 
-		//		System.out.println("ATRAVEZ: "+s+ "     "+ b);
-		//		
-		//		for (IMethod methods:methodList) {
-		//			System.out.println(methods.toString());
-		//			try {
-		//				if((methods.getElementName().equals(className) && methods.getSignature().equals("()V"))){
-		//					String[] temp = classNode.name.split("/");
-		//					System.out.println("className: "+temp[temp.length-1]);
-		//					
-		//				}
-		//				
-		//				
-		//				if(methodNode.name.equals(methods.getElementName()) && methodNode.desc.equals(methods.getSignature())){
-		//					newMethod.setName(formatName(methods.toString()));
-		//					newMethod.setSignature(methodNode.desc);
-		//					break;
-		//				}
-		//				else{
-		//					newMethod.setName(methodNode.name);
-		//				}
-		//				
-		//			} catch (JavaModelException e) {e.printStackTrace();}
-		//		}
 		newClass.getMethods().add(newMethod);//adiciona aos metodos existentes
 
 		int[] lines = new int[methodNode.instructions.size()];
@@ -355,7 +354,18 @@ public class CoverageMockModel  {
 			duas = new DefUseChain[0];
 			vars = new Variable[0];
 		}
-
+		
+		
+		List<LocalVariableNode> localVariables = methodNode.localVariables;
+		HashMap<Integer,String> variables = new HashMap<Integer,String>();
+		for(LocalVariableNode var: localVariables) variables.put(var.index,var.name);
+		ArrayList<XmlStatement> duasXML=null;
+		if(Methods != null){
+			
+			duasXML =  (ArrayList<XmlStatement>) Methods.getStatements().clone();
+			
+		}
+		
 		for (final DefUseChain dua : duas) {
 			final Variable var = vars[dua.var];
 			final int def = lines[dua.def];
@@ -371,40 +381,32 @@ public class CoverageMockModel  {
 				try {
 					name = varName(dua.def, ((Local) var).var,methodNode);
 				} catch (Exception e) {
-					name = var.toString();
+					//					name = var.toString();
+					name = null;
 				}
 			}
-
-			TreeDUA newDua = new TreeDUA(def, use, target, name, cu); //cria uma dua
-			if(Methods != null){
-				for (XmlStatement duas : Methods.getStatements()) {
-					System.out.println(duas.getDef()+" "+ duas.getUse()+" "+ duas.getTarget()+" "+ duas.getVar()+"    "+def+" "+use+" "+target+" "+name);
-					if(duas.getDef() == def && duas.getUse() == use && duas.getTarget() == target && duas.getVar().equals(name)){
-						System.out.println("sao iguais");
-						newDua.setCovered(duas.getCovered());
-						break;
+			if(name != null){
+				//name = getVariableName(name, variables);
+				TreeDUA newDua = new TreeDUA(def, use, target, name, cu); //cria uma dua
+				if(duasXML != null){
+					
+					for(int i = 0; i< duasXML.size();i++){
+//					for (XmlStatement duas : Methods.getStatements()) {
+						//System.out.println(duas.getDef()+" "+ duas.getUse()+" "+ duas.getTarget()+" "+ duas.getVar()+"    "+def+" "+use+" "+target+" "+name);
+						if(duasXML.get(i).getDef() == def && duasXML.get(i).getUse() == use && duasXML.get(i).getTarget() == target && duasXML.get(i).getVar().equals(name)){
+							//System.out.println("sao iguais");
+							newDua.setCovered(duasXML.get(i).getCovered());
+							duasXML.remove(i);
+							break;
+						}
 					}
+					
 				}
+				newMethod.getDUAS().add(newDua); //adiciona nas duas existentes
 			}
-
-//			//DELETAR - GERAR DADOS ALEATORIOS PARA COBERTURA
-//			if(Math.random() > 0.5){
-//				newDua.setCovered(true);
-//			}else newDua.setCovered(false);
-
-			newMethod.getDUAS().add(newDua); //adiciona nas duas existentes
-
 		}
 
 	}
-
-	//usado para o type.getMethods
-	//	private String formatName(String method){
-	//		int finish = method.indexOf(")");
-	//		method =  (String) method.subSequence(0, finish+1);
-	//		return method;
-	//
-	//	}
 
 	private String varName(final int insn, final int index, MethodNode methodNode) {
 		for (final LocalVariableNode local : methodNode.localVariables) {
@@ -417,55 +419,5 @@ public class CoverageMockModel  {
 			}
 		}
 		throw new RuntimeException("Variable not found");
-	}
-
-
-	private Path getClassPath(ICompilationUnit cu) throws JavaModelException, IOException {
-
-		//		System.out.println("getClassPath "+cu.toString());		//nao pode ser not open nem working copy
-		//		cu.open(null);
-		//		System.out.println("getClassPath "+cu.toString());
-		//		System.out.println("primariElement: "+cu.getPrimary());
-		IRegion region = JavaCore.newRegion();
-		region.add(cu);
-		IResource[] r = JavaCore.getGeneratedResources(region, false);
-		//		IFile file = (IFile) r[0];
-		//		IClassFile b = (IClassFile) JavaCore.createClassFileFrom(file);
-		//		System.out.println(b.getSource()); 		//null
-		//		IMethod[] met = b.getType().getMethods();
-		//		System.out.println(met.length);			//Java Model Status [bin/source [in Max] is not on its project's build path]
-		if(r.length == 0){
-			System.exit(0);
-		}
-		IPath ipath = r[0].getLocation();
-
-		//		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(ipath);
-		//		IClassFile f = JavaCore.createClassFileFrom(file);
-
-		//		ASTParser p = ASTParser.newParser(AST.JLS4);
-		//		p.setSource(cu);
-		//		p.setKind(ASTParser.K_COMPILATION_UNIT);
-		//
-		//		CompilationUnit cu = (CompilationUnit)p.createAST(null);
-		//		cu.accept(new ASTVisitor() {
-		//			public boolean visit(MethodDeclaration node){
-		//				SimpleName n = node.getName();
-		//				System.out.println(n.getFullyQualifiedName());
-		//				return false;
-		//
-		//			}
-		//			public boolean visit(Initializer node){
-		//				int modifiers = node.getModifiers();
-		//				if(Modifier.isStatic(modifiers)){
-		//					System.out.println("tem modifier static");
-		//				}else{
-		//					System.out.println("tem modifier");
-		//				}
-		//
-		//				return false;
-		//
-		//			}
-		//		});
-		return Paths.get(ipath.toFile().toURI());
 	}
 } 

@@ -28,11 +28,11 @@ public class TreeProject {
 				covered += cover[0];
 				total += cover[1];
 			}
-			if(covered == 0 && total == 0){
-				return "No Def-Use Associations";
-			}else{
+			if(total != 0){
 				return "("+covered+"/"+total+") "+String.format("%.2f", (double)covered/(double)total*100)+"%";
+
 			}
+			return "No Def-Use Associations";
 		}
 		return "No Def-Use Associations";
 	}

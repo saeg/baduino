@@ -32,24 +32,43 @@ public class VisualizationHandler extends AbstractHandler {
 	//method called when we want open the plugin visualization
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-
+//
 //		XmlInput xmlInput = XmlObject.getInstance();
+//		int coveredAll = 0;
+//		int totalAll = 0;
 //		List<XmlPackage> listPackage = xmlInput.getPackages();
 //		for(XmlPackage l:listPackage ){
-//			System.out.println(l.getName());
+//			//System.out.println(l.getName());
+//			int coveredClass=0,totalClass=0;
 //			List<XmlClass>listClass = l.getClasses();
 //			for(XmlClass l2:listClass){
-//				System.out.println("\t"+l2.getName());
+//			//	System.out.println("\t"+l2.getName());
+//				int coveredMETHOD=0,totalMETHOD=0;
 //				List<XmlMethod>listMethod = l2.getMethods();
 //				for(XmlMethod l3:listMethod){
-//					System.out.println("\t"+"\t"+l3.getName());
+//				//	System.out.println("\t"+"\t"+l3.getName());
+//					int coveredDUA=0,totalDUA=0;
 //					List<XmlStatement>listStatement = l3.getStatements();
 //					for(XmlStatement l4:listStatement){
-//						System.out.println(l4.getDef()+" "+l4.getUse()+" "+l4.getTarget()+" "+l4.getVar()+" "+l4.getCovered());
+//						//System.out.println(l4.getDef()+" "+l4.getUse()+" "+l4.getTarget()+" "+l4.getVar()+" "+l4.getCovered());
+//						if(l4.getCovered()){
+//							coveredDUA++;
+//						}
+//						totalDUA++;
 //					}
+//					System.out.println("\t\t\t"+l3.getName()+" "+coveredDUA+"/"+totalDUA);
+//					coveredMETHOD+=coveredDUA;totalMETHOD+=totalDUA;
+//					coveredDUA=0;totalDUA=0;
 //				}
+//				System.out.println("\t\t"+l2.getName()+" "+coveredMETHOD+"/"+totalMETHOD);
+//				coveredClass+=coveredMETHOD;totalClass+= totalMETHOD;
+//				coveredMETHOD=0;totalMETHOD=0;
 //			}
+//			System.out.println("\t"+l.getName()+" "+coveredClass+"/"+totalClass);
+//			coveredAll+= coveredClass;totalAll+=totalClass;
+//			coveredClass=0;totalClass=0;
 //		}
+//		System.out.println("CoveredALL: "+coveredAll+"/"+totalAll);
 		
 		try {
 			//get selection type

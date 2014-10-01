@@ -3,7 +3,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.debug.core.ILaunchesListener2;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 
 import br.usp.each.saeg.badua.utils.ProjectUtils;
@@ -13,15 +12,6 @@ public class RunTestsHandler extends AbstractHandler implements IJavaLaunchConfi
 
 	JaguarRunnable jaguar;
 	
-	public RunTestsHandler() {
-		super();
-		jaguar = new JaguarRunnable();
-	}
-	
-	public RunTestsHandler(ILaunchesListener2 listener) {
-		super();
-		this.jaguar = new JaguarRunnable(listener);
-	}
 	@Override
 	public Object execute(ExecutionEvent arg) throws ExecutionException {
 		final IProject project = ProjectUtils.getCurrentSelectedProject();
@@ -29,6 +19,7 @@ public class RunTestsHandler extends AbstractHandler implements IJavaLaunchConfi
 			return null;
 		}
 
+		jaguar = new JaguarRunnable(new JaguarLaunchesListener2(project));
 		jaguar.run();
 		
 		return null;

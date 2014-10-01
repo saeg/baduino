@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
@@ -31,6 +32,7 @@ public class CodeMarkerFactory {
 	public static IMarker useMarker;
 	public static IMarker targetMarker;
 	public static IMarker pointerMarker;
+	private static LinkedList<IMarker> markerList= new LinkedList<IMarker>();
 
 
 	public static void mark(final IResource resource, final int[] defOffset, final int[] useOffset, int[] targetOffset, String covered) throws PartInitException {
@@ -52,7 +54,7 @@ public class CodeMarkerFactory {
 			//				useMarker.setAttribute(IMarker.CHAR_END, useOffset[1]);
 			//			}
 			pointerMarker = resource.createMarker(POINTER_MARKER);
-			
+
 			if(covered.equals("true")){
 				defMarker = resource.createMarker(COVERED_MARKER);
 				useMarker = resource.createMarker(COVERED_MARKER);
@@ -67,6 +69,7 @@ public class CodeMarkerFactory {
 				}else{
 					targetMarker = resource.createMarker(UNCOVERED_MARKER);
 				}
+				markerList.add(targetMarker);
 				targetMarker.setAttribute(IMarker.CHAR_START, targetOffset[0]);
 				targetMarker.setAttribute(IMarker.CHAR_END, targetOffset[1]);
 			}
@@ -79,7 +82,11 @@ public class CodeMarkerFactory {
 
 			pointerMarker.setAttribute(IMarker.CHAR_START,defOffset[0]);
 			pointerMarker.setAttribute(IMarker.CHAR_END,defOffset[0]);
-
+			
+			markerList.add(pointerMarker);
+			markerList.add(defMarker);
+			markerList.add(useMarker);
+			
 
 		} catch (CoreException e) {e.printStackTrace();}
 
@@ -143,23 +150,30 @@ public class CodeMarkerFactory {
 			return;
 		}
 
-		WorkspaceJob job = new WorkspaceJob("deleteMarkers " + new Date().toString()) {
-			@Override
-			public IStatus runInWorkspace(IProgressMonitor arg0) throws CoreException {
+//		WorkspaceJob job = new WorkspaceJob("deleteMarkers " + new Date().toString()) {
+//			@Override
+//			public IStatus runInWorkspace(IProgressMonitor arg0) throws CoreException {
 
 				for (IMarker marker : toDelete) {
 					try {
-						marker.delete();
 
+						marker.delete();
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setPriority(WorkspaceJob.DECORATE);
-		job.schedule();
+				markerList.removeAll(toDelete);
+//				return Status.OK_STATUS;
+//			}
+//		};
+//		job.setPriority(WorkspaceJob.DECORATE);
+//		job.schedule();
+
+
+	}
+	public static void removeAllMarkers() {
+		removeMarkers(markerList);
 	}
 
 

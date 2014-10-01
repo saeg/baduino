@@ -2,6 +2,7 @@ package br.usp.each.saeg.badua.xml;
 
 import java.math.*;
 import java.util.*;
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -12,7 +13,7 @@ public class XmlMethod {
     private String name;
     private BigDecimal score = new BigDecimal(XmlInput.nextScore());
     private int loc;
-    private List<XmlStatement> statements = new ArrayList<XmlStatement>();
+    private ArrayList<XmlStatement> statements = new ArrayList<XmlStatement>();
     private int number;
     private int start;
     private int end;
@@ -31,11 +32,12 @@ public class XmlMethod {
 //        }
 //    }
 
-    @XmlElement(name="requirements")
-    public List<XmlStatement> getStatements() {
+    @XmlElement(name="requirement")
+    public ArrayList<XmlStatement> getStatements() {
         return statements;
     }
-    public void setStatements(List<XmlStatement> statements) {
+    
+    public void setStatements(ArrayList<XmlStatement> statements) {
 //    	Collections.sort(statements, new Comparator<XmlStatement>() {
 //            @Override
 //            public int compare(XmlStatement o1, XmlStatement o2) {

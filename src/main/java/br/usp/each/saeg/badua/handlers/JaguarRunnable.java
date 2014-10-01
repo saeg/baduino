@@ -20,7 +20,7 @@ import br.usp.each.saeg.badua.utils.PropertyManager;
 
 public class JaguarRunnable implements IJavaLaunchConfigurationConstants {
 
-	PropertyManager properties = new PropertyManager();
+	PropertyManager properties;
 	ILaunchesListener2 launchesListener;
 
 	public JaguarRunnable() {
@@ -33,6 +33,7 @@ public class JaguarRunnable implements IJavaLaunchConfigurationConstants {
 	}
 
 	public void run() {
+		properties = new PropertyManager();
 		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
 		ILaunchConfigurationType type = manager.getLaunchConfigurationType(ID_JAVA_APPLICATION);
 		if (launchesListener != null) {
@@ -47,15 +48,14 @@ public class JaguarRunnable implements IJavaLaunchConfigurationConstants {
 			return;
 		}
 		workingCopy.setAttribute(ATTR_VM_ARGUMENTS, "-javaagent:" + properties.getJacocoAgentJar() + "=output=tcpserver,dataflow=true");
-
 		List<String> classpath = buildClassPath();
 
 		workingCopy.setAttribute(ATTR_CLASSPATH, classpath);
 		workingCopy.setAttribute(ATTR_DEFAULT_CLASSPATH, false);
 
 		workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, "br.usp.each.saeg.jaguar.runner.BaduinoRunner");
-		//remover o primeiro parametro - heuristic
-		workingCopy.setAttribute(ATTR_PROGRAM_ARGUMENTS, properties.getHeuristic() + " " + properties.getProjectDir() + " "
+
+		workingCopy.setAttribute(ATTR_PROGRAM_ARGUMENTS,properties.getProjectDir() + " "
 				+ properties.getCompiledClassesDir() + " " + properties.getCompiledTestsDir() + " ");
 
 		ILaunchConfiguration configuration = null;

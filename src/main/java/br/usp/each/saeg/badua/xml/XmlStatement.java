@@ -2,20 +2,12 @@ package br.usp.each.saeg.badua.xml;
 
 import java.math.BigDecimal;
 
-import javax.xml.bind.annotation.XmlAnyAttribute;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Danilo Mutti (dmutti@gmail.com)
  */
-public class XmlStatement {
-
-    private int loc;
-    private BigDecimal score = new BigDecimal(XmlInput.nextScore());
-    private int start;
-    private int end;
-    private String content;
+public class XmlStatement implements Cloneable{
     
     private boolean covered;
     private int def;
