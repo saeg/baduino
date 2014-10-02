@@ -1,11 +1,8 @@
 package br.usp.each.saeg.badua.handlers;
 
-import java.util.List;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -17,12 +14,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import br.usp.each.saeg.badua.views.DataFlowMethodView;
-import br.usp.each.saeg.badua.xml.XmlClass;
-import br.usp.each.saeg.badua.xml.XmlInput;
-import br.usp.each.saeg.badua.xml.XmlMethod;
-import br.usp.each.saeg.badua.xml.XmlObject;
-import br.usp.each.saeg.badua.xml.XmlPackage;
-import br.usp.each.saeg.badua.xml.XmlStatement;
 
 
 public class VisualizationHandler extends AbstractHandler {

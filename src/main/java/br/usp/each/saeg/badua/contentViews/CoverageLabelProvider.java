@@ -25,9 +25,11 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 	private static final Image FOLDER = getImage("folder.gif");
 	private static final Image PACKAGE = getImage("package.gif");
 	private static final Image CLASS = getImage("classes.gif");
+	private static final Image DUA = getImage("dua.png");
+	
 
 	// Helper Method to load the images
-	private static Image getImage(String file) {
+	public static Image getImage(String file) {
 		Bundle bundle = FrameworkUtil.getBundle(CoverageLabelProvider.class);
 		URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
 		ImageDescriptor image = ImageDescriptor.createFromURL(url);
@@ -77,6 +79,8 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 				}else{
 					return images.getImage(ISharedImages.IMG_OBJS_DEFAULT);
 				}
+			}else if (element instanceof TreeDUA){
+				return DUA;
 			}
 			return null;
 			

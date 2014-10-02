@@ -6,8 +6,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchesListener2;
 
-import br.usp.each.saeg.badua.utils.ProjectUtils;
-
 public class JaguarLaunchesListener2 implements ILaunchesListener2 {
 
 	private IProject project;

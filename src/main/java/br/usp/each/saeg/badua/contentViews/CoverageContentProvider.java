@@ -1,8 +1,5 @@
 package br.usp.each.saeg.badua.contentViews;
-import java.util.InputMismatchException;
 import java.util.List;
-
-import javax.swing.JOptionPane;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;

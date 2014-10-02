@@ -1,7 +1,6 @@
 package br.usp.each.saeg.badua.views;
 
 import org.eclipse.jdt.core.ICompilationUnit;
-
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -34,7 +33,6 @@ import br.usp.each.saeg.badua.markers.CodeMarkerFactory;
 
 
 public class DataFlowMethodView extends ViewPart {
-
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -55,7 +53,6 @@ public class DataFlowMethodView extends ViewPart {
 	 * to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
-		
 		Tree tree = new Tree(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL); //create a tree 
 		tree.setHeaderVisible(true);//show header in interface
 		tree.setLinesVisible(true); //show lines in interface
@@ -63,12 +60,12 @@ public class DataFlowMethodView extends ViewPart {
 
 		//first column
 		TreeColumn column1 = new TreeColumn(tree, SWT.LEFT);
-		column1.setText("Methods -> Def-Use Associations");
+		column1.setText("Project");
 		column1.setWidth(500);
 
 		//second column
 		TreeColumn column2 = new TreeColumn(tree, SWT.LEFT);
-		column2.setText("Coverage");
+		column2.setText("DUAs Coverage");
 		column2.setWidth(200);
 
 		long start = System.currentTimeMillis();

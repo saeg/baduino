@@ -7,8 +7,9 @@
             allPopups="false"
             locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
          <menu
-         	id="br.usp.each.saeg.badua.ui"
-         	label="BADUINO">
+               icon="icons/baduino.png"
+               id="br.usp.each.saeg.badua.ui"
+               label="Baduino">
          	</menu>   
       </menuContribution>
       
@@ -16,7 +17,8 @@
           locationURI= "popup:br.usp.each.saeg.badua.ui?after=additions">
              <command
                    commandId="br.usp.each.saeg.badua.dataflow.handler"
-                   label="Project DUAs Visualization"
+                   icon="icons/projects.gif"
+                   label="Project Visualization"
                    style="push">
                 <visibleWhen
                       checkEnabled="false">
@@ -34,7 +36,8 @@
              </command>
              <command
                    commandId="br.usp.each.saeg.badua.dataflow.handler"
-                   label="Folder DUAs Visualization"
+                   icon="icons/folder.gif"
+                   label="Folder Visualization"
                    style="push">
                 <visibleWhen
                       checkEnabled="false">
@@ -52,7 +55,8 @@
              </command>
              <command
                    commandId="br.usp.each.saeg.badua.dataflow.handler"
-                   label="Package DUAs Visualization"
+                   icon="icons/package.gif"
+                   label="Package Visualization"
                    style="push">
                 <visibleWhen
                       checkEnabled="false">
@@ -70,7 +74,8 @@
              </command>
              <command
                    commandId="br.usp.each.saeg.badua.dataflow.handler"
-                   label="Class DUAs Visualization"
+                   icon="icons/classes.gif"
+                   label="Class Visualization"
                    style="push">
                 <visibleWhen
                       checkEnabled="false">
@@ -87,9 +92,10 @@
                 </visibleWhen>
              </command>
             <command
-                commandId="br.usp.each.saeg.badua.commands.runJaguar"
-                id="br.usp.each.saeg.badua.menu.item.runJaguar"
-                label="Run Tests">
+                  commandId="br.usp.each.saeg.badua.commands.runJaguar"
+                  icon="icons/junit_launch_icon.gif"
+                  id="br.usp.each.saeg.badua.menu.item.runJaguar"
+                  label="Run Tests">
                <visibleWhen
                      checkEnabled="false">
                   <with
@@ -111,7 +117,7 @@
              <command
                    commandId="br.usp.each.badua.toolbar.handler"
                    hoverIcon="icons/classes.gif"
-                   icon="icons/public_co.gif"
+                   icon="icons/Highlighter Yellow-01.png"
                    label="Remove highlight"
                    style="push"
                    tooltip="Remove highlight">
@@ -131,13 +137,14 @@
          point="org.eclipse.ui.views">
       <category
             id="br.usp.each.saeg.badua.coverage"
-            name="Coverage">
+            name="Baduino">
       </category>
       <view
             category="br.usp.each.saeg.badua.coverage"
             class="br.usp.each.saeg.badua.views.DataFlowMethodView"
+            icon="icons/baduino.png"
             id="br.usp.each.saeg.badua.DataflowView"
-            name="DataflowView"
+            name="Baduino Visualization"
             restorable="true">
       </view>
    </extension>
@@ -310,13 +317,13 @@
             commandId="br.usp.each.badua.toolbar.handler">
       </handler>
    </extension>
-   <extension
+<!--   <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="br.usp.each.saeg.badua.commands.runJaguar"
+            commandId="br.usp.each.saeg.badua.dataflow.handler"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+1">
+            sequence="M1+1">
       </key>
    </extension>
-
+-->
 </plugin>
