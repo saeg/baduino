@@ -20,6 +20,7 @@ public class XmlObject {
 		resource = ProjectUtils.getCurrentSelectedProject().getFile(
 				"baduino.xml");
 		if (!resource.exists()) {
+			System.out.println("isOpen? "+ProjectUtils.getCurrentSelectedProject().isOpen());
 			return null;
 		}
 
