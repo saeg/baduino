@@ -8,6 +8,12 @@ Bundle-ClassPath: .,
  lib/asm-debug-all-4.2.jar,
  lib/asm-defuse-0.0.1.jar,
  lib/saeg-commons-0.0.4.jar
+Export-Package: br.usp.each.saeg.baduino.contentViews,
+ br.usp.each.saeg.baduino.handlers,
+ br.usp.each.saeg.baduino.markers,
+ br.usp.each.saeg.baduino.utils,
+ br.usp.each.saeg.baduino.views,
+ br.usp.each.saeg.baduino.xml
 Import-Package: org.eclipse.debug.core,
  org.eclipse.jdt.launching,
  org.eclipse.ui.ide
