@@ -1,6 +1,5 @@
-package br.usp.each.saeg.badua.contentViews;
+package br.usp.each.saeg.baduino.contentViews;
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,13 +32,13 @@ import br.usp.each.saeg.asm.defuse.DepthFirstDefUseChainSearch;
 import br.usp.each.saeg.asm.defuse.Field;
 import br.usp.each.saeg.asm.defuse.Local;
 import br.usp.each.saeg.asm.defuse.Variable;
-import br.usp.each.saeg.badua.handlers.VisualizationHandler;
-import br.usp.each.saeg.badua.xml.XmlClass;
-import br.usp.each.saeg.badua.xml.XmlInput;
-import br.usp.each.saeg.badua.xml.XmlMethod;
-import br.usp.each.saeg.badua.xml.XmlObject;
-import br.usp.each.saeg.badua.xml.XmlPackage;
-import br.usp.each.saeg.badua.xml.XmlStatement;
+import br.usp.each.saeg.baduino.handlers.VisualizationHandler;
+import br.usp.each.saeg.baduino.xml.XmlClass;
+import br.usp.each.saeg.baduino.xml.XmlInput;
+import br.usp.each.saeg.baduino.xml.XmlMethod;
+import br.usp.each.saeg.baduino.xml.XmlObject;
+import br.usp.each.saeg.baduino.xml.XmlPackage;
+import br.usp.each.saeg.baduino.xml.XmlStatement;
 
 //Structure layers  
 //layer 0: IJavaProject(Project)|

@@ -1,35 +1,24 @@
-package br.usp.each.saeg.badua.contentViews;
+package br.usp.each.saeg.baduino.contentViews;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreeMethod {
+public class TreePackage {
 	private String name;
-	private List<TreeDUA> Duas = new ArrayList<TreeDUA>();
-	private int access;
-
+	private List<TreeClass> Classes = new ArrayList<TreeClass>();
 	private int covered = 0;
 	private int total = 0;
 
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public int getAccess() {
-		return access;
+	public List<TreeClass> getClasses() {
+		return Classes;
 	}
-
-	public void setAccess(int accPublic) {
-		this.access = accPublic;
-	}
-
-	public List<TreeDUA> getDUAS() {
-		return Duas;
-	}
-
 	public String getCoverage(){
 		if(covered == 0 && total == 0){
 			getCoverageRecursive();
@@ -37,21 +26,24 @@ public class TreeMethod {
 
 		if(total != 0){
 			return "("+covered+"/"+total+") "+String.format("%.2f", (double)covered/(double)total*100)+"%";
+		}else{
+			return "No Def-Use Associations";
 		}
-		return "No Def-Use Associations";
 	}
 
 	public int[] getCoverageRecursive() {
 		if(covered == 0 && total == 0){
-			if(Duas.size() != 0){
-				for(TreeDUA duas: Duas){
-					if(duas.getCovered().equals(String.valueOf(true))) {
-						covered++;
+			if(Classes.size() != 0){
+				for(TreeClass classes: Classes){
+					int[] cover = classes.getCoverageRecursive();
+					if((cover[0] != -1) && (cover[1] != -1)){
+						covered += cover[0];
+						total += cover[1];
 					}
 				}
 			}
-			total = Duas.size();
 		}
 		return new int[]{covered,total};
 	}
-} 
+
+}

@@ -1,25 +1,26 @@
-package br.usp.each.saeg.badua.contentViews;
+package br.usp.each.saeg.baduino.contentViews;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreePackage {
+public class TreeFolder {
 	private String name;
-	private List<TreeClass> Classes = new ArrayList<TreeClass>();
+	private List<TreePackage> Packages = new ArrayList<TreePackage>();
 	private int covered = 0;
 	private int total = 0;
 
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public List<TreeClass> getClasses() {
-		return Classes;
+	public List<TreePackage> getPackages() {
+		return Packages;
 	}
-	public String getCoverage(){
+
+	public String getCoverage() {
 		if(covered == 0 && total == 0){
 			getCoverageRecursive();
 		}
@@ -31,11 +32,11 @@ public class TreePackage {
 		}
 	}
 
-	public int[] getCoverageRecursive() {
+	public int[] getCoverageRecursive(){
 		if(covered == 0 && total == 0){
-			if(Classes.size() != 0){
-				for(TreeClass classes: Classes){
-					int[] cover = classes.getCoverageRecursive();
+			if(Packages.size() != 0){
+				for(TreePackage packages: Packages){
+					int[] cover = packages.getCoverageRecursive();
 					if((cover[0] != -1) && (cover[1] != -1)){
 						covered += cover[0];
 						total += cover[1];
@@ -45,5 +46,4 @@ public class TreePackage {
 		}
 		return new int[]{covered,total};
 	}
-
 }

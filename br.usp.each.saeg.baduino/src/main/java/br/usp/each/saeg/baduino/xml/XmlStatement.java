@@ -1,4 +1,4 @@
-package br.usp.each.saeg.badua.xml;
+package br.usp.each.saeg.baduino.xml;
 
 import javax.xml.bind.annotation.XmlAttribute;
 

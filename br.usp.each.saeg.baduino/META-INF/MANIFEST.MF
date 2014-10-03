@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Baduino
-Bundle-SymbolicName: br.usp.each.saeg.badua;singleton:=true
+Bundle-SymbolicName: br.usp.each.saeg.baduino.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .,

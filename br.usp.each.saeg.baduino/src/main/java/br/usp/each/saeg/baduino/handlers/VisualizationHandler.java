@@ -1,6 +1,7 @@
-package br.usp.each.saeg.badua.handlers;
+package br.usp.each.saeg.baduino.handlers;
 
 import org.eclipse.core.commands.AbstractHandler;
+
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -13,7 +14,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import br.usp.each.saeg.badua.views.DataFlowMethodView;
+import br.usp.each.saeg.baduino.views.DataFlowMethodView;
 
 
 public class VisualizationHandler extends AbstractHandler {

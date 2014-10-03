@@ -1,4 +1,4 @@
-package br.usp.each.saeg.badua.markers;
+package br.usp.each.saeg.baduino.markers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,11 +17,11 @@ import org.eclipse.ui.ide.IDE;
 
 public class CodeMarkerFactory {
 
-	public static final String COVERED_MARKER = "br.usp.each.saeg.badua.markers.definition";
-	public static final String UNCOVERED_MARKER = "br.usp.each.saeg.badua.markers.use";
-	public static final String TARGET_MARKER = "br.usp.each.saeg.badua.markers.target";
+	public static final String COVERED_MARKER = "br.usp.each.saeg.baduino.markers.definition";
+	public static final String UNCOVERED_MARKER = "br.usp.each.saeg.baduino.markers.use";
+	public static final String TARGET_MARKER = "br.usp.each.saeg.baduino.markers.target";
 	//public static final String SAMELINE_MARKER = "br.usp.each.saeg.badua.markers.sameLine";
-	public static final String POINTER_MARKER = "br.usp.each.saeg.badua.markers.pointer";
+	public static final String POINTER_MARKER = "br.usp.each.saeg.baduino.markers.pointer";
 
 	public static IMarker defMarker;
 	public static IMarker useMarker;

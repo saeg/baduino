@@ -1,9 +1,11 @@
-package br.usp.each.saeg.badua.contentViews;
+package br.usp.each.saeg.baduino.contentViews;
 
 import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.ui.ISharedImages;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -11,8 +13,6 @@ import org.eclipse.swt.graphics.Image;
 import org.objectweb.asm.Opcodes;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
-import org.eclipse.jdt.ui.ISharedImages;
-import org.eclipse.jdt.ui.JavaUI;
 
 
 public class CoverageLabelProvider implements ITableLabelProvider {

@@ -1,10 +1,10 @@
-package br.usp.each.saeg.badua.contentViews;
+package br.usp.each.saeg.baduino.contentViews;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import br.usp.each.saeg.badua.views.DataFlowMethodView;
+import br.usp.each.saeg.baduino.views.DataFlowMethodView;
 
 public class CoverageContentProvider implements ITreeContentProvider {
 

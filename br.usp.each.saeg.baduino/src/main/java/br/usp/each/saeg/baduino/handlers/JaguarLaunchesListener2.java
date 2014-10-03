@@ -1,4 +1,4 @@
-package br.usp.each.saeg.badua.handlers;
+package br.usp.each.saeg.baduino.handlers;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;

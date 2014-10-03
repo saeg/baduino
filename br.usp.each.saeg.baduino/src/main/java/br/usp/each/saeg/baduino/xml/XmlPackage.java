@@ -1,4 +1,4 @@
-package br.usp.each.saeg.badua.xml;
+package br.usp.each.saeg.baduino.xml;
 
 import java.util.ArrayList;
 import java.util.List;

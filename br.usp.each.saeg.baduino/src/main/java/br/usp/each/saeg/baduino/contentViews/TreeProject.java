@@ -1,4 +1,4 @@
-package br.usp.each.saeg.badua.contentViews;
+package br.usp.each.saeg.baduino.contentViews;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,7 @@
-package br.usp.each.saeg.badua.handlers;
+package br.usp.each.saeg.baduino.handlers;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -16,7 +17,7 @@ import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 
-import br.usp.each.saeg.badua.utils.PropertyManager;
+import br.usp.each.saeg.baduino.utils.PropertyManager;
 
 public class JaguarRunnable implements IJavaLaunchConfigurationConstants {
 

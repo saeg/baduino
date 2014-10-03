@@ -1,6 +1,7 @@
-package br.usp.each.saeg.badua.views;
+package br.usp.each.saeg.baduino.views;
 
 import org.eclipse.jdt.core.ICompilationUnit;
+
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -20,16 +21,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import br.usp.each.saeg.badua.contentViews.CoverageContentProvider;
-import br.usp.each.saeg.badua.contentViews.CoverageLabelProvider;
-import br.usp.each.saeg.badua.contentViews.CoverageMockModel;
-import br.usp.each.saeg.badua.contentViews.TreeClass;
-import br.usp.each.saeg.badua.contentViews.TreeDUA;
-import br.usp.each.saeg.badua.contentViews.TreeFolder;
-import br.usp.each.saeg.badua.contentViews.TreeMethod;
-import br.usp.each.saeg.badua.contentViews.TreePackage;
-import br.usp.each.saeg.badua.contentViews.TreeProject;
-import br.usp.each.saeg.badua.markers.CodeMarkerFactory;
+import br.usp.each.saeg.baduino.contentViews.*;
+import br.usp.each.saeg.baduino.markers.CodeMarkerFactory;
 
 
 public class DataFlowMethodView extends ViewPart {

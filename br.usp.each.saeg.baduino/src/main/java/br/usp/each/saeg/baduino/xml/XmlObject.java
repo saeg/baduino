@@ -1,9 +1,10 @@
-package br.usp.each.saeg.badua.xml;
+package br.usp.each.saeg.baduino.xml;
 
 import org.eclipse.core.resources.IResource;
+
 import org.eclipse.core.runtime.CoreException;
 
-import br.usp.each.saeg.badua.utils.ProjectUtils;
+import br.usp.each.saeg.baduino.utils.ProjectUtils;
 
 public class XmlObject {
 
