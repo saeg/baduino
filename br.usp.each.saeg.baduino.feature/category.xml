@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/br.usp.each.saeg.baduino.feature_1.0.0.qualifier.jar" id="br.usp.each.saeg.baduino.feature" version="1.0.0.qualifier">
+      <category name="Baduino_Category"/>
+   </feature>
+   <category-def name="Baduino_Category" label="Baduino Eclipse Plugin">
+      <description>
+         Baduino Eclipse Plugin
+      </description>
+   </category-def>
+</site>

@@ -1,8 +1,11 @@
 package br.usp.each.saeg.baduino.handlers;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -49,7 +52,13 @@ public class JaguarRunnable implements IJavaLaunchConfigurationConstants {
 			return;
 		}
 		workingCopy.setAttribute(ATTR_VM_ARGUMENTS, "-javaagent:" + properties.getJacocoAgentJar() + "=output=tcpserver,dataflow=true");
-		List<String> classpath = buildClassPath();
+		
+		List<String> classpath = null;
+		try {
+			classpath = buildClassPath();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
 
 		workingCopy.setAttribute(ATTR_CLASSPATH, classpath);
 		workingCopy.setAttribute(ATTR_DEFAULT_CLASSPATH, false);
@@ -58,6 +67,7 @@ public class JaguarRunnable implements IJavaLaunchConfigurationConstants {
 
 		workingCopy.setAttribute(ATTR_PROGRAM_ARGUMENTS,properties.getProjectDir() + " "
 				+ properties.getCompiledClassesDir() + " " + properties.getCompiledTestsDir() + " ");
+
 
 		ILaunchConfiguration configuration = null;
 		try {
@@ -70,21 +80,24 @@ public class JaguarRunnable implements IJavaLaunchConfigurationConstants {
 
 	}
 
-	private List<String> buildClassPath() {
+	private List<String> buildClassPath() throws FileNotFoundException {
 		List<String> classpath = new ArrayList<String>();
 		try {
 
 			IPath jaguarPath = new Path(properties.getJaguarJar());
+			checkPath(jaguarPath);
 			IRuntimeClasspathEntry jaguarEntry = JavaRuntime.newArchiveRuntimeClasspathEntry(jaguarPath);
 			jaguarEntry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
 			classpath.add(jaguarEntry.getMemento());
 
 			IPath testPath = new Path(properties.getCompiledTestsDir());
+			checkPath(testPath);
 			IRuntimeClasspathEntry testEntry = JavaRuntime.newArchiveRuntimeClasspathEntry(testPath);
 			testEntry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
 			classpath.add(testEntry.getMemento());
 
 			IPath classesPath = new Path(properties.getCompiledClassesDir());
+			checkPath(classesPath);
 			IRuntimeClasspathEntry classesEntry = JavaRuntime.newArchiveRuntimeClasspathEntry(classesPath);
 			classesEntry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
 			classpath.add(classesEntry.getMemento());
@@ -93,6 +106,14 @@ public class JaguarRunnable implements IJavaLaunchConfigurationConstants {
 			e.printStackTrace();
 		}
 		return classpath;
+	}
+	
+	private void checkPath(IPath path) throws FileNotFoundException{
+		File test = new File(path.toString());
+		if(!test.exists()){
+			JOptionPane.showMessageDialog(null, "Invalid Classpath:"+path.toString(), "Invalid Classpath", JOptionPane.DEFAULT_OPTION);
+			throw new FileNotFoundException();
+		}
 	}
 
 }

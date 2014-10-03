@@ -1,7 +1,6 @@
 package br.usp.each.saeg.baduino.xml;
 
 import java.util.ArrayList;
-
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 

@@ -6,7 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-import org.apache.commons.lang3.StringUtils;
+//import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Danilo Mutti (dmutti@gmail.com)
@@ -39,13 +39,13 @@ public class XmlClass {
         }
     }
 
-    public XmlMethod byName(String name) {
-        for (int i = 0, j = methods.size(); i < j; i++) {
-            XmlMethod method = methods.get(i);
-            if (StringUtils.equals(name, method.getName())) {
-                return method;
-            }
-        }
-        return null;
-    }
+//    public XmlMethod byName(String name) {
+//        for (int i = 0, j = methods.size(); i < j; i++) {
+//            XmlMethod method = methods.get(i);
+//            if (StringUtils.equals(name, method.getName())) {
+//                return method;
+//            }
+//        }
+//        return null;
+//    }
 }
