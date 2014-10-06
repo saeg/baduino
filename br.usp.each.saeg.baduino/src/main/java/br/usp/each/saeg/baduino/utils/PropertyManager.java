@@ -9,7 +9,7 @@ import java.util.Properties;
 public class PropertyManager {
 
 	private static final String FOLDER_SEPARATOR = System.getProperty("file.separator");
-	private static final String CONFIG_FILE = "codeforest.properties";
+	private static final String CONFIG_FILE = "baduino.properties";
 	
 	private String jacocoAgentJar;
 	private String jaguarJar;

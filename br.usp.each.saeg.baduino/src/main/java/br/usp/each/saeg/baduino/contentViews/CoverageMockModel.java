@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +27,7 @@ import org.objectweb.asm.tree.analysis.AnalyzerException;
 
 import br.usp.each.saeg.asm.defuse.DefUseAnalyzer;
 import br.usp.each.saeg.asm.defuse.DefUseChain;
+import br.usp.each.saeg.asm.defuse.DefUseFrame;
 import br.usp.each.saeg.asm.defuse.DepthFirstDefUseChainSearch;
 import br.usp.each.saeg.asm.defuse.Field;
 import br.usp.each.saeg.asm.defuse.Local;
@@ -48,10 +48,10 @@ import br.usp.each.saeg.baduino.xml.XmlStatement;
 
 public class CoverageMockModel  {
 
-	private DefUseAnalyzer analyzer = new DefUseAnalyzer();
-	private DefUseChain[] duas;
-	private Variable[] vars;
-	private final DepthFirstDefUseChainSearch dfducs = new DepthFirstDefUseChainSearch();
+	private Variable[] variables;
+	private int[][] basicBlocks;
+	private int[] leaders;
+	private String className;
 	private static XmlInput information;
 
 	//	private IMethod[] methodList;
@@ -202,7 +202,7 @@ public class CoverageMockModel  {
 				}
 			}
 		
-
+			className = classNode.name;
 			// for each method in the class
 			for (int posMethod = 0; posMethod < classNode.methods.size(); posMethod++) {
 				methodDuas(classNode, posMethod, newClass, cu, Clazz);
@@ -307,7 +307,6 @@ public class CoverageMockModel  {
 			}
 		}
 
-
 		if((methodNode.access & Opcodes.ACC_PUBLIC) != 0){
 			newMethod.setAccess(Opcodes.ACC_PUBLIC);
 		}else if((methodNode.access & Opcodes.ACC_PROTECTED) != 0){
@@ -319,44 +318,7 @@ public class CoverageMockModel  {
 		}
 
 		newClass.getMethods().add(newMethod);//adiciona aos metodos existentes
-
-		int[] lines = new int[methodNode.instructions.size()];
-		for (int i = 0; i < lines.length; i++) {
-			if (methodNode.instructions.get(i) instanceof LineNumberNode) {
-				final LineNumberNode insn = (LineNumberNode) methodNode.instructions.get(i);
-				lines[methodNode.instructions.indexOf(insn.start)] = insn.line;
-			}
-		}
-		int line = 1;
-		for (int i = 0; i < lines.length; i++) {
-			if (lines[i] == 0)
-				lines[i] = line;
-			else
-				line = lines[i];
-		}
-
-
-		try {
-			analyzer.analyze(classNode.name,methodNode); // right ?
-
-			// find all definition-use chains
-			duas = dfducs.search(analyzer.getDefUseFrames(), analyzer.getVariables(),
-					analyzer.getSuccessors(), analyzer.getPredecessors());
-
-			// only global definition-use chains
-			duas = DefUseChain.globals(duas, analyzer.getLeaders(), analyzer.getBasicBlocks());
-
-			vars = analyzer.getVariables();
-
-		} catch (final AnalyzerException ignore) {
-			duas = new DefUseChain[0];
-			vars = new Variable[0];
-		}
 		
-		
-		List<LocalVariableNode> localVariables = methodNode.localVariables;
-		HashMap<Integer,String> variables = new HashMap<Integer,String>();
-		for(LocalVariableNode var: localVariables) variables.put(var.index,var.name);
 		ArrayList<XmlStatement> duasXML=null;
 		if(Methods != null){
 			
@@ -364,46 +326,59 @@ public class CoverageMockModel  {
 			
 		}
 		
-		for (final DefUseChain dua : duas) {
-			final Variable var = vars[dua.var];
-			final int def = lines[dua.def];
-			final int use = lines[dua.use];
-			int target = dua.target;
-			if(target != -1){
-				target = lines[dua.target];
-			}
-			String name;
-			if (var instanceof Field) {
-				name = ((Field) var).name;
-			} else {
-				try {
-					name = varName(dua.def, ((Local) var).var,methodNode);
-				} catch (Exception e) {
-					//					name = var.toString();
-					name = null;
+		final int[] lines = getLines(methodNode);
+		DefUseChain[] duaI = transform(methodNode);
+		for (DefUseChain defUseChain : duaI) {
+			DefUseChain bbchain = toBB(defUseChain);
+			if(bbchain != null){
+				int defLine = lines[defUseChain.def];
+				int useLine = lines[defUseChain.use];
+				int targetLine = -1;
+				if(defUseChain.target != -1){
+					targetLine = lines[defUseChain.target];
 				}
-			}
-			if(name != null){
-				//name = getVariableName(name, variables);
-				TreeDUA newDua = new TreeDUA(def, use, target, name, cu); //cria uma dua
-				if(duasXML != null){
-					
-					for(int i = 0; i< duasXML.size();i++){
-//					for (XmlStatement duas : Methods.getStatements()) {
-						//System.out.println(duas.getDef()+" "+ duas.getUse()+" "+ duas.getTarget()+" "+ duas.getVar()+"    "+def+" "+use+" "+target+" "+name);
-						if(duasXML.get(i).getDef() == def && duasXML.get(i).getUse() == use && duasXML.get(i).getTarget() == target && duasXML.get(i).getVar().equals(name)){
-							//System.out.println("sao iguais");
-							newDua.setCovered(duasXML.get(i).getCovered());
-							duasXML.remove(i);
-							break;
+				String varName = getName(defUseChain,methodNode);
+				if(varName != null){
+					TreeDUA newDua = new TreeDUA(defLine, useLine, targetLine, varName, cu); //cria uma dua
+					if(duasXML != null){
+						for(int i = 0; i< duasXML.size();i++){
+							if(duasXML.get(i).getDef() == defLine && duasXML.get(i).getUse() == useLine && duasXML.get(i).getTarget() == targetLine && duasXML.get(i).getVar().equals(varName)){
+								newDua.setCovered(duasXML.get(i).getCovered());
+								duasXML.remove(i);
+								break;
+							}
 						}
+						
 					}
+					newMethod.getDUAS().add(newDua); //adiciona nas duas existentes
+					
 					
 				}
-				newMethod.getDUAS().add(newDua); //adiciona nas duas existentes
 			}
 		}
-
+	}
+	
+	private DefUseChain toBB(DefUseChain c) {
+		if (DefUseChain.isGlobal(c, leaders, basicBlocks)) {
+			return new DefUseChain(leaders[c.def], leaders[c.use], c.target == -1 ? -1 : leaders[c.target], c.var);
+		}
+		return null;
+	}
+	
+	private String getName(final DefUseChain dua, MethodNode methodNode) {
+		final Variable var = variables[dua.var];
+		String name;
+		if (var instanceof Field) {
+			name = ((Field) var).name;
+		} else {
+			try {
+				name = varName(dua.use, ((Local) var).var, methodNode);
+			} catch (final Exception e) {
+				name = null;
+			}
+		}
+		
+		return name;
 	}
 
 	private String varName(final int insn, final int index, MethodNode methodNode) {
@@ -418,4 +393,46 @@ public class CoverageMockModel  {
 		}
 		throw new RuntimeException("Variable not found");
 	}
+	
+	
+	private DefUseChain[] transform(final MethodNode methodNode) {
+		final DefUseAnalyzer analyzer = new DefUseAnalyzer();
+		try {
+			analyzer.analyze(className, methodNode);
+		} catch (final AnalyzerException e) {
+			throw new RuntimeException(e);
+		}
+
+		final DefUseFrame[] frames = analyzer.getDefUseFrames();
+		variables = analyzer.getVariables();
+		final int[][] successors = analyzer.getSuccessors();
+		final int[][] predecessors = analyzer.getPredecessors();
+		basicBlocks = analyzer.getBasicBlocks();
+		leaders = analyzer.getLeaders();
+		//defuse with instructions
+		return new DepthFirstDefUseChainSearch().search(frames, variables, successors, predecessors);
+	}
+	
+	
+	private int[] getLines(MethodNode methodNode) {
+		final int[] lines = new int[methodNode.instructions.size()];
+		for (int i = 0; i < lines.length; i++) {
+			if (methodNode.instructions.get(i) instanceof LineNumberNode) {
+				final LineNumberNode insn = (LineNumberNode) methodNode.instructions.get(i);
+				lines[methodNode.instructions.indexOf(insn.start)] = insn.line;
+			}
+		}
+
+		int line = 1;
+		for (int i = 0; i < lines.length; i++) {
+			if (lines[i] == 0) {
+				lines[i] = line;
+			} else {
+				line = lines[i];
+			}
+		}
+		return lines;
+	}
+	
+	
 } 
