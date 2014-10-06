@@ -29,7 +29,7 @@ public class DataFlowMethodView extends ViewPart {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "br.usp.each.saeg.badua.DataflowView";
+	public static final String ID = "br.usp.each.saeg.baduino.DataflowView";
 
 	private TreeViewer viewer;
 
@@ -76,21 +76,21 @@ public class DataFlowMethodView extends ViewPart {
 				IStructuredSelection thisSelection = (IStructuredSelection) event
 						.getSelection();
 				Object selectedNode = thisSelection.getFirstElement();
-
+				
 				if(selectedNode instanceof TreeDUA){
 					ICompilationUnit cu = ((TreeDUA) selectedNode).getCu();
 					try {
+						//remove old markers
+						CodeMarkerFactory.removeMarkers(CodeMarkerFactory.findMarkers(cu.getUnderlyingResource()));
 						//get the first and last char of definition line to draw
-						int[] defOffset = parserLine(cu.getSource(),((TreeDUA) selectedNode).getDef(),new int[2]);
+						int[] defOffset = parserLine(cu.getSource(),((TreeDUA) selectedNode).getDef());
 						//get the first and last char of c-use line to draw
-						int[] useOffset = parserLine(cu.getSource(), ((TreeDUA) selectedNode).getUse(), new int[2]);
+						int[] useOffset = parserLine(cu.getSource(), ((TreeDUA) selectedNode).getUse());
 						//get the first and last char of target line to draw
 						int[] targetOffset = null;
 						if(((TreeDUA) selectedNode).getTarget() != 1){
-							targetOffset = parserLine(cu.getSource(),((TreeDUA) selectedNode).getTarget(),new int[2]);
+							targetOffset = parserLine(cu.getSource(),((TreeDUA) selectedNode).getTarget());
 						}
-						//remove old markers
-						CodeMarkerFactory.removeMarkers(CodeMarkerFactory.findMarkers(cu.getUnderlyingResource()));
 						//create new markers based on selected DUA
 						CodeMarkerFactory.mark(cu.getUnderlyingResource(),defOffset,useOffset,targetOffset,((TreeDUA) selectedNode).getCovered());
 						setFocus();
@@ -119,7 +119,7 @@ public class DataFlowMethodView extends ViewPart {
 						|| selectedNode instanceof TreePackage 
 						|| selectedNode instanceof TreeFolder 
 						|| selectedNode instanceof TreeProject){
-					
+
 					viewer.setExpandedState(selectedNode,
 							!viewer.getExpandedState(selectedNode));
 				}
@@ -145,7 +145,8 @@ public class DataFlowMethodView extends ViewPart {
 	}
 
 	//search for the line , and get the position of the first char and last char
-	protected int[] parserLine(String source, int Line, int[] Offset) {
+	protected int[] parserLine(String source, int Line) {
+		int[] Offset = new int[2];
 		String[] Source = source.split("\n");
 		int actualLine = 1;
 		int counterChar = 0;
@@ -163,11 +164,12 @@ public class DataFlowMethodView extends ViewPart {
 
 	//close the view, when workbench is closed, and changed
 	public static void closeViews() {
+		System.out.println("Close view");
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		if (page != null) {
 			IViewReference[] viewReferences = page.getViewReferences();
 			for (IViewReference ivr : viewReferences) {
-				if (ivr.getId().startsWith("br.usp.each.saeg.badua")) {
+				if (ivr.getId().startsWith("br.usp.each.saeg.baduino")) {
 					page.hideView(ivr);
 				}
 			}

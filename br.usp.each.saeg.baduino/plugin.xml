@@ -136,20 +136,20 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            id="br.usp.each.saeg.badua.coverage"
+            id="br.usp.each.saeg.baduino.coverage"
             name="Baduino">
       </category>
       <view
-            category="br.usp.each.saeg.badua.coverage"
+            category="br.usp.each.saeg.baduino.coverage"
             class="br.usp.each.saeg.baduino.views.DataFlowMethodView"
             icon="icons/baduino.png"
-            id="br.usp.each.saeg.badua.DataflowView"
+            id="br.usp.each.saeg.baduino.DataflowView"
             name="Baduino Visualization"
             restorable="true">
       </view>
    </extension>
    <extension
-         id="br.usp.each.saeg.badua.markers.definition"
+         id="br.usp.each.saeg.baduino.markers.definition"
          name="Definition Marker"
          point="org.eclipse.core.resources.markers">
       <super
@@ -160,7 +160,7 @@
       </persistent>
    </extension>
    <extension
-         id="br.usp.each.saeg.badua.markers.use"
+         id="br.usp.each.saeg.baduino.markers.use"
          name="Use Marker"
          point="org.eclipse.core.resources.markers">
       <super
@@ -171,7 +171,7 @@
       </persistent>
    </extension>
    <extension
-         id="br.usp.each.saeg.badua.markers.target"
+         id="br.usp.each.saeg.baduino.markers.target"
          name="Target Marker"
          point="org.eclipse.core.resources.markers">
       <super
@@ -182,7 +182,7 @@
       </persistent>
    </extension>
    <extension
-         id="br.usp.each.saeg.badua.markers.sameLine"
+         id="br.usp.each.saeg.baduino.markers.sameLine"
          name="Same Line Marker"
          point="org.eclipse.core.resources.markers">
       <super
@@ -193,7 +193,7 @@
       </persistent>
    </extension>
    <extension
-         id="br.usp.each.saeg.badua.markers.pointer"
+         id="br.usp.each.saeg.baduino.markers.pointer"
          name="Pointer Marker"
          point="org.eclipse.core.resources.markers">
       <super
