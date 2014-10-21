@@ -173,23 +173,30 @@ public class CoverageMockModel  {
 
 			String[] name = classNode.name.split("/");
 			newClass.setName(name[name.length-1]+".java");
-			
+
 			XmlClass Clazz = null;
 			if(information != null){
 				List<XmlPackage> listPackage = information.getPackages();
 				XmlPackage Package = null;
 				for(XmlPackage l:listPackage ){
 					try {
-						String packageName = extractPackageName(cu.getPackageDeclarations()[0].toString());
-						if(packageName.equals(l.getName())){
-							Package = l;
-							break;
+						if(cu.getPackageDeclarations().length > 0){
+							String packageName = extractPackageName(cu.getPackageDeclarations()[0].toString());
+							if(packageName.equals(l.getName())){
+								Package = l;
+								break;
+							}
+						}else {
+							if(newClass.getName().equals(l.getName())){
+								Package = l;
+								break;
+							}
 						}
 					} catch (JavaModelException e) {
 						e.printStackTrace();
 					}
 				}
-				
+
 				if(Package != null){
 					String clazzName = classNode.name.replace('/', '.');
 					for (XmlClass classes : Package.getClasses()) {
@@ -201,7 +208,7 @@ public class CoverageMockModel  {
 					}
 				}
 			}
-		
+
 			className = classNode.name;
 			// for each method in the class
 			for (int posMethod = 0; posMethod < classNode.methods.size(); posMethod++) {
@@ -318,14 +325,14 @@ public class CoverageMockModel  {
 		}
 
 		newClass.getMethods().add(newMethod);//adiciona aos metodos existentes
-		
+
 		ArrayList<XmlStatement> duasXML=null;
 		if(Methods != null){
-			
+
 			duasXML =  (ArrayList<XmlStatement>) Methods.getStatements().clone();
-			
+
 		}
-		
+
 		final int[] lines = getLines(methodNode);
 		DefUseChain[] duaI = transform(methodNode);
 		for (DefUseChain defUseChain : duaI) {
@@ -348,23 +355,23 @@ public class CoverageMockModel  {
 								break;
 							}
 						}
-						
+
 					}
 					newMethod.getDUAS().add(newDua); //adiciona nas duas existentes
-					
-					
+
+
 				}
 			}
 		}
 	}
-	
+
 	private DefUseChain toBB(DefUseChain c) {
 		if (DefUseChain.isGlobal(c, leaders, basicBlocks)) {
 			return new DefUseChain(leaders[c.def], leaders[c.use], c.target == -1 ? -1 : leaders[c.target], c.var);
 		}
 		return null;
 	}
-	
+
 	private String getName(final DefUseChain dua, MethodNode methodNode) {
 		final Variable var = variables[dua.var];
 		String name;
@@ -377,7 +384,7 @@ public class CoverageMockModel  {
 				name = null;
 			}
 		}
-		
+
 		return name;
 	}
 
@@ -393,8 +400,8 @@ public class CoverageMockModel  {
 		}
 		throw new RuntimeException("Variable not found");
 	}
-	
-	
+
+
 	private DefUseChain[] transform(final MethodNode methodNode) {
 		final DefUseAnalyzer analyzer = new DefUseAnalyzer();
 		try {
@@ -412,8 +419,8 @@ public class CoverageMockModel  {
 		//defuse with instructions
 		return new DepthFirstDefUseChainSearch().search(frames, variables, successors, predecessors);
 	}
-	
-	
+
+
 	private int[] getLines(MethodNode methodNode) {
 		final int[] lines = new int[methodNode.instructions.size()];
 		for (int i = 0; i < lines.length; i++) {
@@ -433,6 +440,6 @@ public class CoverageMockModel  {
 		}
 		return lines;
 	}
-	
-	
+
+
 } 
