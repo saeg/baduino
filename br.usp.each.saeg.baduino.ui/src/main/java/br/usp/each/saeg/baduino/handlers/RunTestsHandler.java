@@ -1,9 +1,11 @@
 package br.usp.each.saeg.baduino.handlers;
-import org.eclipse.core.commands.AbstractHandler;
+import java.io.IOException;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 
 import br.usp.each.saeg.baduino.utils.ProjectUtils;
@@ -21,7 +23,13 @@ public class RunTestsHandler extends AbstractHandler implements IJavaLaunchConfi
 		}
 
 		jaguar = new JaguarRunnable(new JaguarLaunchesListener2(project));
-		jaguar.run();
+		try {
+			jaguar.run();
+		} catch (CoreException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		return null;
 	}

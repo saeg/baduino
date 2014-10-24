@@ -7,7 +7,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .,
  lib/asm-debug-all-4.2.jar,
  lib/asm-defuse-0.0.1.jar,
- lib/saeg-commons-0.0.4.jar
+ lib/saeg-commons-0.0.4.jar,
+ lib/jacocoagent.jar,
+ lib/jaguarresource.jar
 Export-Package: br.usp.each.saeg.baduino.contentViews,
  br.usp.each.saeg.baduino.handlers,
  br.usp.each.saeg.baduino.markers,

@@ -1,5 +1,6 @@
 package br.usp.each.saeg.baduino.contentViews;
 import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -409,7 +410,7 @@ public class CoverageMockModel  {
 		} catch (final AnalyzerException e) {
 			throw new RuntimeException(e);
 		}
-
+		
 		final DefUseFrame[] frames = analyzer.getDefUseFrames();
 		variables = analyzer.getVariables();
 		final int[][] successors = analyzer.getSuccessors();

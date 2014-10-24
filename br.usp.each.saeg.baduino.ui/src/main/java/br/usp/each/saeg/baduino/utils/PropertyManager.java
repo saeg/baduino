@@ -10,15 +10,20 @@ public class PropertyManager {
 
 	private static final String FOLDER_SEPARATOR = System.getProperty("file.separator");
 	private static final String CONFIG_FILE = "baduino.properties";
+	private static final String INCLUDES = "*";
+	
+	private final String projectLocation;
 	
 	private String jacocoAgentJar;
 	private String jaguarJar;
 	private String compiledTestsDir;
 	private String compiledClassesDir;
 	private String projectDir;
+	private String includes;
 
-	public PropertyManager() {
+	public PropertyManager(String projectLocation) {
 		super();
+		this.projectLocation = projectLocation;
 		loadProperties();
 	}
 
@@ -26,19 +31,18 @@ public class PropertyManager {
 		Properties prop = getPropertyFile(ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + CONFIG_FILE);
 		if (prop == null) {
 			System.out.println("Using default properties!");
-			setJacocoAgentJar(ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "jacocoagent.jar");
-			setJaguarJar(ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "jaguar.jar");
-			setCompiledTestsDir(ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "test-classes");
-			setCompiledClassesDir(ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "classes");
-			setProjectDir(ProjectUtils.getCurrentSelectedProject().getLocation().toString());
+			setProjectDir(projectLocation);
+			setJaguarJar(projectLocation + FOLDER_SEPARATOR + "jaguar.jar");
+			setCompiledTestsDir(projectLocation + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "test-classes");
+			setCompiledClassesDir(projectLocation + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "classes");
+			setIncludes(INCLUDES);
 			return;
 		}
-		
-		setJacocoAgentJar(prop.getProperty("jacoco.agent.jar", ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "jacocoagent.jar"));
-		setJaguarJar(prop.getProperty("jaguar.jar", ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "jaguar.jar"));
-		setCompiledTestsDir(prop.getProperty("compiled.tests.dir", ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "test-classes"));
-		setCompiledClassesDir(prop.getProperty("compiled.classes.dir", ProjectUtils.getCurrentSelectedProject().getLocation() + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "classes"));
-		setProjectDir(prop.getProperty("project.dir", ProjectUtils.getCurrentSelectedProject().getLocation().toString()));
+		setProjectDir(prop.getProperty("project.dir", projectLocation));
+		setJaguarJar(prop.getProperty("jaguar.jar", projectLocation + FOLDER_SEPARATOR + "jaguar.jar"));
+		setCompiledTestsDir(prop.getProperty("compiled.tests.dir", projectLocation + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "test-classes"));
+		setCompiledClassesDir(prop.getProperty("compiled.classes.dir", projectLocation + FOLDER_SEPARATOR + "target" + FOLDER_SEPARATOR + "classes"));
+		setIncludes(prop.getProperty("includes", INCLUDES));
 	}
 
 	public String getJacocoAgentJar() {
@@ -59,6 +63,10 @@ public class PropertyManager {
 
 	public String getProjectDir() {
 		return projectDir;
+	}
+	
+	public String getIncludes() {
+		return includes;
 	}
 
 	public void setJacocoAgentJar(String jacocoAgentJar) {
@@ -84,6 +92,11 @@ public class PropertyManager {
 	public void setProjectDir(String projectDir) {
 		this.projectDir = projectDir;
 		System.out.println("projectDir = " + projectDir);
+	}
+	
+	public void setIncludes(String includes) {
+		this.includes = includes;
+		System.out.println("includes = " + includes);
 	}
 	
 	public String getProperty(String propertyName) {
