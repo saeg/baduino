@@ -57,31 +57,7 @@ public class JaguarRunnable implements IJavaLaunchConfigurationConstants {
 			e.printStackTrace();
 			return;
 		}
-
-//		List<String> classpath = buildClassPath();
-
-		//workingCopy.setAttribute(ATTR_VM_ARGUMENTS, "-javaagent:" + properties.getJacocoAgentJar() + "=output=tcpserver,dataflow=true");
 		
-//		List<String> classpath = null;
-//		try {
-//			classpath = buildClassPath();
-//		} catch (FileNotFoundException e1) {
-//			e1.printStackTrace();
-//		}
-		
-//		workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, "br.usp.each.saeg.jaguar.core.runner.JaguarRunner");
-//		workingCopy.setAttribute(ATTR_PROGRAM_ARGUMENTS,properties.getProjectDir() + " " + properties.getCompiledClassesDir() + " "
-//						+ properties.getCompiledTestsDir() + " ");
-//
-//		workingCopy.setAttribute(ATTR_CLASSPATH, classpath);
-//		workingCopy.setAttribute(ATTR_DEFAULT_CLASSPATH, false);
-//
-//		workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, "br.usp.each.saeg.jaguar.runner.BaduinoRunner");
-//
-//		workingCopy.setAttribute(ATTR_PROGRAM_ARGUMENTS,properties.getProjectDir() + " "
-//				+ properties.getCompiledClassesDir() + " " + properties.getCompiledTestsDir() + " ");
-//
-
 		workingCopy.setAttribute(ATTR_VM_ARGUMENTS, jacocoJar.getQuotedVmArguments(properties.getIncludes()));
 		
 		List<String> classpath = buildClassPath();
@@ -92,7 +68,6 @@ public class JaguarRunnable implements IJavaLaunchConfigurationConstants {
 		workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, "br.usp.each.saeg.jaguar.runner.BaduinoRunner");
 		workingCopy.setAttribute(ATTR_PROGRAM_ARGUMENTS,properties.getProjectDir() + " " 
 				+ properties.getCompiledClassesDir() + " " + properties.getCompiledTestsDir() + " ");
-		
 		
 		ILaunchConfiguration configuration = null;
 		try {

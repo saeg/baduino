@@ -28,7 +28,6 @@ public class JaguarLaunchesListener2 implements ILaunchesListener2 {
 
 	@Override
 	public void launchesTerminated(ILaunch[] launches) {
-		System.out.println("LAUNCHES TERMINATED");
 		try {
 			project.refreshLocal(IResource.DEPTH_ONE, null);
 		} catch (CoreException e) {
