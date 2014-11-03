@@ -1,1 +1,3 @@
-# [Official Baduino Site](http://luizbaptistao.github.io/) #
+# BADUINO #
+==============================
+##Bitwise-Algorithm Definition-Use assocIatioN visualizatiOn##
