@@ -1,72 +1,20 @@
-<<<<<<< HEAD
 
-# Created by https://www.gitignore.io/api/java,eclipse,osx
+# Created by https://www.gitignore.io/api/eclipse,java,osx,windows
 
 ### Eclipse ###
 
 .metadata
 bin/
 tmp/
-=======
-# Directories #
-/build/
-bin/
-target/
- 
-*.class
- 
-# Package Files #
-*.jar
-*.war
-*.ear
-*.db
-
-######################
-# Maven
-######################
-pom.xml.releaseBackup
-release.properties
-
-######################
-# Windows
-######################
- 
-# Windows image file caches
-Thumbs.db 
- 
-# Folder config file
-Desktop.ini
- 
-######################
-# OSX
-######################
- 
-.DS_Store
-.svn
- 
-# Thumbnails
-._*
- 
-######################
-# Eclipse
-######################
- 
-*.pydevproject
-.project
-.metadata
-bin/**
-tmp/**
-tmp/**/*
->>>>>>> b26a528189e5efdb0f54a6042ddabbe574c568b2
 *.tmp
 *.bak
 *.swp
 *~.nib
 local.properties
-<<<<<<< HEAD
 .settings/
 .loadpath
 .recommenders
+target/
 
 # Eclipse Core
 .project
@@ -137,6 +85,27 @@ Temporary Items
 .apdisk
 
 
+### Windows ###
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+
 ### Java ###
 *.class
 
@@ -149,16 +118,3 @@ Temporary Items
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-
-target/
-=======
-.classpath
-.settings/
-.loadpath
-
-# External tool builders
-.externalToolBuilders/
- 
-# Locally stored "Eclipse launch configurations"
-*.launch
->>>>>>> b26a528189e5efdb0f54a6042ddabbe574c568b2
