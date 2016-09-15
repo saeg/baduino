@@ -23,9 +23,9 @@
 
 	<distributionManagement>
         <repository>
-        	<id>bintray-marioconcilio-baduino</id>
-    		<name>marioconcilio-baduino</name>
-        	<url>https://api.bintray.com/maven/marioconcilio/baduino/ui/;publish=1</url>
+          <id>bintray-marioconcilio-baduino</id>
+    		  <name>marioconcilio-baduino</name>
+        	<url>https://api.bintray.com/maven/marioconcilio/baduino/baduino/;publish=1</url>
     	</repository>
 	</distributionManagement>
  
