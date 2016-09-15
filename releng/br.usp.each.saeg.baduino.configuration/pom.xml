@@ -9,23 +9,23 @@
  	<packaging>pom</packaging>
  	
  	<properties>
-  		<tycho.version>0.25.0</tycho.version>
-  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  		<mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
-      <luna-repo.url>http://download.eclipse.org/releases/luna</luna-repo.url>
+  	<tycho.version>0.25.0</tycho.version>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  	<mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
+    <luna-repo.url>http://download.eclipse.org/releases/luna</luna-repo.url>
  	</properties>
  	
  	<repositories>
-  		<repository>
-   			<id>mars</id>
-   			<url>${mars-repo.url}</url>
-   			<layout>p2</layout>
-  		</repository>
-      <repository>
-        <id>luna</id>
-        <url>${luna-repo.url}</url>
-        <layout>p2</layout>
-      </repository>
+  	<repository>
+   		<id>mars</id>
+   		<url>${mars-repo.url}</url>
+   		<layout>p2</layout>
+  	</repository>
+    <repository>
+      <id>luna</id>
+      <url>${luna-repo.url}</url>
+      <layout>p2</layout>
+    </repository>
  	</repositories>
 
   <scm>
@@ -85,11 +85,11 @@
  	</build>
 
   <distributionManagement>
-        <repository>
-          <id>bintray-marioconcilio-baduino</id>
-          <name>marioconcilio-baduino</name>
-          <url>https://api.bintray.com/maven/marioconcilio/baduino/baduino/;publish=1</url>
-      </repository>
+    <repository>
+      <id>bintray-marioconcilio-baduino</id>
+      <name>marioconcilio-baduino</name>
+      <url>https://api.bintray.com/maven/marioconcilio/baduino/baduino/;publish=1</url>
+    </repository>
   </distributionManagement>
  	
 </project>

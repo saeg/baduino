@@ -3,12 +3,41 @@
   xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
                       http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
-<servers>
-	<server>
+	<servers>
+		<server>
     	<id>bintray-marioconcilio-baduino</id>
-        <username>marioconcilio</username>
-        <password>2446dba61753d65e75c1b619fdb63504239fe6e8</password>
-	</server>
-</servers>
+      <username>marioconcilio</username>
+      <password>2446dba61753d65e75c1b619fdb63504239fe6e8</password>
+		</server>
+	</servers>
+
+	<profiles>
+    <profile>
+      <repositories>
+        <repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>bintray-marioconcilio-baduino</id>
+          <name>bintray</name>
+          <url>http://dl.bintray.com/marioconcilio/baduino</url>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>bintray-marioconcilio-baduino</id>
+          <name>bintray-plugins</name>
+          <url>http://dl.bintray.com/marioconcilio/baduino</url>
+        </pluginRepository>
+      </pluginRepositories>
+      <id>bintray</id>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>bintray</activeProfile>
+  </activeProfiles>
 
 </settings>
