@@ -34,11 +34,11 @@
  	
  	<build>
   		<plugins>
-        <plugin>
+  <!--       <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <version>2.5.3</version>
-        </plugin>
+        </plugin> -->
 
    			<plugin>
     			<groupId>org.eclipse.tycho</groupId>
@@ -47,12 +47,12 @@
     			<extensions>true</extensions>
    			</plugin>
 
-        <plugin>
+        <!-- <plugin>
           <groupId>org.eclipse.tycho</groupId>
           <artifactId>tycho-pomgenerator-plugin</artifactId>
           <version>${tycho.version}</version>
           <extensions>true</extensions>
-        </plugin>
+        </plugin> -->
 
    			<plugin>
     			<groupId>org.eclipse.tycho</groupId>

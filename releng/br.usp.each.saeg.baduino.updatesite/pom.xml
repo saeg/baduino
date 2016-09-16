@@ -6,9 +6,9 @@
     <parent>
         <groupId>br.usp.each.saeg.baduino</groupId>
         <artifactId>br.usp.each.saeg.baduino.releng</artifactId>
-        <version>0.9.1</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>br.usp.each.saeg.baduino.updatesite</artifactId>
-    <version>0.9.1</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>eclipse-repository</packaging>
 </project>
