@@ -9,10 +9,10 @@
  	<packaging>pom</packaging>
  	
  	<properties>
-  	<tycho.version>0.25.0</tycho.version>
+  	<tycho.version>0.26.0</tycho.version>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	<mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
-    <luna-repo.url>http://download.eclipse.org/releases/luna</luna-repo.url>
+    <!-- <luna-repo.url>http://download.eclipse.org/releases/luna</luna-repo.url> -->
  	</properties>
  	
  	<repositories>
@@ -21,11 +21,11 @@
    		<url>${mars-repo.url}</url>
    		<layout>p2</layout>
   	</repository>
-    <repository>
-      <id>luna</id>
-      <url>${luna-repo.url}</url>
-      <layout>p2</layout>
-    </repository>
+    <!-- <repository> -->
+      <!-- <id>luna</id> -->
+      <!-- <url>${luna-repo.url}</url> -->
+      <!-- <layout>p2</layout> -->
+    <!-- </repository> -->
  	</repositories>
 
   <scm>
