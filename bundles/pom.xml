@@ -4,18 +4,17 @@
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.usp.each.saeg.baduino</groupId>
-    <artifactId>br.usp.each.saeg.baduino.bundles</artifactId>
+  <artifactId>br.usp.each.saeg.baduino.bundles</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <parent>
+    <groupId>br.usp.each.saeg.baduino</groupId>
+    <artifactId>br.usp.each.saeg.baduino.root</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+  </parent>
 
-    <parent>
-        <groupId>br.usp.each.saeg.baduino</groupId>
-        <artifactId>br.usp.each.saeg.baduino.root</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
-
-    <modules>
-        <module>br.usp.each.saeg.baduino.ui</module>
-    </modules>
-    
+  <modules>
+    <module>br.usp.each.saeg.baduino.ui</module>
+  </modules>
 </project>

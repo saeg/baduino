@@ -12,7 +12,6 @@
   	<tycho.version>0.26.0</tycho.version>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   	<mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
-    <!-- <luna-repo.url>http://download.eclipse.org/releases/luna</luna-repo.url> -->
  	</properties>
  	
  	<repositories>
@@ -21,11 +20,6 @@
    		<url>${mars-repo.url}</url>
    		<layout>p2</layout>
   	</repository>
-    <!-- <repository> -->
-      <!-- <id>luna</id> -->
-      <!-- <url>${luna-repo.url}</url> -->
-      <!-- <layout>p2</layout> -->
-    <!-- </repository> -->
  	</repositories>
 
   <scm>
@@ -34,25 +28,12 @@
  	
  	<build>
   		<plugins>
-  <!--       <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>2.5.3</version>
-        </plugin> -->
-
    			<plugin>
     			<groupId>org.eclipse.tycho</groupId>
     			<artifactId>tycho-maven-plugin</artifactId>
     			<version>${tycho.version}</version>
     			<extensions>true</extensions>
    			</plugin>
-
-        <!-- <plugin>
-          <groupId>org.eclipse.tycho</groupId>
-          <artifactId>tycho-pomgenerator-plugin</artifactId>
-          <version>${tycho.version}</version>
-          <extensions>true</extensions>
-        </plugin> -->
 
    			<plugin>
     			<groupId>org.eclipse.tycho</groupId>

@@ -4,13 +4,13 @@
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>br.usp.each.saeg.baduino</groupId>
-  <artifactId>br.usp.each.saeg.baduino.updatesite</artifactId>
+  <artifactId>br.usp.each.saeg.baduino.ui</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <packaging>eclipse-repository</packaging>
+  <packaging>eclipse-plugin</packaging>
 
   <parent>
     <groupId>br.usp.each.saeg.baduino</groupId>
-    <artifactId>br.usp.each.saeg.baduino.releng</artifactId>
+    <artifactId>br.usp.each.saeg.baduino.bundles</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 </project>
