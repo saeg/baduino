@@ -29,4 +29,5 @@
       </plugin>
     </plugins>
   </build>
+<version>0.9.0</version>
 </project>
