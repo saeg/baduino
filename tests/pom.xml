@@ -3,19 +3,17 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>br.usp.each.saeg.baduino</groupId>
-  <artifactId>br.usp.each.saeg.baduino.releng</artifactId>
-  <version>0.9.0</version>
+  <artifactId>br.usp.each.saeg.baduino.tests</artifactId>
   <packaging>pom</packaging>
 
   <parent>
     <groupId>br.usp.each.saeg.baduino</groupId>
     <artifactId>br.usp.each.saeg.baduino.root</artifactId>
     <version>0.9.0</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <modules>
-    <module>br.usp.each.saeg.baduino.updatesite</module>
-    <module>br.usp.each.saeg.baduino.target</module>
+  	<module>br.usp.each.saeg.baduino.ui.tests</module>
   </modules>
 </project>
