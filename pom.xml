@@ -19,16 +19,6 @@
     <module>releng</module>
     <module>tests</module>
   </modules>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-maven-plugin</artifactId>
-        <version>0.26.0</version>
-        <extensions>true</extensions>
-      </plugin>
-    </plugins>
-  </build>
-<version>0.9.0</version>
+  
+  <version>0.9.0</version>
 </project>
