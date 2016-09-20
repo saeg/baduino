@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide;bundle-version="3.10.2",
  org.eclipse.jdt.launching;bundle-version="3.7.102",
  org.eclipse.debug.core;bundle-version="3.9.1"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: br.usp.each.saeg.baduino.contentViews,
  br.usp.each.saeg.baduino.handlers,
