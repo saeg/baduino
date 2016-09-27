@@ -6,3 +6,7 @@ script: ./mvnw clean verify
 branches:
   only:
     - dev
+notifications:
+  email: marioconcilio@gmail.com
+  on_success: change
+  on_failure: aways
