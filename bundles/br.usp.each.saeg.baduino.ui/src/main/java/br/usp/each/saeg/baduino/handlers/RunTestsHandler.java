@@ -1,5 +1,6 @@
 package br.usp.each.saeg.baduino.handlers;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -8,6 +9,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -39,32 +42,45 @@ public class RunTestsHandler extends AbstractHandler implements IJavaLaunchConfi
 		}
 		*/
 
-		IProject project = ProjectUtils.getCurrentSelectedProject();
-		IJavaProject javaProject = JavaCore.create(project);
+		final IProject project = ProjectUtils.getCurrentSelectedProject();
+		final IJavaProject javaProject = JavaCore.create(project);
 		
-		System.out.println("Building project " + project.getName());
+		final String projectName = project.getName();
+		final String location = project.getLocation().toOSString();
 		
+		System.out.println("Building project " + projectName);
+		System.out.println("Project location: " + location);
+		
+		final StringBuilder src = new StringBuilder();
+		final StringBuilder dest = new StringBuilder();
+
 		try {
-			String srcFolder = javaProject.getOutputLocation().toOSString();
-			System.out.println("output folder: " + srcFolder);
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
+			String output = javaProject.getOutputLocation().toOSString();
+			
+			src.append(output)
+			.delete(0, projectName.length() + 1)
+			.insert(0, location);
+			
+			dest.append(location)
+			.append(File.separator)
+			.append(".baduino")
+			.append(File.separator)
+			.append("classes");
+			
+			project.build(IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor());
+			project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-		
-//		Instrument.main("");
+
+		Instrument.main(new String[] {"-src", src.toString(), "-dest", dest.toString()});
 		
 		return null;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		IProject project = ProjectUtils.getCurrentSelectedProject();
+		final IProject project = ProjectUtils.getCurrentSelectedProject();
 		return (project != null);
 	}
 }
