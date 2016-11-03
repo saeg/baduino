@@ -1,4 +1,4 @@
-package br.usp.each.saeg.baduino.utils;
+package br.usp.each.saeg.baduino.util;
 
 import java.io.FileInputStream;
 

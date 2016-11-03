@@ -3,11 +3,11 @@ package br.usp.each.saeg.baduino.xml;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
-import br.usp.each.saeg.baduino.utils.ProjectUtils;
+import br.usp.each.saeg.baduino.util.ProjectUtils;
 
 public class XmlObject {
 
-	private static XmlInput instance;
+	private static XmlInput instance = null;
 	private static long fileLastModified;
 	private static IResource resource;
 
@@ -18,7 +18,8 @@ public class XmlObject {
 	public static XmlInput getInstance() {
 		refresh();
 		resource = ProjectUtils.getCurrentSelectedProject().getFile(
-				"baduino.xml");
+				".baduino/coverage.xml");
+		
 		if (!resource.exists()) {
 			System.out.println("isOpen? "+ProjectUtils.getCurrentSelectedProject().isOpen());
 			return null;

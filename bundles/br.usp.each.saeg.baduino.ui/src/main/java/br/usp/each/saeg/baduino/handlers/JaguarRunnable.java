@@ -23,8 +23,8 @@ import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 
-import br.usp.each.saeg.baduino.utils.ProjectUtils;
-import br.usp.each.saeg.baduino.utils.PropertyManager;
+import br.usp.each.saeg.baduino.util.ProjectUtils;
+import br.usp.each.saeg.baduino.util.PropertyManager;
 import br.usp.each.saeg.jaguar.resource.JaguarJar;
 
 public class JaguarRunnable implements IJavaLaunchConfigurationConstants {

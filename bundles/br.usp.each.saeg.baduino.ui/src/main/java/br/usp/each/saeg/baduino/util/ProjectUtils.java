@@ -1,4 +1,4 @@
-package br.usp.each.saeg.baduino.utils;
+package br.usp.each.saeg.baduino.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +9,8 @@ import java.util.Map;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jdt.core.IJavaElement;
@@ -119,14 +121,18 @@ public class ProjectUtils {
     
     public static IJavaProject getCurrentSelectedJavaProject(IWorkbenchWindow window) {
     	IProject project = getCurrentSelectedProject(window);
+    	IJavaProject javaProject = null;
 
 		try {
 			if (project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
-			      return JavaCore.create(project);
+			      javaProject = JavaCore.create(project);
 			}
-		} catch (CoreException e) {
+		} 
+		catch (CoreException e) {
 			e.printStackTrace();
 		}
-        return null;
+		
+        return javaProject;
     }
+
 }

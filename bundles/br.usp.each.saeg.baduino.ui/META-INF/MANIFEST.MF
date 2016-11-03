@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Baduino
 Bundle-SymbolicName: br.usp.each.saeg.baduino.ui;singleton:=true
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.2
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jdt.ui;bundle-version="3.10.2",
@@ -12,13 +12,19 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.launching;bundle-version="3.7.102",
  org.eclipse.debug.core;bundle-version="3.9.1",
  org.eclipse.debug.ui;bundle-version="3.11.200",
- org.junit;bundle-version="4.12.0"
+ org.junit;bundle-version="4.12.0",
+ org.apache.commons.io;bundle-version="2.2.0",
+ org.apache.log4j;bundle-version="1.2.15",
+ com.fasterxml.jackson.core.jackson-databind;bundle-version="2.5.0",
+ com.fasterxml.jackson.core.jackson-core;bundle-version="2.5.0",
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.5.0",
+ org.eclipse.core.variables;bundle-version="3.3.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: br.usp.each.saeg.baduino.contentViews,
  br.usp.each.saeg.baduino.handlers,
  br.usp.each.saeg.baduino.markers,
- br.usp.each.saeg.baduino.utils,
+ br.usp.each.saeg.baduino.util,
  br.usp.each.saeg.baduino.views,
  br.usp.each.saeg.baduino.xml
 Bundle-ClassPath: .,
