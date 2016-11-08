@@ -1,6 +1,7 @@
 package br.usp.each.saeg.baduino.contentViews;
 import java.util.List;
 
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -21,16 +22,26 @@ public class CoverageContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-		List<?> tree = model.getTree();
-		if(tree != null){
-			return tree.toArray();
+		Object[] array = null;
+		
+		try {
+			final List<?> tree = model.getTree();
+			
+			if (tree != null) {
+				array = tree.toArray();
+			}
+			else {
+				//gerando varias exception pois ele nao termina o programa.
+				//correto seria fechar a view e nao fazer mais nada.
+				DataFlowMethodView.closeViews();
+				throw new IllegalStateException("open an Dataflow empty view");
+			}
 		}
-		else{
-			//gerando varias exception pois ele nao termina o programa.
-			//correto seria fechar a view e nao fazer mais nada.
-			DataFlowMethodView.closeViews();
-			throw new IllegalStateException("open an Dataflow empty view");
+		catch (JavaModelException e) {
+			e.printStackTrace();
 		}
+		
+		return array;
 	}
 
 	@Override

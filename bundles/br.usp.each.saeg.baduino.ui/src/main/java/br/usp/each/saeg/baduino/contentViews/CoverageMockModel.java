@@ -5,9 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -38,8 +40,7 @@ import br.usp.each.saeg.baduino.xml.XmlClass;
 import br.usp.each.saeg.baduino.xml.XmlInput;
 import br.usp.each.saeg.baduino.xml.XmlMethod;
 import br.usp.each.saeg.baduino.xml.XmlObject;
-import br.usp.each.saeg.baduino.xml.XmlPackage;
-import br.usp.each.saeg.baduino.xml.XmlStatement;
+import br.usp.each.saeg.baduino.xml.XmlDua;
 
 //Structure layers  
 //layer 0: IJavaProject(Project)|
@@ -48,135 +49,158 @@ import br.usp.each.saeg.baduino.xml.XmlStatement;
 //layer 3: 																					 |->ICompilationUnit(Classes)
 
 public class CoverageMockModel  {
+	
+	private static final Logger logger = Logger.getLogger(CoverageMockModel.class);
 
 	private Variable[] variables;
 	private int[][] basicBlocks;
 	private int[] leaders;
 	private String className;
-	private static XmlInput information;
+	private XmlInput information;
 
 	//	private IMethod[] methodList;
 
-	public List<?> getTree() {
+	public List<?> getTree() throws JavaModelException {
 		information = XmlObject.getInstance();
+
+		final List<XmlClass> classes = information.getClasses();
+		for (XmlClass clazz : classes) {
+			logger.debug("class: " + clazz);
+			
+			final List<XmlMethod> methods = clazz.getMethods();
+			for (XmlMethod method : methods) {
+				logger.debug("method: " + method);
+				
+				final List<XmlDua> statements = method.getDuas();
+				for (XmlDua statement : statements) {
+					logger.debug("result: " + statement);			
+				}
+			}
+		}
+		
+		logger.debug(information);
+		
 		//use the selection type to show the type level and below 
-		if(VisualizationHandler.getType() instanceof IJavaProject){
+		if (VisualizationHandler.getType() instanceof IJavaProject){
 			return getProjectNode((IJavaProject) VisualizationHandler.getType());
 		}
 
-		if(VisualizationHandler.getType() instanceof IPackageFragmentRoot){
+		if (VisualizationHandler.getType() instanceof IPackageFragmentRoot){
 			return getFolderNode((IPackageFragmentRoot) VisualizationHandler.getType());
 		}
 
-		if(VisualizationHandler.getType() instanceof IPackageFragment){
+		if (VisualizationHandler.getType() instanceof IPackageFragment){
 			return getPackageNode((IPackageFragment) VisualizationHandler.getType());
 		}
 
-		if(VisualizationHandler.getType() instanceof ICompilationUnit){
+		if (VisualizationHandler.getType() instanceof ICompilationUnit){
 			return getClassNode((ICompilationUnit) VisualizationHandler.getType());
 		}
+		
 		return null;
 	}
 
-
 	//get coverage from Project Layer and below
-	private List<TreeProject> getProjectNode(IJavaProject jp) {
-		List<TreeProject> Project = new ArrayList<TreeProject>();
-		TreeProject newProject = new TreeProject();
+	private List<TreeProject> getProjectNode(final IJavaProject jp) throws JavaModelException {
+		final List<TreeProject> project = new ArrayList<>();
+		final TreeProject newProject = new TreeProject();
 		newProject.setName(jp.getElementName());
 
-		try{
-			IJavaElement[] children = jp.getChildren();
-			List<TreeFolder> Folders;
-			for (int i = 0; i < children.length; i++) {
-				if(children[i] instanceof IPackageFragmentRoot){
-					IPackageFragmentRoot child = (IPackageFragmentRoot) children[i];
-					Folders = getFolderNode(child);
-					newProject.getFolders().addAll(Folders);
-				}
+		final IJavaElement[] children = jp.getChildren();
+
+		List<TreeFolder> folders;
+		for (int i = 0; i < children.length; i++) {
+			if(children[i] instanceof IPackageFragmentRoot){
+				IPackageFragmentRoot child = (IPackageFragmentRoot) children[i];
+				folders = getFolderNode(child);
+				newProject.getFolders().addAll(folders);
 			}
+		}
 
-		} catch (JavaModelException e) {e.printStackTrace();}
-
-		Project.add(newProject);
-
-		return Project;
+		project.add(newProject);
+		return project;
 	}
-
 
 	//get coverage from Folder Layer
-	private List<TreeFolder> getFolderNode(IPackageFragmentRoot pfr) {
-		List<TreeFolder> Folder = new ArrayList<TreeFolder>();
-		TreeFolder newFolder = new TreeFolder();
+	private List<TreeFolder> getFolderNode(final IPackageFragmentRoot pfr) throws JavaModelException {
+		final List<TreeFolder> folder = new ArrayList<>();
+		final TreeFolder newFolder = new TreeFolder();
 		newFolder.setName(pfr.getElementName());
 
-		if(!pfr.isArchive()){ //ignore external folders like .jar
+		if (!pfr.isArchive()) { //ignore external folders like .jar
+			final IJavaElement[] children = pfr.getChildren();
+			if (children.length == 0) {
+				return folder;
+			}
 
-			try {
-				IJavaElement[] children = pfr.getChildren();
-				if(children.length == 0){
-					return Folder;
+			List<TreePackage> packages;
+			for (int i = 0; i < children.length; i++) {
+				if(children[i] instanceof IPackageFragment){
+					IPackageFragment child = (IPackageFragment) children[i];
+					packages = getPackageNode(child);
+					newFolder.getPackages().addAll(packages);
 				}
-				List<TreePackage> Packages;
-				for (int i = 0; i < children.length; i++) {
-					if(children[i] instanceof IPackageFragment){
-						IPackageFragment child = (IPackageFragment) children[i];
-						Packages = getPackageNode(child);
-						newFolder.getPackages().addAll(Packages);
-					}
-				}
+			}
 
-			} catch (JavaModelException e) {e.printStackTrace();}
-
-			Folder.add(newFolder);
+			folder.add(newFolder);
 		}
 
-		return Folder;
+		return folder;
 	}
-
 
 	//get coverage from Package Layer
-	public List<TreePackage> getPackageNode(IPackageFragment pf) {
-		List<TreePackage> Package = new ArrayList<TreePackage>();
-		TreePackage newPackage = new TreePackage();
-		if(pf.isDefaultPackage()){
+	public List<TreePackage> getPackageNode(final IPackageFragment pf) throws JavaModelException {
+		final List<TreePackage> pkg = new ArrayList<>();
+		final TreePackage newPackage = new TreePackage();
+		
+		if (pf.isDefaultPackage()){
 			newPackage.setName("(Default Package)");
-		}else{
+		}
+		else {
 			newPackage.setName(pf.getElementName());
 		}
-		try {
-			IJavaElement[] children = pf.getChildren();
-			if(children.length == 0){
-				return Package;
-			}
-			List<TreeClass> Classes;
-			for (int i = 0; i < children.length; i++) {
-				if(children[i] instanceof ICompilationUnit){
-					ICompilationUnit child = (ICompilationUnit) children[i];
-					Classes = getClassNode(child);
-					newPackage.getClasses().addAll(Classes);
-				}
-			}
 
-		} catch (JavaModelException e) {e.printStackTrace();}
+		final IJavaElement[] children = pf.getChildren();
+		if(children.length == 0){
+			return pkg;
+		}
+		
+		List<TreeClass> classes;
+		for (int i = 0; i < children.length; i++) {
+			if(children[i] instanceof ICompilationUnit){
+				ICompilationUnit child = (ICompilationUnit) children[i];
+				classes = getClassNode(child);
+				newPackage.getClasses().addAll(classes);
+			}
+		}
 
-		Package.add(newPackage);
-		return Package;
+		pkg.add(newPackage);
+		return pkg;
 	}
 
-
 	//get coverage from Class Layer
-	public List<TreeClass> getClassNode(ICompilationUnit cu){
-		List<TreeClass> Class = new ArrayList<TreeClass>(); //create a list
-		LinkedList<ClassNode> classNodes = getASMClassNode(cu);
+	public List<TreeClass> getClassNode(final ICompilationUnit cu){
+		final List<TreeClass> listClass = new ArrayList<>(); //create a list
+		final LinkedList<ClassNode> classNodes = getASMClassNode(cu);
+		
 		for (ClassNode classNode : classNodes) {
-			TreeClass newClass = new TreeClass();
+			final TreeClass newClass = new TreeClass();
+			final String[] name = classNode.name.split("/");
+			newClass.setName(name[name.length-1] + ".java");
 
-			String[] name = classNode.name.split("/");
-			newClass.setName(name[name.length-1]+".java");
-
-			XmlClass Clazz = null;
-			if(information != null){
+			XmlClass clazz = null;
+			if (information != null) {
+				final String clazzName = classNode.name.replace('/', '.');
+				final List<XmlClass> xmlClasses = information.getClasses();
+				
+				for (XmlClass c : xmlClasses) {
+					if (clazzName.equals(c.getName())) {
+						clazz = c;
+						break;
+					}
+				}
+				
+				/*
 				List<XmlPackage> listPackage = information.getPackages();
 				XmlPackage Package = null;
 				for(XmlPackage l:listPackage ){
@@ -203,66 +227,73 @@ public class CoverageMockModel  {
 					for (XmlClass classes : Package.getClasses()) {
 						//System.out.println(clazzName +" "+classes.getName());
 						if(clazzName.equals(classes.getName())){
-							Clazz = classes;
+							clazz = classes;
 							break;
 						}
 					}
 				}
+				*/
 			}
 
 			className = classNode.name;
+			
 			// for each method in the class
 			for (int posMethod = 0; posMethod < classNode.methods.size(); posMethod++) {
-				methodDuas(classNode, posMethod, newClass, cu, Clazz);
+				methodDuas(classNode, posMethod, newClass, cu, clazz);
 			}
-			Class.add(newClass);
+			
+			listClass.add(newClass);
 		}
-		return Class;
+		
+		return listClass;
 	}
 
 	private String extractPackageName(String Package) {
 		return Package.substring(8, Package.indexOf(" ["));
 	}
 
-
 	//transform class bytes in ClassNode form from ASM
-	private LinkedList<ClassNode> getASMClassNode(ICompilationUnit cu) {
-		LinkedList<ClassNode> classNodes = new LinkedList<ClassNode>();
+	private LinkedList<ClassNode> getASMClassNode(final ICompilationUnit cu) {
+		final LinkedList<ClassNode> classNodes = new LinkedList<>();
+		
 		try {
-			LinkedList<Path> paths = getClasspath(cu); // path for the inner class and mainly class
+			final LinkedList<Path> paths = getClasspath(cu); // path for the inner class and mainly class
+			
 			for (Path path : paths) {
-				ClassNode classNode = new ClassNode(Opcodes.ASM4);
-				ClassReader classReader = new ClassReader(Files.readAllBytes(path));
+				final byte[] bytes = Files.readAllBytes(path);
+				final ClassNode classNode = new ClassNode();
+				final ClassReader classReader = new ClassReader(bytes);
 				classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
+				
 				//do not analyze interfaces
 				if ((classNode.access & Opcodes.ACC_INTERFACE) == 0) {
 					classNodes.add(classNode);
 				}
 			}
-		} catch (JavaModelException |IOException e) {
+		} 
+		catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return classNodes;
 	}
 
-	private LinkedList<Path> getClasspath(ICompilationUnit cu) throws JavaModelException, IOException {
-		IRegion region = JavaCore.newRegion();
+	private LinkedList<Path> getClasspath(final ICompilationUnit cu) throws JavaModelException, IOException {
+		final IRegion region = JavaCore.newRegion();
 		region.add(cu);
-		IResource[] r = JavaCore.getGeneratedResources(region, false);
-		LinkedList<Path> path = new LinkedList<Path>();
-		for (IResource iResource : r) {
-			path.add(Paths.get(iResource.getLocation().toFile().toURI()));
+		
+		final IResource[] resources = JavaCore.getGeneratedResources(region, false);
+		final LinkedList<Path> path = new LinkedList<Path>();
+		for (IResource resource : resources) {
+			path.add(Paths.get(resource.getLocation().toFile().toURI()));
 		}
+		
 		return path;
 	}
 
-
-	@SuppressWarnings("unchecked")
-	private void methodDuas(ClassNode classNode, int posMethod, TreeClass newClass,ICompilationUnit cu, XmlClass clazz) {
-
-		MethodNode methodNode = classNode.methods.get(posMethod);
-
-		TreeMethod newMethod = new TreeMethod(); //create new method
+	private void methodDuas(final ClassNode classNode, final int posMethod, final TreeClass newClass, final ICompilationUnit cu, final XmlClass clazz) {
+		final MethodNode methodNode = classNode.methods.get(posMethod);
+		final TreeMethod newMethod = new TreeMethod(); //create new method
 
 		// Does not instrument:
 		// 1. Abstract methods
@@ -270,11 +301,11 @@ public class CoverageMockModel  {
 			return;
 		}
 		// 2. Interfaces
-		if((methodNode.access & Opcodes.ACC_INTERFACE) != 0){
+		if ((methodNode.access & Opcodes.ACC_INTERFACE) != 0){
 			return;
 		}
 		// 3. Synthetic methods
-		if((methodNode.access & Opcodes.ACC_SYNTHETIC) != 0){
+		if ((methodNode.access & Opcodes.ACC_SYNTHETIC) != 0){
 			return;
 		}
 		// 4. Static class initialization
@@ -282,85 +313,115 @@ public class CoverageMockModel  {
 			return;
 		}
 
-		String[] fullClassName = classNode.name.split("/");
-		String className = fullClassName[fullClassName.length-1];
+		final String[] fullClassName = classNode.name.split("/");
+		final String className = fullClassName[fullClassName.length - 1];
 		//System.out.println(methodNode.name + " " + methodNode.desc);
-		if(methodNode.name.equals("<clinit>")){
-			String name = Signature.toString(methodNode.desc, className, null, false, false);
-			newMethod.setName("static "+name);
+		if (methodNode.name.equals("<clinit>")) {
+			final String name = Signature.toString(methodNode.desc, className, null, false, false);
+			newMethod.setName("static " + name);
 			//System.out.println("<clinit> vira: static "+name);
-		}else if(methodNode.name.equals("<init>")){
-			String name = Signature.toString(methodNode.desc, className, null, false, false);
+		}
+		else if (methodNode.name.equals("<init>")) {
+			final String name = Signature.toString(methodNode.desc, className, null, false, false);
 			newMethod.setName(name);
 			//System.out.println("<init> vira: "+name);
-		}else{
-			String name = Signature.toString(methodNode.desc, methodNode.name, null, false,true);
-			if((methodNode.access & Opcodes.ACC_STATIC) != 0){
+		}
+		else {
+			final String name = Signature.toString(methodNode.desc, methodNode.name, null, false,true);
+			
+			if ((methodNode.access & Opcodes.ACC_STATIC) != 0) {
 				newMethod.setName("static " + name);
 				//	System.out.println("com flag ACC_STATIC vira: static "+name);
-			}else{
+			}
+			else {
 				newMethod.setName(name);
 				//	System.out.println("Default: "+name);
 			}
 		}
 
-
-		XmlMethod Methods = null;
-		if(clazz!= null){
-			for (XmlMethod m: clazz.getMethods()) {
-				if(newMethod.getName().equals(m.getName())){
-					Methods = m;
+		XmlMethod xmlMethod = null;
+		if (clazz != null) {
+			final List<XmlMethod> xmlMethods = clazz.getMethods();
+			
+			for (XmlMethod m : xmlMethods) {
+				if (newMethod.getName().equals(m.getName())) {
+					xmlMethod = m;
 					break;
 				}
 			}
 		}
 
-		if((methodNode.access & Opcodes.ACC_PUBLIC) != 0){
+		if ((methodNode.access & Opcodes.ACC_PUBLIC) != 0){
 			newMethod.setAccess(Opcodes.ACC_PUBLIC);
-		}else if((methodNode.access & Opcodes.ACC_PROTECTED) != 0){
+		}
+		else if ((methodNode.access & Opcodes.ACC_PROTECTED) != 0){
 			newMethod.setAccess(Opcodes.ACC_PROTECTED);
-		}else if((methodNode.access & Opcodes.ACC_PRIVATE) != 0){
+		}
+		else if ((methodNode.access & Opcodes.ACC_PRIVATE) != 0){
 			newMethod.setAccess(Opcodes.ACC_PRIVATE);
-		}else{
-			newMethod.setAccess(-1);//default methods;
+		}
+		else {
+			newMethod.setAccess(-1); //default methods;
 		}
 
 		newClass.getMethods().add(newMethod);//adiciona aos metodos existentes
 
-		ArrayList<XmlStatement> duasXML=null;
-		if(Methods != null){
-
-			duasXML =  (ArrayList<XmlStatement>) Methods.getStatements().clone();
-
+		List<XmlDua> xmlDuas = null;
+		if (xmlMethod != null) {
+//			duasXML =  (ArrayList<XmlDua>) xmlMethod.getStatements().clone();
+			xmlDuas = xmlMethod.getDuas();
 		}
 
 		final int[] lines = getLines(methodNode);
-		DefUseChain[] duaI = transform(methodNode);
+		final DefUseChain[] duaI = transform(methodNode);
+		
 		for (DefUseChain defUseChain : duaI) {
 			DefUseChain bbchain = toBB(defUseChain);
+			
 			if(bbchain != null){
 				int defLine = lines[defUseChain.def];
 				int useLine = lines[defUseChain.use];
 				int targetLine = -1;
-				if(defUseChain.target != -1){
+				if (defUseChain.target != -1){
 					targetLine = lines[defUseChain.target];
 				}
-				String varName = getName(defUseChain,methodNode);
-				if(varName != null){
-					TreeDUA newDua = new TreeDUA(defLine, useLine, targetLine, varName, cu); //cria uma dua
-					if(duasXML != null){
-						for(int i = 0; i< duasXML.size();i++){
-							if(duasXML.get(i).getDef() == defLine && duasXML.get(i).getUse() == useLine && duasXML.get(i).getTarget() == targetLine && duasXML.get(i).getVar().equals(varName)){
-								newDua.setCovered(duasXML.get(i).getCovered());
-								duasXML.remove(i);
+				
+				final String varName = getName(defUseChain,methodNode);
+				if (varName != null) {
+					final TreeDUA newDua = new TreeDUA(defLine, useLine, targetLine, varName, cu); //cria uma dua
+					
+					if (xmlDuas != null) {
+						for (XmlDua dua : xmlDuas) {
+							if (
+									dua.getDef() == defLine &&
+									dua.getUse() == useLine &&
+									dua.getTarget() == targetLine &&
+									dua.getVar().equals(varName)
+									) {
+								
+								boolean covered = dua.getCovered();
+								logger.debug("dua covered: " + dua.getCovered());
+								newDua.setCovered(covered);
 								break;
 							}
 						}
+						
+//						for(int i = 0; i< xmlDuas.size(); i++){
+//							if (xmlDuas.get(i).getDef() == defLine && 
+//									xmlDuas.get(i).getUse() == useLine && 
+//									xmlDuas.get(i).getTarget() == targetLine && 
+//									xmlDuas.get(i).getVar().equals(varName)) {
+//								
+//								logger.debug("dua covered: " + xmlDuas.get(i).getCovered());
+//								newDua.setCovered(xmlDuas.get(i).getCovered());
+//								xmlDuas.remove(i);
+//								break;
+//							}
+//						}
 
 					}
+					
 					newMethod.getDUAS().add(newDua); //adiciona nas duas existentes
-
-
 				}
 			}
 		}
@@ -370,6 +431,7 @@ public class CoverageMockModel  {
 		if (DefUseChain.isGlobal(c, leaders, basicBlocks)) {
 			return new DefUseChain(leaders[c.def], leaders[c.use], c.target == -1 ? -1 : leaders[c.target], c.var);
 		}
+		
 		return null;
 	}
 

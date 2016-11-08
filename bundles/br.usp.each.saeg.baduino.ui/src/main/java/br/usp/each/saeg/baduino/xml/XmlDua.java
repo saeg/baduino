@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 /**
  * @author Danilo Mutti (dmutti@gmail.com)
  */
-public class XmlStatement implements Cloneable{
+public class XmlDua implements Cloneable {
     
     private boolean covered;
     private int def;
@@ -17,6 +17,7 @@ public class XmlStatement implements Cloneable{
     public boolean getCovered(){
     	return covered;
     }
+    
     public void setCovered(boolean covered){
     	this.covered=covered;
     }
@@ -25,6 +26,7 @@ public class XmlStatement implements Cloneable{
     public int getDef(){
     	return def;
     }
+    
     public void setDef(int def){
     	this.def=def;
     }
@@ -33,6 +35,7 @@ public class XmlStatement implements Cloneable{
     public int getUse(){
     	return use;
     }
+    
     public void setUse(int use){
     	this.use=use;
     }
@@ -41,6 +44,7 @@ public class XmlStatement implements Cloneable{
     public int getTarget(){
     	return target;
     }
+    
     public void setTarget(int target){
     	this.target=target;
     }
@@ -49,7 +53,19 @@ public class XmlStatement implements Cloneable{
     public String getVar(){
     	return var;
     }
+    
     public void setVar(String var){
     	this.var=var;
     }
+    
+    @Override
+    public String toString() {
+    	return String.format("covered=%s, var=%s, def=%d, use=%d, target=%s",
+    			getCovered(),
+    			getVar(),
+    			getDef(),
+    			getUse(),
+    			getTarget());
+    }
+    
 }

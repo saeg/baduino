@@ -16,7 +16,7 @@
           locationURI= "popup:br.usp.each.saeg.baduino.ui?after=additions">
              <command
                    commandId="br.usp.each.saeg.baduino.dataflow.handler"
-                   icon="icons/projects.gif"
+                   icon="src/main/resources/icons/projects.gif"
                    label="Project Visualization"
                    style="push">
                 <visibleWhen
@@ -35,7 +35,7 @@
              </command>
              <command
                    commandId="br.usp.each.saeg.baduino.dataflow.handler"
-                   icon="icons/folder.gif"
+                   icon="src/main/resources/icons/folder.gif"
                    label="Folder Visualization"
                    style="push">
                 <visibleWhen
@@ -54,7 +54,7 @@
              </command>
              <command
                    commandId="br.usp.each.saeg.baduino.dataflow.handler"
-                   icon="icons/package.gif"
+                   icon="src/main/resources/icons/package.gif"
                    label="Package Visualization"
                    style="push">
                 <visibleWhen
@@ -73,7 +73,7 @@
              </command>
              <command
                    commandId="br.usp.each.saeg.baduino.dataflow.handler"
-                   icon="icons/classes.gif"
+                   icon="src/main/resources/icons/classes.gif"
                    label="Class Visualization"
                    style="push">
                 <visibleWhen
@@ -92,7 +92,7 @@
              </command>
             <command
                   commandId="br.usp.each.saeg.baduino.commands.runbadua"
-                  icon="icons/junit_launch_icon.gif"
+                  icon="src/main/resources/icons/junit_launch_icon.gif"
                   id="br.usp.each.saeg.baduino.menu.item.runbadua"
                   label="Run Tests">
                <visibleWhen
@@ -115,8 +115,8 @@
                 locationURI="toolbar:br.usp.each.saeg.baduino.DataflowView">
              <command
                    commandId="br.usp.each.saeg.baduino.toolbar.handler"
-                   hoverIcon="icons/classes.gif"
-                   icon="icons/Highlighter Yellow-01.png"
+                   hoverIcon="src/main/resources/icons/classes.gif"
+                   icon="src/main/resources/icons/Highlighter Yellow-01.png"
                    label="Remove highlight"
                    style="push"
                    tooltip="Remove highlight">
@@ -141,9 +141,9 @@
       <view
             category="br.usp.each.saeg.baduino.coverage"
             class="br.usp.each.saeg.baduino.views.DataFlowMethodView"
-            icon="icons/baduino.png"
+            icon="src/main/resources/icons/baduino.png"
             id="br.usp.each.saeg.baduino.DataflowView"
-            name="Baduino Visualization"
+            name="Baduino"
             restorable="true">
       </view>
    </extension>

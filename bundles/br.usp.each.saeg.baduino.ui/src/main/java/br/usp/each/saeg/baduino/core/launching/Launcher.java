@@ -159,13 +159,13 @@ public class Launcher {
 		classpath.add(badua);
 
 		// baduino
-//		final String path = "/Users/666mario/Documents/develop/each/baduino/bundles/br.usp.each.saeg.baduino.ui/target/br.usp.each.saeg.baduino.ui-0.1.26.jar";
-//		final IPath ipath = new Path(path);
-//		final IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(ipath);
-//		entry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
-//		String baduino = entry.getMemento();
+		final String path = "/Users/666mario/Documents/develop/each/baduino/bundles/br.usp.each.saeg.baduino.ui/target/br.usp.each.saeg.baduino.ui-0.2.4.jar";
+		final IPath ipath = new Path(path);
+		final IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(ipath);
+		entry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
+		String baduino = entry.getMemento();
 
-		final String baduino = mementoForClass(BaduinoRunner.class);
+//		final String baduino = mementoForClass(BaduinoRunner.class);
 		classpath.add(baduino);
 		
 		// saeg commons

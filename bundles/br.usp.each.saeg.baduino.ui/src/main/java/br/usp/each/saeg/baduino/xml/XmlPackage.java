@@ -20,6 +20,7 @@ public class XmlPackage {
     public String getName() {
         return name;
     }
+    
     public void setName(String name) {
         this.name = name;
     }
@@ -28,9 +29,11 @@ public class XmlPackage {
     public List<XmlClass> getClasses() {
         return classes;
     }
+    
     public void setClasses(List<XmlClass> classes) {
         this.classes = classes;
     }
+    
     public void addClass(XmlClass arg) {
         if (arg != null) {
             classes.add(arg);

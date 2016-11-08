@@ -4,7 +4,7 @@ import java.util.List;
 
 public class TreeMethod {
 	private String name;
-	private List<TreeDUA> Duas = new ArrayList<TreeDUA>();
+	private List<TreeDUA> duas = new ArrayList<TreeDUA>();
 	private int access;
 
 	private int covered = 0;
@@ -27,31 +27,34 @@ public class TreeMethod {
 	}
 
 	public List<TreeDUA> getDUAS() {
-		return Duas;
+		return duas;
 	}
 
 	public String getCoverage(){
-		if(covered == 0 && total == 0){
+		if(covered == 0 && total == 0) {
 			getCoverageRecursive();
 		}
 
 		if(total != 0){
 			return "("+covered+"/"+total+") "+String.format("%.2f", (double)covered/(double)total*100)+"%";
 		}
+		
 		return "No Def-Use Associations";
 	}
 
 	public int[] getCoverageRecursive() {
-		if(covered == 0 && total == 0){
-			if(Duas.size() != 0){
-				for(TreeDUA duas: Duas){
-					if(duas.getCovered().equals(String.valueOf(true))) {
+		if (covered == 0 && total == 0) {
+			if (duas.size() != 0){
+				for (TreeDUA duas: duas) {
+					if(duas.isCovered()) {
 						covered++;
 					}
 				}
 			}
-			total = Duas.size();
+			
+			total = duas.size();
 		}
+		
 		return new int[]{covered,total};
 	}
 } 

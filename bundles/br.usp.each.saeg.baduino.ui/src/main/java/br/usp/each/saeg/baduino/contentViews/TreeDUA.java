@@ -11,7 +11,6 @@ public class TreeDUA {
 	private boolean covered = false;
 	private final ICompilationUnit cu;
 
-
 	public TreeDUA(final int def, final int use, final int target, final String var, ICompilationUnit cu) {
 		this.def = def;
 		this.use = use;
@@ -36,19 +35,24 @@ public class TreeDUA {
 		return var;
 	}
 	
-	public String getCovered(){
-		return String.valueOf(covered);
+//	public String getCovered() {
+//		return String.valueOf(covered);
+//	}
+	
+	public boolean isCovered() {
+		return covered;
 	}
 	
-	public void setCovered(boolean covered){
+	public void setCovered(boolean covered) {
 		this.covered = covered;
 	}
 
 	@Override
 	public String toString() {
-		if(target == -1){
+		if(target == -1) {
 			return String.format("(%d , %d, %s)", def, use, var);
-		}else{
+		}
+		else {
 			return String.format("(%d , (%d , %d) , %s)", def, use, target, var);
 		}
 	}

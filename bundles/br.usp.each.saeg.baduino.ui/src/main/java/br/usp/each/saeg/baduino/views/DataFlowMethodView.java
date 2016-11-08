@@ -99,7 +99,9 @@ public class DataFlowMethodView extends ViewPart {
 							targetOffset = parserLine(cu.getSource(),((TreeDUA) selectedNode).getTarget());
 						}
 						//create new markers based on selected DUA
-						CodeMarkerFactory.mark(cu.getUnderlyingResource(),defOffset,useOffset,targetOffset,((TreeDUA) selectedNode).getCovered());
+						final TreeDUA dua = (TreeDUA) selectedNode;
+						final String covered = dua.isCovered()? "true" : "false";
+						CodeMarkerFactory.mark(cu.getUnderlyingResource(), defOffset, useOffset, targetOffset, covered);
 						setFocus();
 					} catch (JavaModelException e1) {
 						e1.printStackTrace();
@@ -130,7 +132,6 @@ public class DataFlowMethodView extends ViewPart {
 					viewer.setExpandedState(selectedNode,
 							!viewer.getExpandedState(selectedNode));
 				}
-
 			}
 
 		});

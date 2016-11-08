@@ -10,18 +10,18 @@ import javax.xml.bind.annotation.XmlElement;
 public class XmlMethod {
 
     private String name;
-    private ArrayList<XmlStatement> statements = new ArrayList<XmlStatement>();
+    private ArrayList<XmlDua> duas = new ArrayList<>();
 
-
-    @XmlElement(name="requirement")
-    public ArrayList<XmlStatement> getStatements() {
-        return statements;
+//    @XmlElement(name="requirement")
+    @XmlElement(name="du")
+    public ArrayList<XmlDua> getDuas() {
+        return duas;
     }
     
-    public void setStatements(ArrayList<XmlStatement> statements) {
-//    	Collections.sort(statements, new Comparator<XmlStatement>() {
+    public void setDuas(ArrayList<XmlDua> duas) {
+//    	Collections.sort(duas, new Comparator<XmlDua>() {
 //            @Override
-//            public int compare(XmlStatement o1, XmlStatement o2) {
+//            public int compare(XmlDua o1, XmlDua o2) {
 //          	  int resp = Integer.compare(o1.getDef(), o2.getDef());
 //          	  if(resp != 0) return resp;
 //          	  resp = Integer.compare(o1.getUse(), o2.getUse());
@@ -32,11 +32,12 @@ public class XmlMethod {
 //
 //            }
 //        });
-        this.statements = statements;
+    	
+        this.duas = duas;
     }
-    public void addStatements(XmlStatement statement) {
+    public void addStatements(XmlDua statement) {
         if (statement != null) {
-            statements.add(statement);
+            duas.add(statement);
         }
     }
 
@@ -44,7 +45,14 @@ public class XmlMethod {
     public String getName() {
         return name;
     }
+    
     public void setName(String name) {
         this.name = name;
     }
+    
+    @Override
+    public String toString() {
+    	return getName();
+    }
+    
 }
