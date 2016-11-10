@@ -5,15 +5,23 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import br.usp.each.saeg.baduino.tree.TreeClass;
+import br.usp.each.saeg.baduino.tree.TreeMethod;
+import br.usp.each.saeg.baduino.tree.TreePackage;
+import br.usp.each.saeg.baduino.tree.TreeProject;
 import br.usp.each.saeg.baduino.views.DataFlowMethodView;
 
+/**
+ * 
+ * @author Mario Concilio
+ *
+ */
 public class CoverageContentProvider implements ITreeContentProvider {
 
 	private CoverageMockModel model;
 
 	@Override
-	public void dispose() {
-	}
+	public void dispose() {}
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
@@ -45,57 +53,45 @@ public class CoverageContentProvider implements ITreeContentProvider {
 	}
 
 	@Override
-	public Object[] getChildren(Object parentElement) {
-
-		if(parentElement instanceof TreeProject){
-			TreeProject Project = (TreeProject) parentElement;
-			return Project.getFolders().toArray();
-
-		}else if(parentElement instanceof TreeFolder){
-			TreeFolder Folder = (TreeFolder) parentElement;
-			return Folder.getPackages().toArray();
-
-		}else if(parentElement instanceof TreePackage){
-			TreePackage Package = (TreePackage) parentElement;
-			return Package.getClasses().toArray();
-
-		}else if(parentElement instanceof TreeClass){
-			TreeClass Class = (TreeClass) parentElement;
-			return Class.getMethods().toArray();
-
-		}else if (parentElement instanceof TreeMethod) {
-			TreeMethod category = (TreeMethod) parentElement;
-			return category.getDUAS().toArray();
+	public Object[] getChildren(final Object parentElement) {
+		Object[] children = null;
+		
+		if (parentElement instanceof TreeProject) {
+			final TreeProject project = (TreeProject) parentElement;
+			children = project.getPackages().toArray();
 		}
-		return null;
+//		else if (parentElement instanceof TreeFolder) {
+//			final TreeFolder folder = (TreeFolder) parentElement;
+//			children = folder.getPackages().toArray();
+//		}
+		else if (parentElement instanceof TreePackage) {
+			final TreePackage pkg = (TreePackage) parentElement;
+			children = pkg.getClasses().toArray();
+		}
+		else if (parentElement instanceof TreeClass) {
+			final TreeClass clazz = (TreeClass) parentElement;
+			children = clazz.getMethods().toArray();
+		}
+		else if (parentElement instanceof TreeMethod) {
+			final TreeMethod method = (TreeMethod) parentElement;
+			children = method.getDuas().toArray();
+		}
+		
+		return children;
 	}
 
 	@Override
-	public Object getParent(Object element) {
+	public Object getParent(final Object element) {
 		return null;	
 	}
 
 	@Override
-	public boolean hasChildren(Object element) {
-		if(element instanceof TreeProject){
-			return true;
-			
-		}else if(element instanceof TreeFolder){
-			return true;
-			
-		}else if(element instanceof TreePackage){
-			return true;
-			
-		}else if(element instanceof TreeClass){
-			return true;
-			
-		}else if (element instanceof TreeMethod) {
-			return true;
-			
-		}else{
-			return false;	
-		}
-
+	public boolean hasChildren(final Object element) {
+		return element instanceof TreeProject ||
+//				element instanceof TreeFolder ||
+				element instanceof TreePackage ||
+				element instanceof TreeClass ||
+				element instanceof TreeMethod;
 	}
 
 } 

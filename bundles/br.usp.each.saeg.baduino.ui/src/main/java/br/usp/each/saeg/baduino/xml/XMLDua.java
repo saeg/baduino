@@ -3,9 +3,11 @@ package br.usp.each.saeg.baduino.xml;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- * @author Danilo Mutti (dmutti@gmail.com)
+ * 
+ * @author Mario Concilio
+ *
  */
-public class XmlDua implements Cloneable {
+public class XMLDua {
     
     private boolean covered;
     private int def;
@@ -13,13 +15,13 @@ public class XmlDua implements Cloneable {
 	private int target;
 	private String var;
     
-    @XmlAttribute(name="covered")
-    public boolean getCovered(){
+	@XmlAttribute(name="covered")
+    public boolean isCovered(){
     	return covered;
     }
     
     public void setCovered(boolean covered){
-    	this.covered=covered;
+    	this.covered = covered;
     }
     
     @XmlAttribute(name="def")
@@ -28,7 +30,7 @@ public class XmlDua implements Cloneable {
     }
     
     public void setDef(int def){
-    	this.def=def;
+    	this.def = def;
     }
     
     @XmlAttribute(name="use")
@@ -37,7 +39,7 @@ public class XmlDua implements Cloneable {
     }
     
     public void setUse(int use){
-    	this.use=use;
+    	this.use = use;
     }
     
     @XmlAttribute(name="target")
@@ -46,7 +48,7 @@ public class XmlDua implements Cloneable {
     }
     
     public void setTarget(int target){
-    	this.target=target;
+    	this.target = target;
     }
     
     @XmlAttribute(name="var")
@@ -55,17 +57,21 @@ public class XmlDua implements Cloneable {
     }
     
     public void setVar(String var){
-    	this.var=var;
+    	this.var = var;
     }
     
     @Override
     public String toString() {
-    	return String.format("covered=%s, var=%s, def=%d, use=%d, target=%s",
-    			getCovered(),
-    			getVar(),
-    			getDef(),
-    			getUse(),
-    			getTarget());
+    	String str;
+    	
+    	if (target == 0) {
+    		str = String.format("(%d, %d, %s)", def, use, var);
+    	}
+    	else {
+    		str = String.format("(%d, (%d, %d), %s)", def, use, target, var);
+    	}
+    	
+    	return str;
     }
     
 }

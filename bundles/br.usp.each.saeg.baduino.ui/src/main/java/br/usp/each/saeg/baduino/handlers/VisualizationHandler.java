@@ -17,12 +17,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import br.usp.each.saeg.baduino.views.DataFlowMethodView;
-import br.usp.each.saeg.baduino.xml.XmlClass;
-import br.usp.each.saeg.baduino.xml.XmlInput;
-import br.usp.each.saeg.baduino.xml.XmlMethod;
-import br.usp.each.saeg.baduino.xml.XmlObject;
-import br.usp.each.saeg.baduino.xml.XmlPackage;
-import br.usp.each.saeg.baduino.xml.XmlDua;
+import br.usp.each.saeg.baduino.xml.XMLClass;
+import br.usp.each.saeg.baduino.xml.XMLProject;
+import br.usp.each.saeg.baduino.xml.XMLMethod;
+import br.usp.each.saeg.baduino.xml.XMLFactory;
+import br.usp.each.saeg.baduino.xml.XMLPackage;
+import br.usp.each.saeg.baduino.xml.XMLDua;
 
 
 public class VisualizationHandler extends AbstractHandler {
@@ -35,27 +35,27 @@ public class VisualizationHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 /*
-		XmlInput xmlInput = XmlObject.getInstance();
+		XMLProject xmlInput = XMLFactory.getInstance();
 		int coveredAll = 0;
 		int totalAll = 0;
 		
-		List<XmlPackage> listPackage = xmlInput.getPackages();
-		for(XmlPackage l : listPackage ){
+		List<XMLPackage> listPackage = xmlInput.getPackages();
+		for(XMLPackage l : listPackage ){
 			//System.out.println(l.getName());
 			int coveredClass=0,totalClass=0;
-			List<XmlClass>listClass = l.getClasses();
+			List<XMLClass>listClass = l.getClasses();
 			
-			for(XmlClass l2 : listClass){
+			for(XMLClass l2 : listClass){
 			//	System.out.println("\t"+l2.getName());
 				int coveredMETHOD=0,totalMETHOD=0;
-				List<XmlMethod>listMethod = l2.getMethods();
+				List<XMLMethod>listMethod = l2.getMethods();
 				
-				for(XmlMethod l3 : listMethod){
+				for(XMLMethod l3 : listMethod){
 				//	System.out.println("\t"+"\t"+l3.getName());
 					int coveredDUA=0,totalDUA=0;
-					List<XmlDua>listStatement = l3.getStatements();
+					List<XMLDua>listStatement = l3.getStatements();
 					
-					for(XmlDua l4:listStatement){
+					for(XMLDua l4:listStatement){
 						//System.out.println(l4.getDef()+" "+l4.getUse()+" "+l4.getTarget()+" "+l4.getVar()+" "+l4.getCovered());
 						if(l4.getCovered()){
 							coveredDUA++;

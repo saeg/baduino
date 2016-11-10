@@ -23,13 +23,12 @@ import org.eclipse.ui.part.ViewPart;
 import br.usp.each.saeg.baduino.contentViews.CoverageContentProvider;
 import br.usp.each.saeg.baduino.contentViews.CoverageLabelProvider;
 import br.usp.each.saeg.baduino.contentViews.CoverageMockModel;
-import br.usp.each.saeg.baduino.contentViews.TreeClass;
-import br.usp.each.saeg.baduino.contentViews.TreeDUA;
-import br.usp.each.saeg.baduino.contentViews.TreeFolder;
-import br.usp.each.saeg.baduino.contentViews.TreeMethod;
-import br.usp.each.saeg.baduino.contentViews.TreePackage;
-import br.usp.each.saeg.baduino.contentViews.TreeProject;
 import br.usp.each.saeg.baduino.markers.CodeMarkerFactory;
+import br.usp.each.saeg.baduino.tree.TreeClass;
+import br.usp.each.saeg.baduino.tree.TreeDua;
+import br.usp.each.saeg.baduino.tree.TreeMethod;
+import br.usp.each.saeg.baduino.tree.TreePackage;
+import br.usp.each.saeg.baduino.tree.TreeProject;
 
 public class DataFlowMethodView extends ViewPart {
 	/**
@@ -84,22 +83,22 @@ public class DataFlowMethodView extends ViewPart {
 						.getSelection();
 				Object selectedNode = thisSelection.getFirstElement();
 				
-				if(selectedNode instanceof TreeDUA){
-					ICompilationUnit cu = ((TreeDUA) selectedNode).getCu();
+				if(selectedNode instanceof TreeDua){
+					ICompilationUnit cu = ((TreeDua) selectedNode).getCompilationUnit();
 					try {
 						//remove old markers
 						CodeMarkerFactory.removeMarkers(CodeMarkerFactory.findMarkers(cu.getUnderlyingResource()));
 						//get the first and last char of definition line to draw
-						int[] defOffset = parserLine(cu.getSource(),((TreeDUA) selectedNode).getDef());
+						int[] defOffset = parserLine(cu.getSource(),((TreeDua) selectedNode).getDef());
 						//get the first and last char of c-use line to draw
-						int[] useOffset = parserLine(cu.getSource(), ((TreeDUA) selectedNode).getUse());
+						int[] useOffset = parserLine(cu.getSource(), ((TreeDua) selectedNode).getUse());
 						//get the first and last char of target line to draw
 						int[] targetOffset = null;
-						if(((TreeDUA) selectedNode).getTarget() != 1){
-							targetOffset = parserLine(cu.getSource(),((TreeDUA) selectedNode).getTarget());
+						if(((TreeDua) selectedNode).getTarget() != 1){
+							targetOffset = parserLine(cu.getSource(),((TreeDua) selectedNode).getTarget());
 						}
 						//create new markers based on selected DUA
-						final TreeDUA dua = (TreeDUA) selectedNode;
+						final TreeDua dua = (TreeDua) selectedNode;
 						final String covered = dua.isCovered()? "true" : "false";
 						CodeMarkerFactory.mark(cu.getUnderlyingResource(), defOffset, useOffset, targetOffset, covered);
 						setFocus();
@@ -126,7 +125,7 @@ public class DataFlowMethodView extends ViewPart {
 				if(selectedNode instanceof TreeMethod 
 						|| selectedNode instanceof TreeClass 
 						|| selectedNode instanceof TreePackage 
-						|| selectedNode instanceof TreeFolder 
+//						|| selectedNode instanceof TreeFolder 
 						|| selectedNode instanceof TreeProject){
 
 					viewer.setExpandedState(selectedNode,

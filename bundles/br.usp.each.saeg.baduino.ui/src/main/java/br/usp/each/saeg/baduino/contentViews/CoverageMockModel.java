@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,11 +35,12 @@ import br.usp.each.saeg.asm.defuse.Field;
 import br.usp.each.saeg.asm.defuse.Local;
 import br.usp.each.saeg.asm.defuse.Variable;
 import br.usp.each.saeg.baduino.handlers.VisualizationHandler;
-import br.usp.each.saeg.baduino.xml.XmlClass;
-import br.usp.each.saeg.baduino.xml.XmlInput;
-import br.usp.each.saeg.baduino.xml.XmlMethod;
-import br.usp.each.saeg.baduino.xml.XmlObject;
-import br.usp.each.saeg.baduino.xml.XmlDua;
+import br.usp.each.saeg.baduino.xml.XMLClass;
+import br.usp.each.saeg.baduino.xml.XMLDua;
+import br.usp.each.saeg.baduino.xml.XMLFactory;
+import br.usp.each.saeg.baduino.xml.XMLMethod;
+import br.usp.each.saeg.baduino.xml.XMLPackage;
+import br.usp.each.saeg.baduino.xml.XMLProject;
 
 //Structure layers  
 //layer 0: IJavaProject(Project)|
@@ -48,6 +48,11 @@ import br.usp.each.saeg.baduino.xml.XmlDua;
 //layer 2: 														|->IPackageFragment(Packages)|
 //layer 3: 																					 |->ICompilationUnit(Classes)
 
+/**
+ * 
+ * @author Mario Concilio
+ *
+ */
 public class CoverageMockModel  {
 	
 	private static final Logger logger = Logger.getLogger(CoverageMockModel.class);
@@ -56,24 +61,27 @@ public class CoverageMockModel  {
 	private int[][] basicBlocks;
 	private int[] leaders;
 	private String className;
-	private XmlInput information;
-
-	//	private IMethod[] methodList;
+	private XMLProject information;
 
 	public List<?> getTree() throws JavaModelException {
-		information = XmlObject.getInstance();
-
-		final List<XmlClass> classes = information.getClasses();
-		for (XmlClass clazz : classes) {
-			logger.debug("class: " + clazz);
+		information = XMLFactory.getInstance();
+		
+		final List<XMLPackage> packages = information.getPackages();
+		for (XMLPackage pkg : packages) {
+			logger.debug("package: " + pkg);
 			
-			final List<XmlMethod> methods = clazz.getMethods();
-			for (XmlMethod method : methods) {
-				logger.debug("method: " + method);
+			final List<XMLClass> classes = pkg.getClasses();
+			for (XMLClass clazz : classes) {
+				logger.debug("class: " + clazz);
 				
-				final List<XmlDua> statements = method.getDuas();
-				for (XmlDua statement : statements) {
-					logger.debug("result: " + statement);			
+				final List<XMLMethod> methods = clazz.getMethods();
+				for (XMLMethod method : methods) {
+					logger.debug("method: " + method);
+					
+					final List<XMLDua> statements = method.getDuas();
+					for (XMLDua statement : statements) {
+						logger.debug("result: " + statement);			
+					}
 				}
 			}
 		}
@@ -188,22 +196,22 @@ public class CoverageMockModel  {
 			final String[] name = classNode.name.split("/");
 			newClass.setName(name[name.length-1] + ".java");
 
-			XmlClass clazz = null;
+			XMLClass clazz = null;
 			if (information != null) {
 				final String clazzName = classNode.name.replace('/', '.');
-				final List<XmlClass> xmlClasses = information.getClasses();
-				
-				for (XmlClass c : xmlClasses) {
-					if (clazzName.equals(c.getName())) {
-						clazz = c;
-						break;
-					}
-				}
+//				final List<XMLClass> xmlClasses = information.getClasses();
+//				
+//				for (XMLClass c : xmlClasses) {
+//					if (clazzName.equals(c.getName())) {
+//						clazz = c;
+//						break;
+//					}
+//				}
 				
 				/*
-				List<XmlPackage> listPackage = information.getPackages();
-				XmlPackage Package = null;
-				for(XmlPackage l:listPackage ){
+				List<XMLPackage> listPackage = information.getPackages();
+				XMLPackage Package = null;
+				for(XMLPackage l:listPackage ){
 					try {
 						if(cu.getPackageDeclarations().length > 0){
 							String packageName = extractPackageName(cu.getPackageDeclarations()[0].toString());
@@ -224,7 +232,7 @@ public class CoverageMockModel  {
 
 				if(Package != null){
 					String clazzName = classNode.name.replace('/', '.');
-					for (XmlClass classes : Package.getClasses()) {
+					for (XMLClass classes : Package.getClasses()) {
 						//System.out.println(clazzName +" "+classes.getName());
 						if(clazzName.equals(classes.getName())){
 							clazz = classes;
@@ -291,7 +299,7 @@ public class CoverageMockModel  {
 		return path;
 	}
 
-	private void methodDuas(final ClassNode classNode, final int posMethod, final TreeClass newClass, final ICompilationUnit cu, final XmlClass clazz) {
+	private void methodDuas(final ClassNode classNode, final int posMethod, final TreeClass newClass, final ICompilationUnit cu, final XMLClass clazz) {
 		final MethodNode methodNode = classNode.methods.get(posMethod);
 		final TreeMethod newMethod = new TreeMethod(); //create new method
 
@@ -339,13 +347,13 @@ public class CoverageMockModel  {
 			}
 		}
 
-		XmlMethod xmlMethod = null;
+		XMLMethod xMLMethod = null;
 		if (clazz != null) {
-			final List<XmlMethod> xmlMethods = clazz.getMethods();
+			final List<XMLMethod> xMLMethods = clazz.getMethods();
 			
-			for (XmlMethod m : xmlMethods) {
+			for (XMLMethod m : xMLMethods) {
 				if (newMethod.getName().equals(m.getName())) {
-					xmlMethod = m;
+					xMLMethod = m;
 					break;
 				}
 			}
@@ -366,10 +374,10 @@ public class CoverageMockModel  {
 
 		newClass.getMethods().add(newMethod);//adiciona aos metodos existentes
 
-		List<XmlDua> xmlDuas = null;
-		if (xmlMethod != null) {
-//			duasXML =  (ArrayList<XmlDua>) xmlMethod.getStatements().clone();
-			xmlDuas = xmlMethod.getDuas();
+		List<XMLDua> xMLDuas = null;
+		if (xMLMethod != null) {
+//			duasXML =  (ArrayList<XMLDua>) xmlMethod.getStatements().clone();
+			xMLDuas = xMLMethod.getDuas();
 		}
 
 		final int[] lines = getLines(methodNode);
@@ -390,8 +398,8 @@ public class CoverageMockModel  {
 				if (varName != null) {
 					final TreeDUA newDua = new TreeDUA(defLine, useLine, targetLine, varName, cu); //cria uma dua
 					
-					if (xmlDuas != null) {
-						for (XmlDua dua : xmlDuas) {
+					if (xMLDuas != null) {
+						for (XMLDua dua : xMLDuas) {
 							if (
 									dua.getDef() == defLine &&
 									dua.getUse() == useLine &&
@@ -399,8 +407,8 @@ public class CoverageMockModel  {
 									dua.getVar().equals(varName)
 									) {
 								
-								boolean covered = dua.getCovered();
-								logger.debug("dua covered: " + dua.getCovered());
+								boolean covered = dua.isCovered();
+								logger.debug("dua covered: " + dua.isCovered());
 								newDua.setCovered(covered);
 								break;
 							}

@@ -14,14 +14,24 @@ import org.objectweb.asm.Opcodes;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
+import br.usp.each.saeg.baduino.tree.TreeClass;
+import br.usp.each.saeg.baduino.tree.TreeDua;
+import br.usp.each.saeg.baduino.tree.TreeMethod;
+import br.usp.each.saeg.baduino.tree.TreePackage;
+import br.usp.each.saeg.baduino.tree.TreeProject;
 
+/**
+ * 
+ * @author Mario Concilio
+ *
+ */
 public class CoverageLabelProvider implements ITableLabelProvider {
 
 	private static final Image COVERED 		= getImage("check.png");
 	private static final Image UNCOVERED 	= getImage("uncheck.png");
 	private static final Image PERCENT 		= getImage("percent.png");
 	private static final Image PROJECT 		= getImage("projects.gif");
-	private static final Image FOLDER 		= getImage("folder.gif");
+//	private static final Image FOLDER 		= getImage("folder.gif");
 	private static final Image PACKAGE 		= getImage("package.gif");
 	private static final Image CLASS 		= getImage("classes.gif");
 	private static final Image DUA 			= getImage("dua.png");
@@ -36,168 +46,140 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 	}
 
 	@Override
-	public void addListener(ILabelProviderListener listener) {}
+	public void addListener(final ILabelProviderListener listener) {}
+	
+	@Override
+	public void removeListener(final ILabelProviderListener listener) {}
 
 	@Override
 	public void dispose() {}
 
 	@Override
-	public boolean isLabelProperty(Object element, String property) {
+	public boolean isLabelProperty(final Object element, final String property) {
 		return false;
 	}
 
 	@Override
-	public void removeListener(ILabelProviderListener listener) {}
-
-	@Override
 	public Image getColumnImage(final Object element, final int columnIndex) {
+		Image image = null;
+		
 		switch(columnIndex) {
 		
-		case 0://first column
+		// first column
+		case 0:
 			if (element instanceof TreeProject) {
-				return PROJECT;
+				image = PROJECT;
 			}
-			else if (element instanceof TreeFolder) {
-				return FOLDER;
-			}
+//			else if (element instanceof TreeFolder) {
+//				image = FOLDER;
+//			}
 			else if (element instanceof TreePackage) {
-				return PACKAGE;
+				image = PACKAGE;
 			}
 			else if (element instanceof TreeClass) {
-				return CLASS;
+				image = CLASS;
 			}
 			else if (element instanceof TreeMethod) {
 				final ISharedImages images = JavaUI.getSharedImages();
 				final TreeMethod method = (TreeMethod) element;
-				Image img = null;
 				
 				switch (method.getAccess()) {
 					case Opcodes.ACC_PUBLIC:
-						img = images.getImage(ISharedImages.IMG_OBJS_PUBLIC);
+						image = images.getImage(ISharedImages.IMG_OBJS_PUBLIC);
 						break;
 					
 					case Opcodes.ACC_PROTECTED:
-						img = images.getImage(ISharedImages.IMG_OBJS_PROTECTED);
+						image = images.getImage(ISharedImages.IMG_OBJS_PROTECTED);
 						break;
 					
 					case Opcodes.ACC_PRIVATE:
-						img = images.getImage(ISharedImages.IMG_OBJS_PRIVATE);
+						image = images.getImage(ISharedImages.IMG_OBJS_PRIVATE);
 						break;
 					
 					default:
-						img = images.getImage(ISharedImages.IMG_OBJS_DEFAULT);
-				}
-				
-				return img;
-				
-//				if(method.getAccess() == Opcodes.ACC_PUBLIC) {
-//					img = images.getImage(ISharedImages.IMG_OBJS_PUBLIC);
-//				}
-//				if (method.getAccess() == Opcodes.ACC_PROTECTED) {
-//					return images.getImage(ISharedImages.IMG_OBJS_PROTECTED);
-//				}
-//				if (method.getAccess() == Opcodes.ACC_PRIVATE) {
-//					return images.getImage(ISharedImages.IMG_OBJS_PRIVATE);
-//				}
-//					return images.getImage(ISharedImages.IMG_OBJS_DEFAULT);
-					
+						image = images.getImage(ISharedImages.IMG_OBJS_DEFAULT);
+				}				
 			}
-			else if (element instanceof TreeDUA){
-				return DUA;
+			else if (element instanceof TreeDua){
+				image = DUA;
 			}
 			
-			return null;
-			
-		case 1://second column
-			if (element instanceof TreeProject) {
-				return PERCENT;
-			}
-			else if (element instanceof TreeFolder) {
-				return PERCENT;
-			}
-			else if (element instanceof TreePackage) {
-				return PERCENT;
-			}
-			else if (element instanceof TreeClass) {
-				return PERCENT;
-			}
-			else if (element instanceof TreeMethod) {
-				return PERCENT;
+		//second column	
+		case 1: 
+			if (element instanceof TreeDua) {
+				final TreeDua dua = (TreeDua) element;
+				image = dua.isCovered()? COVERED : UNCOVERED;
 			}
 			else {
-				final TreeDUA dua = (TreeDUA) element;
-				return dua.isCovered() ? COVERED : UNCOVERED;
-						
-//				if (dua.isCovered()){
-//					return COVERED;
-//				}
-//				else {
-//					return UNCOVERED;
-//				}
+				image = PERCENT;
 			}
 		}
 		
-		return null;
+		return image;
 	}
 
 	@Override
 	public String getColumnText(final Object element, final int columnIndex) {
+		String text = null;
+		
 		switch(columnIndex) {
 
-		case 0://first column
+		//first column
+		case 0:
 			if(element instanceof TreeProject) {
 				final TreeProject project = (TreeProject) element;
-				return project.getName();
+				text = project.getName();
 			}
-			else if (element instanceof TreeFolder) {
-				final TreeFolder folder = (TreeFolder) element;
-				return folder.getName();
-			}
+//			else if (element instanceof TreeFolder) {
+//				final TreeFolder folder = (TreeFolder) element;
+//				text = folder.getName();
+//			}
 			else if (element instanceof TreePackage) {
 				final TreePackage pkg = (TreePackage) element;
-				return pkg.getName();
+				text = pkg.getName();
 			}
 			else if (element instanceof TreeClass) {
 				final TreeClass clazz = (TreeClass) element;
-				return clazz.getName();
+				text = clazz.getName();
 
 			}
 			else if (element instanceof TreeMethod) {
 				final TreeMethod method = (TreeMethod) element;
-				return method.getName();
+				text = method.getName();
 			}
 			else {
-				final TreeDUA dua = (TreeDUA) element;
-				return dua.toString();
+				final TreeDua dua = (TreeDua) element;
+				text = dua.toString();
 			}
 
-		case 1://second column
+		//second column
+		case 1:
 			if (element instanceof TreeProject) {
 				final TreeProject project = (TreeProject) element;
-				return project.getCoverage();	
+				text = project.getCoverage();	
 			}
-			else if (element instanceof TreeFolder) {
-				final TreeFolder folder = (TreeFolder) element;
-				return folder.getCoverage();	
-			}
+//			else if (element instanceof TreeFolder) {
+//				final TreeFolder folder = (TreeFolder) element;
+//				text = folder.getCoverage();	
+//			}
 			else if (element instanceof TreePackage) {
 				final TreePackage pkg = (TreePackage) element;
-				return pkg.getCoverage();
+				text = pkg.getCoverage();
 			}
 			else if (element instanceof TreeClass) {
 				final TreeClass clazz = (TreeClass) element;
-				return clazz.getCoverage();
+				text = clazz.getCoverage();
 			}
 			else if (element instanceof TreeMethod) {
 				final TreeMethod method = (TreeMethod) element;
-				return method.getCoverage();
+				text = method.getCoverage();
 			}
 			else {
-				final TreeDUA dua = (TreeDUA) element;
-				return dua.isCovered()? "true" : "false";
+				final TreeDua dua = (TreeDua) element;
+				text = dua.isCovered()? "true" : "false";
 			}
 		}
 
-		return null;
+		return text;
 	} 
 } 

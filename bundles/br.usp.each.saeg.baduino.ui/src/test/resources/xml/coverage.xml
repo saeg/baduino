@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<report>
+	<class name="br/usp/each/ach2026/AuthManager">
+		<method desc="()Z" name="isLogged">
+			<du covered="0" def="19" use="20" var="this"/>
+			<du covered="0" def="19" target="33" use="20" var="this"/>
+			<du covered="0" def="19" target="21" use="20" var="this"/>
+			<du covered="0" def="19" use="24" var="this"/>
+			<du covered="0" def="19" use="20" var="this.br"/>
+			<du covered="0" def="19" target="33" use="20" var="this.br"/>
+			<du covered="0" def="19" target="21" use="20" var="this.br"/>
+			<du covered="0" def="23" target="26" use="26" var="value"/>
+			<du covered="0" def="23" target="20" use="26" var="value"/>
+			<du covered="0" def="23" target="27" use="26" var="value"/>
+			<du covered="0" def="23" target="20" use="26" var="value"/>
+			<du covered="0" def="24" target="27" use="26" var="encoded"/>
+			<du covered="0" def="24" target="20" use="26" var="encoded"/>
+			<du covered="0" def="20" target="22" use="21" var="headerLine"/>
+			<du covered="0" def="20" target="20" use="21" var="headerLine"/>
+			<du covered="0" def="20" use="22" var="headerLine"/>
+			<counter covered="0" missed="16" type="DU"/>
+			<counter covered="0" missed="1" type="METHOD"/>
+		</method>
+		<counter covered="0" missed="16" type="DU"/>
+		<counter covered="0" missed="1" type="METHOD"/>
+		<counter covered="0" missed="1" type="CLASS"/>
+	</class>
+	<class name="br/usp/each/ach2026/PropertiesManager">
+		<method desc="(Ljava/lang/String;)V" name="&lt;init&gt;">
+			<du covered="1" def="14" use="28" var="this"/>
+			<du covered="1" def="14" use="25" var="this"/>
+			<du covered="1" def="14" use="22" var="this"/>
+			<du covered="1" def="14" use="22" var="ALLOWED"/>
+			<du covered="1" def="14" use="25" var="DENIED"/>
+			<du covered="1" def="14" use="28" var="DEFAULT"/>
+			<du covered="1" def="17" target="30" use="30" var="input"/>
+			<du covered="0" def="17" target="35" use="30" var="input"/>
+			<du covered="1" def="17" use="30" var="input"/>
+			<du covered="1" def="19" target="22" use="21" var="listing"/>
+			<du covered="1" def="19" target="24" use="21" var="listing"/>
+			<du covered="1" def="19" target="25" use="24" var="listing"/>
+			<du covered="1" def="19" target="28" use="24" var="listing"/>
+			<counter covered="12" missed="1" type="DU"/>
+			<counter covered="1" missed="0" type="METHOD"/>
+		</method>
+		<counter covered="12" missed="1" type="DU"/>
+		<counter covered="1" missed="0" type="METHOD"/>
+		<counter covered="1" missed="0" type="CLASS"/>
+	</class>
+	<class name="br/usp/each/ach2026/response/HttpResponse">
+		<method desc="()Ljava/lang/String;" name="contentType">
+			<du covered="1" def="23" target="24" use="24" var="this"/>
+			<du covered="1" def="23" target="25" use="24" var="this"/>
+			<du covered="1" def="23" target="28" use="27" var="this"/>
+			<du covered="1" def="23" target="30" use="27" var="this"/>
+			<du covered="1" def="23" target="30" use="30" var="this"/>
+			<du covered="1" def="23" target="31" use="30" var="this"/>
+			<du covered="1" def="23" target="31" use="30" var="this"/>
+			<du covered="1" def="23" target="33" use="30" var="this"/>
+			<du covered="1" def="23" target="25" use="24" var="this"/>
+			<du covered="1" def="23" target="27" use="24" var="this"/>
+			<du covered="1" def="23" target="24" use="24" var="this.filename"/>
+			<du covered="1" def="23" target="25" use="24" var="this.filename"/>
+			<du covered="1" def="23" target="28" use="27" var="this.filename"/>
+			<du covered="1" def="23" target="30" use="27" var="this.filename"/>
+			<du covered="1" def="23" target="30" use="30" var="this.filename"/>
+			<du covered="1" def="23" target="31" use="30" var="this.filename"/>
+			<du covered="1" def="23" target="31" use="30" var="this.filename"/>
+			<du covered="1" def="23" target="33" use="30" var="this.filename"/>
+			<du covered="1" def="23" target="25" use="24" var="this.filename"/>
+			<du covered="1" def="23" target="27" use="24" var="this.filename"/>
+			<du covered="1" def="23" use="33" var="contentType"/>
+			<du covered="1" def="25" use="33" var="contentType"/>
+			<du covered="1" def="28" use="33" var="contentType"/>
+			<du covered="1" def="31" use="33" var="contentType"/>
+			<counter covered="24" missed="0" type="DU"/>
+			<counter covered="1" missed="0" type="METHOD"/>
+		</method>
+		<counter covered="24" missed="0" type="DU"/>
+		<counter covered="1" missed="0" type="METHOD"/>
+		<counter covered="1" missed="0" type="CLASS"/>
+	</class>
+	<class name="br/usp/each/ach2026/response/HttpResponseFactory">
+		<method desc="(Ljava/lang/String;ZLbr/usp/each/ach2026/PropertiesManager$ListingDirectories;)Lbr/usp/each/ach2026/response/HttpResponse;" name="getResponse">
+			<du covered="1" def="12" target="23" use="23" var="filename"/>
+			<du covered="1" def="12" target="26" use="23" var="filename"/>
+			<du covered="1" def="12" use="36" var="filename"/>
+			<du covered="1" def="12" use="58" var="filename"/>
+			<du covered="1" def="12" use="47" var="filename"/>
+			<du covered="1" def="12" use="43" var="filename"/>
+			<du covered="1" def="12" use="39" var="filename"/>
+			<du covered="1" def="12" target="28" use="27" var="filename"/>
+			<du covered="1" def="12" target="31" use="27" var="filename"/>
+			<du covered="1" def="12" use="31" var="filename"/>
+			<du covered="1" def="12" use="28" var="filename"/>
+			<du covered="1" def="12" use="24" var="filename"/>
+			<du covered="1" def="12" target="24" use="23" var="logged"/>
+			<du covered="1" def="12" target="26" use="23" var="logged"/>
+			<du covered="1" def="12" target="56" use="37" var="listing"/>
+			<du covered="1" def="12" target="39" use="37" var="listing"/>
+			<du covered="1" def="12" target="43" use="37" var="listing"/>
+			<du covered="1" def="12" target="47" use="37" var="listing"/>
+			<du covered="1" def="13" target="27" use="26" var="fileExists"/>
+			<du covered="1" def="13" target="36" use="26" var="fileExists"/>
+			<du covered="1" def="17" use="32" var="fis"/>
+			<du covered="0" def="22" use="62" var="response"/>
+			<du covered="1" def="24" use="62" var="response"/>
+			<du covered="1" def="28" use="62" var="response"/>
+			<du covered="1" def="31" use="62" var="response"/>
+			<du covered="1" def="39" use="62" var="response"/>
+			<du covered="1" def="43" use="62" var="response"/>
+			<du covered="1" def="50" use="62" var="response"/>
+			<du covered="1" def="58" use="62" var="response"/>
+			<counter covered="28" missed="1" type="DU"/>
+			<counter covered="1" missed="0" type="METHOD"/>
+		</method>
+		<method desc="()[I" name="$SWITCH_TABLE$br$usp$each$ach2026$PropertiesManager$ListingDirectories">
+			<du covered="1" def="9" target="9" use="9" var="$SWITCH_TABLE$br$usp$each$ach2026$PropertiesManager$ListingDirectories"/>
+			<du covered="1" def="9" target="9" use="9" var="$SWITCH_TABLE$br$usp$each$ach2026$PropertiesManager$ListingDirectories"/>
+			<du covered="1" def="9" use="9" var="$SWITCH_TABLE$br$usp$each$ach2026$PropertiesManager$ListingDirectories"/>
+			<du covered="1" def="9" use="9" var="ALLOWED"/>
+			<du covered="1" def="9" use="9" var="DEFAULT"/>
+			<du covered="1" def="9" use="9" var="DENIED"/>
+			<counter covered="6" missed="0" type="DU"/>
+			<counter covered="1" missed="0" type="METHOD"/>
+		</method>
+		<counter covered="34" missed="1" type="DU"/>
+		<counter covered="2" missed="0" type="METHOD"/>
+		<counter covered="1" missed="0" type="CLASS"/>
+	</class>
+	<class name="br/usp/each/ach2026/response/HttpResponseOkFile">
+		<method desc="(Ljava/io/DataOutputStream;)V" name="writeBody">
+			<du covered="0" def="33" use="37" var="this"/>
+			<du covered="0" def="33" target="41" use="37" var="this"/>
+			<du covered="0" def="33" target="38" use="37" var="this"/>
+			<du covered="0" def="33" use="41" var="this"/>
+			<du covered="0" def="33" use="38" var="os"/>
+			<du covered="0" def="33" use="37" var="this.fis"/>
+			<du covered="0" def="33" target="41" use="37" var="this.fis"/>
+			<du covered="0" def="33" target="38" use="37" var="this.fis"/>
+			<du covered="0" def="33" use="41" var="this.fis"/>
+			<du covered="0" def="33" use="37" var="buffer"/>
+			<du covered="0" def="33" target="41" use="37" var="buffer"/>
+			<du covered="0" def="33" target="38" use="37" var="buffer"/>
+			<du covered="0" def="33" use="38" var="buffer"/>
+			<du covered="0" def="37" use="38" var="bytes"/>
+			<counter covered="0" missed="14" type="DU"/>
+			<counter covered="0" missed="1" type="METHOD"/>
+		</method>
+		<counter covered="0" missed="14" type="DU"/>
+		<counter covered="0" missed="1" type="METHOD"/>
+		<counter covered="0" missed="1" type="CLASS"/>
+	</class>
+	<class name="br/usp/each/ach2026/WebServer">
+		<method desc="([Ljava/lang/String;)V" name="main">
+			<du covered="0" def="16" use="29" var="listing"/>
+			<du covered="0" def="19" use="25" var="welcomeSocket"/>
+			<counter covered="0" missed="2" type="DU"/>
+			<counter covered="0" missed="1" type="METHOD"/>
+		</method>
+		<counter covered="0" missed="2" type="DU"/>
+		<counter covered="0" missed="1" type="METHOD"/>
+		<counter covered="0" missed="1" type="CLASS"/>
+	</class>
+	<counter covered="70" missed="34" type="DU"/>
+	<counter covered="4" missed="3" type="METHOD"/>
+	<counter covered="3" missed="3" type="CLASS"/>
+</report>

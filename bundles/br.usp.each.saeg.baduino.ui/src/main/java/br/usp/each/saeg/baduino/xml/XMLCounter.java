@@ -7,11 +7,28 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @author Mario Concilio
  *
  */
-public class XmlCounter {
+public class XMLCounter {
+	
+	public enum XMLCounterType {
+		DU("DU"),
+		METHOD("METHOD"),
+		CLASS("CLASS");
+		
+		private String type;
+		
+		XMLCounterType(String type) {
+			this.type = type;
+		}
+		
+		@Override
+		public String toString() {
+			return this.type;
+		}
+	}
 	
 	private int covered;
 	private int missed;
-	private String type;
+	private XMLCounterType type;
 	
 	@XmlAttribute(name="covered")
 	public int getCovered() {
@@ -32,12 +49,20 @@ public class XmlCounter {
 	}
 	
 	@XmlAttribute(name="type")
-	public String getType() {
+	public XMLCounterType getType() {
 		return type;
 	}
 	
-	public void setType(String type) {
+	public void setType(XMLCounterType type) {
 		this.type = type;
+	}
+	
+	public int getTotal() {
+		return covered + missed;
+	}
+	
+	public double getPercentage() {
+		return ((double) covered / (double) getTotal()) * 100.0; 
 	}
 	
 	@Override
