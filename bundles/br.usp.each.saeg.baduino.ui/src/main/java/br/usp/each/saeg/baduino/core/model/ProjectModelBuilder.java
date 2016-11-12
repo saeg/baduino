@@ -34,7 +34,6 @@ public class ProjectModelBuilder {
 		model.setLocation(locationPath.toOSString());
 		model.setClassesPath(locationPath.removeLastSegments(1).append(output).toOSString());
 		model.setBaduinoPath(locationPath.append(".baduino").toOSString());
-//		model.setTestClasses(searchTestClasses(javaProject));
 		model.setClasses(searchClasses(javaProject));
 		model.setCoverageBinPath(locationPath.append(".baduino").append("coverage.ser").toOSString());
 		model.setCoverageXmlPath(locationPath.append(".baduino").append("coverage.xml").toOSString());

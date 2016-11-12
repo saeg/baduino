@@ -89,7 +89,6 @@ public class Launcher {
 		});
 		
 		final ILaunchConfiguration configuration = workingCopy.doSave();
-//		configuration.launch(ILaunchManager.RUN_MODE, null);
 		DebugUITools.launch(configuration, ILaunchManager.RUN_MODE);
 	}
 	
@@ -113,15 +112,6 @@ public class Launcher {
 				classpath.add(dependenciesEntry.getMemento());
 			}
 		}
-		
-		// tests 
-//		List<String> testsPath = this.model.getTestClasses();
-//		for (String p : testsPath) {
-//			IPath path = new Path(p);
-//			IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(path);
-//			entry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
-//			classpath.add(entry.getMemento());
-//		}
 		
 		// junit
 		final String junit = mementoForClass(JUnitCore.class);
@@ -159,13 +149,13 @@ public class Launcher {
 		classpath.add(badua);
 
 		// baduino
-		final String path = "/Users/666mario/Documents/develop/each/baduino/bundles/br.usp.each.saeg.baduino.ui/target/br.usp.each.saeg.baduino.ui-0.2.4.jar";
-		final IPath ipath = new Path(path);
-		final IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(ipath);
-		entry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
-		String baduino = entry.getMemento();
+//		final String path = "/Users/666mario/Documents/develop/each/baduino/bundles/br.usp.each.saeg.baduino.ui/target/br.usp.each.saeg.baduino.ui-0.3.1.jar";
+//		final IPath ipath = new Path(path);
+//		final IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(ipath);
+//		entry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
+//		String baduino = entry.getMemento();
 
-//		final String baduino = mementoForClass(BaduinoRunner.class);
+		final String baduino = mementoForClass(BaduinoRunner.class);
 		classpath.add(baduino);
 		
 		// saeg commons

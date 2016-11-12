@@ -15,7 +15,7 @@ public class TreeProject extends TreeElement {
 	private List<TreePackage> packages = new ArrayList<>();
 	
 	public String getName() {
-		return "Project";
+		return name;
 	}
 	
 	public void setName(String name) {

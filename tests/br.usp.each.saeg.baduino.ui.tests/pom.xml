@@ -9,6 +9,6 @@
   <parent>
     <groupId>br.usp.each.saeg.baduino</groupId>
     <artifactId>br.usp.each.saeg.baduino.tests</artifactId>
-    <version>0.2.4</version>
+    <version>0.3.3</version>
   </parent>
 </project>

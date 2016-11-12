@@ -140,7 +140,7 @@
       </category>
       <view
             category="br.usp.each.saeg.baduino.coverage"
-            class="br.usp.each.saeg.baduino.views.DataFlowMethodView"
+            class="br.usp.each.saeg.baduino.view.DataFlowMethodView"
             icon="src/main/resources/icons/baduino.png"
             id="br.usp.each.saeg.baduino.DataflowView"
             name="Baduino"

@@ -70,9 +70,6 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 			if (element instanceof TreeProject) {
 				image = PROJECT;
 			}
-//			else if (element instanceof TreeFolder) {
-//				image = FOLDER;
-//			}
 			else if (element instanceof TreePackage) {
 				image = PACKAGE;
 			}
@@ -104,6 +101,8 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 				image = DUA;
 			}
 			
+			break;
+			
 		//second column	
 		case 1: 
 			if (element instanceof TreeDua) {
@@ -113,6 +112,8 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 			else {
 				image = PERCENT;
 			}
+			
+			break;
 		}
 		
 		return image;
@@ -126,14 +127,10 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 
 		//first column
 		case 0:
-			if(element instanceof TreeProject) {
+			if (element instanceof TreeProject) {
 				final TreeProject project = (TreeProject) element;
 				text = project.getName();
 			}
-//			else if (element instanceof TreeFolder) {
-//				final TreeFolder folder = (TreeFolder) element;
-//				text = folder.getName();
-//			}
 			else if (element instanceof TreePackage) {
 				final TreePackage pkg = (TreePackage) element;
 				text = pkg.getName();
@@ -151,6 +148,8 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 				final TreeDua dua = (TreeDua) element;
 				text = dua.toString();
 			}
+			
+			break;
 
 		//second column
 		case 1:
@@ -158,10 +157,6 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 				final TreeProject project = (TreeProject) element;
 				text = project.getCoverage();	
 			}
-//			else if (element instanceof TreeFolder) {
-//				final TreeFolder folder = (TreeFolder) element;
-//				text = folder.getCoverage();	
-//			}
 			else if (element instanceof TreePackage) {
 				final TreePackage pkg = (TreePackage) element;
 				text = pkg.getCoverage();
@@ -178,6 +173,8 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 				final TreeDua dua = (TreeDua) element;
 				text = dua.isCovered()? "true" : "false";
 			}
+			
+			break;
 		}
 
 		return text;

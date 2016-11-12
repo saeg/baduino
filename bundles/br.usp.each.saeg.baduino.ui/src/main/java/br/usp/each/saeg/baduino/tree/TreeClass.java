@@ -45,6 +45,20 @@ public class TreeClass extends TreeElement {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof TreeClass))
+			return false;
+		
+		TreeClass clazz = (TreeClass) obj;
+		return name.equals(clazz.getName());
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
+	@Override
     public String toString() {
     	return name;
     }

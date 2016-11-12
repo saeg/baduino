@@ -1,7 +1,7 @@
-package br.usp.each.saeg.baduino.views;
+package br.usp.each.saeg.baduino.view;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -16,13 +16,12 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchListener;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import br.usp.each.saeg.baduino.contentViews.CoverageContentProvider;
+import br.usp.each.saeg.baduino.contentViews.CoverageInput;
 import br.usp.each.saeg.baduino.contentViews.CoverageLabelProvider;
-import br.usp.each.saeg.baduino.contentViews.CoverageMockModel;
 import br.usp.each.saeg.baduino.markers.CodeMarkerFactory;
 import br.usp.each.saeg.baduino.tree.TreeClass;
 import br.usp.each.saeg.baduino.tree.TreeDua;
@@ -31,6 +30,9 @@ import br.usp.each.saeg.baduino.tree.TreePackage;
 import br.usp.each.saeg.baduino.tree.TreeProject;
 
 public class DataFlowMethodView extends ViewPart {
+	
+	private static final Logger logger = Logger.getLogger(DataFlowMethodView.class);
+	
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -38,13 +40,6 @@ public class DataFlowMethodView extends ViewPart {
 
 	private TreeViewer viewer;
 
-
-	/**
-	 * The constructor.
-	 */
-	public DataFlowMethodView() {
-		super();
-	}
 
 	/**
 	 * This is a callback that will allow us
@@ -71,20 +66,19 @@ public class DataFlowMethodView extends ViewPart {
 		
 		viewer.setContentProvider(new CoverageContentProvider());
 		viewer.setLabelProvider(new CoverageLabelProvider());
-		viewer.setInput(new CoverageMockModel());		// provide the input to the ContentProvider
-		System.out.println("Time to show view: "+(System.currentTimeMillis()-start)/1000.0);
+		viewer.setInput(new CoverageInput());		// provide the input to the ContentProvider
+		logger.info("Time to show view: " + (System.currentTimeMillis() - start) / 1000.0);
 		
 		//change selection event
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				IStructuredSelection thisSelection = (IStructuredSelection) event
-						.getSelection();
+				IStructuredSelection thisSelection = (IStructuredSelection) event.getSelection();
 				Object selectedNode = thisSelection.getFirstElement();
 				
 				if(selectedNode instanceof TreeDua){
-					ICompilationUnit cu = ((TreeDua) selectedNode).getCompilationUnit();
+					final ICompilationUnit cu = ((TreeDua) selectedNode).getCompilationUnit();
 					try {
 						//remove old markers
 						CodeMarkerFactory.removeMarkers(CodeMarkerFactory.findMarkers(cu.getUnderlyingResource()));
@@ -102,9 +96,8 @@ public class DataFlowMethodView extends ViewPart {
 						final String covered = dua.isCovered()? "true" : "false";
 						CodeMarkerFactory.mark(cu.getUnderlyingResource(), defOffset, useOffset, targetOffset, covered);
 						setFocus();
-					} catch (JavaModelException e1) {
-						e1.printStackTrace();
-					} catch (PartInitException e) {
+					}
+					catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
@@ -112,7 +105,6 @@ public class DataFlowMethodView extends ViewPart {
 			}
 		});
 
-		
 		//double click event to expand state
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
@@ -137,7 +129,6 @@ public class DataFlowMethodView extends ViewPart {
 		
 		//Listener to closing view in workbench shutdown
 		PlatformUI.getWorkbench().addWorkbenchListener(new IWorkbenchListener() {
-
 			@Override
 			public boolean preShutdown(IWorkbench workbench, boolean forced) {
 				closeViews();
@@ -171,7 +162,7 @@ public class DataFlowMethodView extends ViewPart {
 
 	//close the view, when workbench is closed, and changed
 	public static void closeViews() {
-		System.out.println("Close view");
+		logger.info("Close view");
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		if (page != null) {
 			IViewReference[] viewReferences = page.getViewReferences();

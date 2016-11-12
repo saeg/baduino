@@ -51,9 +51,13 @@ public class TreeBuilderTests {
 		assertThat(packages, containsInAnyOrder(defaultPackage, responsePackage));
 		
 		for (final TreePackage pkg : packages) {
+			assertThat(pkg, is(notNullValue()));
 			System.out.println(pkg + " - covered: " + pkg.getCovered() + " total: " + pkg.getTotal() + " percentage: " + pkg.getPercentage());
 			
 			final List<TreeClass> classes = pkg.getClasses();
+			assertThat(classes, is(notNullValue()));
+			assertThat(classes, hasSize(greaterThan(0)));
+			
 			for (final TreeClass clazz : classes) {
 				System.out.println("\t" + clazz.getSimpleName());
 				

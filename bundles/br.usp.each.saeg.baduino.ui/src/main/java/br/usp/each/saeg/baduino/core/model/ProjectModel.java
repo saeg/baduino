@@ -33,10 +33,6 @@ public class ProjectModel {
 	
 	@JsonIgnore
 	private IJavaProject javaProject;
-	
-	public ProjectModel() {
-		
-	}
 		
 	public void build() throws CoreException, IOException {
 		// clean and build the project

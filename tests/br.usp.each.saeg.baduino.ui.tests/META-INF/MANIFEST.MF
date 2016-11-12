@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Tests
 Bundle-SymbolicName: br.usp.each.saeg.baduino.ui.tests
-Bundle-Version: 0.2.4
+Bundle-Version: 0.3.3
 Fragment-Host: br.usp.each.saeg.baduino.ui;bundle-version="0.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.12.0"

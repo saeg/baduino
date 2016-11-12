@@ -1,7 +1,7 @@
 package br.usp.each.saeg.baduino.contentViews;
+
 import java.util.List;
 
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -9,7 +9,7 @@ import br.usp.each.saeg.baduino.tree.TreeClass;
 import br.usp.each.saeg.baduino.tree.TreeMethod;
 import br.usp.each.saeg.baduino.tree.TreePackage;
 import br.usp.each.saeg.baduino.tree.TreeProject;
-import br.usp.each.saeg.baduino.views.DataFlowMethodView;
+import br.usp.each.saeg.baduino.view.DataFlowMethodView;
 
 /**
  * 
@@ -18,14 +18,14 @@ import br.usp.each.saeg.baduino.views.DataFlowMethodView;
  */
 public class CoverageContentProvider implements ITreeContentProvider {
 
-	private CoverageMockModel model;
+	private CoverageInput model;
 
 	@Override
 	public void dispose() {}
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		this.model = (CoverageMockModel) newInput;
+		this.model = (CoverageInput) newInput;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class CoverageContentProvider implements ITreeContentProvider {
 				throw new IllegalStateException("open an Dataflow empty view");
 			}
 		}
-		catch (JavaModelException e) {
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -60,10 +60,6 @@ public class CoverageContentProvider implements ITreeContentProvider {
 			final TreeProject project = (TreeProject) parentElement;
 			children = project.getPackages().toArray();
 		}
-//		else if (parentElement instanceof TreeFolder) {
-//			final TreeFolder folder = (TreeFolder) parentElement;
-//			children = folder.getPackages().toArray();
-//		}
 		else if (parentElement instanceof TreePackage) {
 			final TreePackage pkg = (TreePackage) parentElement;
 			children = pkg.getClasses().toArray();
@@ -88,7 +84,6 @@ public class CoverageContentProvider implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(final Object element) {
 		return element instanceof TreeProject ||
-//				element instanceof TreeFolder ||
 				element instanceof TreePackage ||
 				element instanceof TreeClass ||
 				element instanceof TreeMethod;
