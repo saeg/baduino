@@ -6,19 +6,24 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * 
  * @author Mario Concilio
  *
  */
+@XmlRootElement(name="model")
 public class ProjectModel {
 	
 	private String name;
@@ -27,11 +32,8 @@ public class ProjectModel {
 	private String location;
 	private String coverageBinPath;
 	private String coverageXmlPath;
-	private String jsonPath;
-	
+	private String xmlPath;
 	private List<String> classes;
-	
-	@JsonIgnore
 	private IJavaProject javaProject;
 		
 	public void build() throws CoreException, IOException {
@@ -41,13 +43,24 @@ public class ProjectModel {
 		project.build(IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor());
 		project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
 		
-		// creates baduino folder
-		Path path = Paths.get(baduinoPath);
+		// create baduino folder
+		Path path = Paths.get(getBaduinoPath());
 		if (!Files.exists(path)) {
 			Files.createDirectory(path);
 		}
 	}
 	
+	@XmlAttribute(name="name")
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	@XmlElementWrapper(name="classes")
+	@XmlElement(name="class")
 	public List<String> getClasses() {
 		return classes;
 	}
@@ -56,14 +69,7 @@ public class ProjectModel {
 		this.classes = classes;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	@XmlElement(name="classes-path")
 	public String getClassesPath() {
 		return classesPath;
 	}
@@ -72,6 +78,7 @@ public class ProjectModel {
 		this.classesPath = path;
 	}
 
+	@XmlElement(name="baduino")
 	public String getBaduinoPath() {
 		return baduinoPath;
 	}
@@ -80,6 +87,7 @@ public class ProjectModel {
 		this.baduinoPath = path;
 	}
 
+	@XmlElement(name="location")
 	public String getLocation() {
 		return location;
 	}
@@ -88,6 +96,36 @@ public class ProjectModel {
 		this.location = location;
 	}
 
+	
+	public String getCoverageBinPath() {
+		return coverageBinPath;
+	}
+
+	@XmlElement(name="coverage-bin")
+	public void setCoverageBinPath(String path) {
+		this.coverageBinPath = path;
+	}
+
+	
+	public String getCoverageXmlPath() {
+		return coverageXmlPath;
+	}
+
+	@XmlElement(name="coverage-xml")
+	public void setCoverageXmlPath(String path) {
+		this.coverageXmlPath = path;
+	}
+
+	@XmlElement(name="path")
+	public String getXmlPath() {
+		return xmlPath;
+	}
+
+	public void setXmlPath(String xmlPath) {
+		this.xmlPath = xmlPath;
+	}
+	
+	@XmlTransient
 	public IJavaProject getJavaProject() {
 		return javaProject;
 	}
@@ -95,29 +133,27 @@ public class ProjectModel {
 	public void setJavaProject(IJavaProject javaProject) {
 		this.javaProject = javaProject;
 	}
-
-	public String getCoverageBinPath() {
-		return coverageBinPath;
+	
+	@Override
+	public String toString() {
+		return name;
 	}
-
-	public void setCoverageBinPath(String path) {
-		this.coverageBinPath = path;
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ProjectModel))
+			return false;
+		
+		if (obj == this)
+			return true;
+		
+		final ProjectModel model = (ProjectModel) obj;
+		return location.equals(model.getLocation());
 	}
-
-	public String getCoverageXmlPath() {
-		return coverageXmlPath;
-	}
-
-	public void setCoverageXmlPath(String path) {
-		this.coverageXmlPath = path;
-	}
-
-	public String getJsonPath() {
-		return jsonPath;
-	}
-
-	public void setJsonPath(String jsonPath) {
-		this.jsonPath = jsonPath;
+	
+	@Override
+	public int hashCode() {
+		return location.hashCode();
 	}
 
 }

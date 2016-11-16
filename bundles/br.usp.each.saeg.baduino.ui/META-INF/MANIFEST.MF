@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Baduino
 Bundle-SymbolicName: br.usp.each.saeg.baduino.ui;singleton:=true
-Bundle-Version: 0.3.3
+Bundle-Version: 0.3.9
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jdt.ui;bundle-version="3.10.2",
@@ -15,16 +15,13 @@ Require-Bundle: org.eclipse.ui,
  org.junit;bundle-version="4.12.0",
  org.apache.commons.io;bundle-version="2.2.0",
  org.apache.log4j;bundle-version="1.2.15",
- com.fasterxml.jackson.core.jackson-databind;bundle-version="2.5.0",
- com.fasterxml.jackson.core.jackson-core;bundle-version="2.5.0",
- com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.5.0",
  org.eclipse.core.variables;bundle-version="3.3.0",
  org.hamcrest.library;bundle-version="1.3.0",
  org.hamcrest;bundle-version="1.1.0",
  org.hamcrest.text;bundle-version="1.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: br.usp.each.saeg.baduino.contentViews,
+Export-Package: br.usp.each.saeg.baduino.coverage,
  br.usp.each.saeg.baduino.handlers,
  br.usp.each.saeg.baduino.markers,
  br.usp.each.saeg.baduino.util,

@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+import org.apache.log4j.Logger;
+
 import br.usp.each.saeg.badua.cli.XMLCoverageWriter;
 import br.usp.each.saeg.badua.core.analysis.Analyzer;
 import br.usp.each.saeg.badua.core.data.ExecutionDataReader;
@@ -22,6 +24,8 @@ import br.usp.each.saeg.baduino.core.model.ProjectModel;
  *
  */
 public class BaduinoReport {
+	
+	private static final Logger logger = Logger.getLogger(BaduinoReport.class);
 	
 	private final CoverageVisitor visitor;
 	private final Analyzer analyzer;
@@ -49,6 +53,7 @@ public class BaduinoReport {
 	public void writeXML() throws IOException {
 		try (final FileOutputStream output = new FileOutputStream(xml)) {
 			XMLCoverageWriter.write(visitor.getClasses(), output);
+			logger.debug("XML file created");
 		}
 	}
 	

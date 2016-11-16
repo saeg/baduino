@@ -25,6 +25,7 @@ public class TestsRunner {
 	}
 	
 	public void run() {
+		// load all classes
 		model.getClasses()
 		.stream()
 		.filter(clazz -> !clazz.endsWith("Test"))

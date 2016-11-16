@@ -28,26 +28,23 @@ public class ProjectModelBuilder {
 		
 		final IPath locationPath = javaProject.getProject().getLocation();
 		final IPath output = javaProject.getOutputLocation();
+		final String name = javaProject.getProject().getName();
 		
 		model.setJavaProject(javaProject);
-		model.setName(javaProject.getProject().getName());
+		model.setName(name);
 		model.setLocation(locationPath.toOSString());
 		model.setClassesPath(locationPath.removeLastSegments(1).append(output).toOSString());
 		model.setBaduinoPath(locationPath.append(".baduino").toOSString());
 		model.setClasses(searchClasses(javaProject));
 		model.setCoverageBinPath(locationPath.append(".baduino").append("coverage.ser").toOSString());
 		model.setCoverageXmlPath(locationPath.append(".baduino").append("coverage.xml").toOSString());
-		model.setJsonPath(locationPath.append(".baduino").append(javaProject.getProject().getName() + ".json").toOSString());
+		model.setXmlPath(locationPath.append(".baduino").append(name + ".xml").toOSString());
 		
 		return model;
 	}
 	
 	private static List<String> searchClasses(IJavaProject javaProject) throws JavaModelException {
 		return getClassesFiltering(javaProject, ".class");
-	}
-
-	private static List<String> searchTestClasses(IJavaProject javaProject) throws JavaModelException {
-		return getClassesFiltering(javaProject, "Test.class");
 	}
 	
 	private static List<String> getClassesFiltering(IJavaProject javaProject, String filter) throws JavaModelException {

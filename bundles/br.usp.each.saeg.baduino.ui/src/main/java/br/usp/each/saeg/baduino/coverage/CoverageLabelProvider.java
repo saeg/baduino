@@ -1,4 +1,4 @@
-package br.usp.each.saeg.baduino.contentViews;
+package br.usp.each.saeg.baduino.coverage;
 
 import java.net.URL;
 
@@ -31,7 +31,6 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 	private static final Image UNCOVERED 	= getImage("uncheck.png");
 	private static final Image PERCENT 		= getImage("percent.png");
 	private static final Image PROJECT 		= getImage("projects.gif");
-//	private static final Image FOLDER 		= getImage("folder.gif");
 	private static final Image PACKAGE 		= getImage("package.gif");
 	private static final Image CLASS 		= getImage("classes.gif");
 	private static final Image DUA 			= getImage("dua.png");

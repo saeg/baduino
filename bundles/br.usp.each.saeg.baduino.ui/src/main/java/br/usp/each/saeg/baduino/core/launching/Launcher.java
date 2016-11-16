@@ -1,5 +1,10 @@
 package br.usp.each.saeg.baduino.core.launching;
 
+import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_CLASSPATH;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
@@ -7,21 +12,31 @@ import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_P
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchEvent.Kind;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
+import org.apache.commons.io.monitor.FileAlterationListener;
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.ILaunchesListener2;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -29,10 +44,6 @@ import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.hamcrest.SelfDescribing;
 import org.junit.runner.JUnitCore;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.Versioned;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.usp.each.saeg.badua.agent.rt.internal.PreMain;
 import br.usp.each.saeg.badua.commons.time.TimeWatch;
@@ -49,50 +60,43 @@ public class Launcher {
 	private static final Logger logger = Logger.getLogger(Launcher.class);
 
 	private final IJavaProject javaProject;
+	private final ProjectModel model;
 	private final ILaunchManager manager;
 	private final ILaunchConfigurationWorkingCopy workingCopy;
 	private final List<String> classpath;
+	private final List<VMListener> listeners;
 	
-	public Launcher(final ProjectModel model) throws CoreException {
+	public Launcher(final ProjectModel model) throws CoreException, URISyntaxException {
 		this.javaProject = model.getJavaProject();
-		this.classpath = new ArrayList<String>();
+		this.model = model;
+		this.classpath = new ArrayList<>();
 		this.manager = DebugPlugin.getDefault().getLaunchManager();
+		this.listeners = new ArrayList<>();
 		
 		final ILaunchConfigurationType type = manager.getLaunchConfigurationType(ID_JAVA_APPLICATION);
 		workingCopy = type.newInstance(null, "Baduino");
-		configClasspath(model);
+		configClasspath();
 	}
 	
-	public void launch(Consumer<Void> consumer) throws CoreException {
+	public void launch() throws CoreException {
 		logger.debug("Launching new VM");
-		manager.addLaunchListener(new ILaunchesListener2() {
-			@Override
-			public void launchesRemoved(ILaunch[] launches) {}
-
-			@Override
-			public void launchesAdded(ILaunch[] launches) {}
-
-			@Override
-			public void launchesChanged(ILaunch[] launches) {}
-
-			@Override
-			public void launchesTerminated(ILaunch[] launches) {
-				try {
-					Thread.sleep(1000);
-					consumer.accept(null);
-				} 
-				catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			
-		});
+		
+		if (isMac()) {
+			new WatchFolderMac(model.getBaduinoPath()).start();
+		}
+		else {
+			new WatchFolderRunnable(model.getBaduinoPath()).start();	
+		}
 		
 		final ILaunchConfiguration configuration = workingCopy.doSave();
 		DebugUITools.launch(configuration, ILaunchManager.RUN_MODE);
 	}
 	
-	private void configClasspath(final ProjectModel model) throws CoreException {
+	public void addListener(VMListener listener) {
+		this.listeners.add(listener);
+	}
+	
+	private void configClasspath() throws CoreException, URISyntaxException {
 		logger.debug("Configuring Classpath for new VM");
 		
 		// adding selected project
@@ -124,17 +128,6 @@ public class Launcher {
 		// log4j
 		final String log4j = mementoForClass(Logger.class);
 		classpath.add(log4j);
-		
-		// jackson databind
-		final String databind = mementoForClass(ObjectMapper.class);
-		classpath.add(databind);
-		
-		final String core = mementoForClass(Versioned.class);
-		classpath.add(core);
-		
-		// annotation
-		final String ann = mementoForClass(JsonIgnore.class);
-		classpath.add(ann);
 
 		// eclipse core
 		final String eclipseCore = mementoForClass(IPath.class);
@@ -149,13 +142,13 @@ public class Launcher {
 		classpath.add(badua);
 
 		// baduino
-//		final String path = "/Users/666mario/Documents/develop/each/baduino/bundles/br.usp.each.saeg.baduino.ui/target/br.usp.each.saeg.baduino.ui-0.3.1.jar";
-//		final IPath ipath = new Path(path);
-//		final IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(ipath);
-//		entry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
-//		String baduino = entry.getMemento();
+		final String path = "/Users/666mario/Documents/develop/each/baduino/bundles/br.usp.each.saeg.baduino.ui/target/br.usp.each.saeg.baduino.ui-0.3.9.jar";
+		final IPath ipath = new Path(path);
+		final IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(ipath);
+		entry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
+		String baduino = entry.getMemento();
 
-		final String baduino = mementoForClass(BaduinoRunner.class);
+//		final String baduino = mementoForClass(BaduinoRunner.class);
 		classpath.add(baduino);
 		
 		// saeg commons
@@ -170,14 +163,20 @@ public class Launcher {
 		workingCopy.setAttribute(ATTR_MAIN_TYPE_NAME, BaduinoRunner.class.getName());
 		
 		// setting up java agent from ba-dua
-		workingCopy.setAttribute(ATTR_VM_ARGUMENTS, "-javaagent:" + pathForClass(PreMain.class));
+		final String arguments = new StringBuilder("-javaagent:")
+				.append("\"")
+				.append(pathForClass(PreMain.class))
+				.append("\"")
+				.toString();
+		logger.debug("VM Arguments: " + arguments);
+		workingCopy.setAttribute(ATTR_VM_ARGUMENTS, arguments);
 		
-		// passing json path as parameter
-		// so the new VM knows where to look for the json file
-		workingCopy.setAttribute(ATTR_PROGRAM_ARGUMENTS, model.getJsonPath());
+		// passing xml path as parameter
+		// so the new VM knows where to look for the xml file
+		workingCopy.setAttribute(ATTR_PROGRAM_ARGUMENTS, model.getXmlPath());
 	}
 	
-	private String mementoForClass(Class<?> clazz) throws CoreException {
+	private String mementoForClass(Class<?> clazz) throws CoreException, URISyntaxException {
 		final String path = pathForClass(clazz);
 		final IPath ipath = new Path(path);
 		final IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(ipath);
@@ -186,8 +185,177 @@ public class Launcher {
 		return entry.getMemento();
 	}
 	
-	private String pathForClass(Class<?> clazz) {
-		return clazz.getProtectionDomain().getCodeSource().getLocation().getPath();
+	private String pathForClass(Class<?> clazz) throws URISyntaxException {
+		String path = clazz.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+		if (isWindows()) {
+			path = path.substring(1);
+		}
+		
+		logger.debug(String.format("Path for %s: %s", clazz.getName(), path));
+		return path;
+	}
+	
+	private boolean isWindows() {
+		final String os = System.getProperty("os.name").toLowerCase();
+		return (os.indexOf("win") >= 0);
+	}
+	
+	private boolean isMac() {
+		final String os = System.getProperty("os.name").toLowerCase();
+		return (os.indexOf("mac") >= 0);
+	}
+	
+	private final class WatchFolderMac implements Runnable {
+		
+		private Thread thread;
+		private final java.nio.file.Path path;
+		
+		public WatchFolderMac(String path) {
+			this.path = Paths.get(path);
+		}
+
+		@Override
+		public void run() {
+			final File dir = path.toFile();
+			final FileAlterationObserver fao = new FileAlterationObserver(dir);
+			final FileAlterationMonitor monitor = new FileAlterationMonitor(100);
+			monitor.addObserver(fao);
+			fao.addListener(new FileAlterationListener() {
+
+				@Override
+				public void onStart(FileAlterationObserver observer) {}
+
+				@Override
+				public void onDirectoryCreate(File directory) {}
+
+				@Override
+				public void onDirectoryChange(File directory) {}
+
+				@Override
+				public void onDirectoryDelete(File directory) {}
+
+				@Override
+				public void onFileCreate(File file) {
+					if (file.getName().equals("coverage.ser")) {
+						logger.debug(file + " created");
+						for (VMListener listener : listeners) {
+							listener.terminated();
+						}
+						
+						try {
+							monitor.stop();
+						} 
+						catch (Exception e) {/*ignored */}
+					}
+				}
+
+				@Override
+				public void onFileChange(File file) {
+					if (file.getName().equals("coverage.ser")) {
+						logger.debug(file + " changed");
+						for (VMListener listener : listeners) {
+							listener.terminated();
+						}
+						
+						try {
+							monitor.stop();
+						} 
+						catch (Exception e) {/*ignored */}
+					}
+				}
+
+				@Override
+				public void onFileDelete(File file) {}
+
+				@Override
+				public void onStop(FileAlterationObserver observer) {}
+				
+			});
+			
+			try {
+				monitor.start();
+			} 
+			catch (Exception e) {/*ignored */}
+		}
+		
+		public void start() {
+			if (thread == null) {
+				thread = new Thread(this);
+				thread.start();
+			}
+		}
+		
+	}
+	
+	private final class WatchFolderRunnable implements Runnable {
+		
+		private Thread thread;
+		private final java.nio.file.Path path;
+		
+		public WatchFolderRunnable(String path) {
+			this.path = Paths.get(path);
+		}
+
+		@Override
+		public void run() {
+			try {
+				Boolean isFolder = (Boolean) Files.getAttribute(path, "basic:isDirectory", NOFOLLOW_LINKS);
+				if (!isFolder) {
+					throw new IllegalArgumentException("Path: " + path + " is not a folder");
+				}
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			final FileSystem fs = path.getFileSystem();
+			try (final WatchService service = fs.newWatchService()) {
+				path.register(service, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
+//				path.register(service, new WatchEvent.Kind<?>[]{}, SensitivityWatchEventModifier.HIGH);
+				
+				WatchKey key = null;
+				while (true) {
+					key = service.take();
+					Kind<?> kind = null;
+					for (WatchEvent<?> watchEvent : key.pollEvents()) {
+						kind = watchEvent.kind();
+						
+						@SuppressWarnings("unchecked")
+						WatchEvent<java.nio.file.Path> ev = (WatchEvent<java.nio.file.Path>) watchEvent;
+						java.nio.file.Path fileName = ev.context();
+						
+						if (kind == OVERFLOW) {
+							continue;
+						}
+						else if (kind == ENTRY_CREATE || kind == ENTRY_MODIFY || kind == ENTRY_DELETE) {
+							if (fileName.toString().equals("coverage.ser")) {
+								logger.debug("Coverage file created");
+								for (VMListener listener : listeners) {
+									listener.terminated();
+								}
+								
+								return;
+							}
+						}
+					}
+					
+					if (!key.reset()) {
+						break;
+					}
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		public void start() {
+			if (thread == null) {
+				thread = new Thread(this);
+				thread.start();
+			}
+		}
+		
 	}
 	
 }

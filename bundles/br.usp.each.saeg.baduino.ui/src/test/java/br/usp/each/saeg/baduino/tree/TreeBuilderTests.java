@@ -27,7 +27,7 @@ public class TreeBuilderTests {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		final URL url = XMLFactoryTests.class.getResource("/xml/coverage.xml");
+		final URL url = XMLFactoryTests.class.getResource("/xml/coverage_test.xml");
 		final File xml = new File(url.toURI());
 		xmlProject = XMLFactory.getInstance(xml);
 	}
@@ -81,9 +81,9 @@ public class TreeBuilderTests {
 	}
 	
 	@Test
-	public final void testBuildPackage() {
-		final List<XMLClass> clazz = xmlProject.getClasses();
-//		final TreePackage defaultPackage = TreeBuilder.buildPackage(xmlClass);
+	public final void testBuildClass() {
+		final List<XMLClass> classes = xmlProject.getClasses();
+		
 	}
 
 }

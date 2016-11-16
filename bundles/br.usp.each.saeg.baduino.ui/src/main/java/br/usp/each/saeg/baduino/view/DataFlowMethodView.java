@@ -19,9 +19,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import br.usp.each.saeg.baduino.contentViews.CoverageContentProvider;
-import br.usp.each.saeg.baduino.contentViews.CoverageInput;
-import br.usp.each.saeg.baduino.contentViews.CoverageLabelProvider;
+import br.usp.each.saeg.baduino.coverage.CoverageContentProvider;
+import br.usp.each.saeg.baduino.coverage.CoverageInput;
+import br.usp.each.saeg.baduino.coverage.CoverageLabelProvider;
 import br.usp.each.saeg.baduino.markers.CodeMarkerFactory;
 import br.usp.each.saeg.baduino.tree.TreeClass;
 import br.usp.each.saeg.baduino.tree.TreeDua;

@@ -48,5 +48,14 @@ public class XMLClassTests {
 		assertThat(clazz.getMethods(), hasSize(3));
 		assertThat(clazz.getMethods(), containsInAnyOrder(method1, method2, method3));
 	}
+	
+	@Test
+	public final void testEquals() {
+		final XMLClass clazz2 = new XMLClass("br/usp/each/ach2026/AuthManager");
+		assertThat(clazz, is(not(clazz2)));
+		
+		final XMLClass clazz3 = new XMLClass("imc/usp/IMC");
+		assertThat(clazz, is(clazz3));
+	}
 
 }

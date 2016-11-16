@@ -1,4 +1,4 @@
-package br.usp.each.saeg.baduino.contentViews;
+package br.usp.each.saeg.baduino.coverage;
 
 import java.util.List;
 

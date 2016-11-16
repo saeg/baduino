@@ -1,8 +1,11 @@
 package br.usp.each.saeg.baduino.core.model;
 
 import java.io.File;
+import java.io.FileReader;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 /**
  * 
@@ -12,14 +15,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ProjectModelManager {
 
 	/**
-	 * Writes the ProjectModel to disk as json file.
+	 * Writes the ProjectModel to disk as xml file.
 	 * @param model
 	 * @throws Exception
 	 */
-	public static void writeToDisk(final ProjectModel model) throws Exception {
-		final File jsonFile = new File(model.getJsonPath());
-		final ObjectMapper mapper = new ObjectMapper();
-		mapper.writeValue(jsonFile, model);
+	public static void writeToDisk(final ProjectModel model) throws Exception {		
+		final JAXBContext context = JAXBContext.newInstance(ProjectModel.class);
+        final Marshaller m = context.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        m.marshal(model, new File(model.getXmlPath()));
 	}
 	
 	/**
@@ -29,9 +33,9 @@ public class ProjectModelManager {
 	 * @throws Exception
 	 */
 	public static ProjectModel readFromDisk(final String path) throws Exception {
-		final File jsonFile = new File(path);
-		final ObjectMapper mapper = new ObjectMapper();
-		ProjectModel model = mapper.readValue(jsonFile, ProjectModel.class);
+		final JAXBContext context = JAXBContext.newInstance(ProjectModel.class);
+		final Unmarshaller um = context.createUnmarshaller();
+        final ProjectModel model = (ProjectModel) um.unmarshal(new FileReader(path));
 		
 		return model;
 	}

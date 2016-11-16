@@ -16,6 +16,14 @@ public class XMLClass {
     private String name;
     private List<XMLMethod> methods = new ArrayList<>();
     private List<XMLCounter> counters = new ArrayList<>();
+    
+    public XMLClass() {
+    	
+    }
+    
+    public XMLClass(String name) {
+    	this.name = name.replaceAll("/", ".");
+    }
 	
 	@XmlElement(name="counter")
     public List<XMLCounter> getCounters() {
@@ -48,6 +56,23 @@ public class XMLClass {
         if (method != null) {
             methods.add(method);
         }
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+    	if (!(obj instanceof XMLClass))
+    		return false;
+    	
+    	if (obj == this)
+    		return true;
+    	
+    	final XMLClass clazz = (XMLClass) obj;
+    	return name.equals(clazz.getName());
+    }
+    
+    @Override
+    public int hashCode() {
+    	return name.hashCode();
     }
     
     @Override

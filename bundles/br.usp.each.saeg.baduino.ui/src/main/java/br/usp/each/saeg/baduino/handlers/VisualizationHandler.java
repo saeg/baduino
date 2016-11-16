@@ -13,6 +13,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import br.usp.each.saeg.baduino.core.logger.LoggerManager;
 import br.usp.each.saeg.baduino.view.DataFlowMethodView;
 
 
@@ -23,6 +24,8 @@ public class VisualizationHandler extends AbstractHandler {
 	//method called when we want open the plugin visualization
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		LoggerManager.setupLogger();
+		
 		try {
 			//get selection type
 			ISelection sel = HandlerUtil.getActiveMenuSelection(event);

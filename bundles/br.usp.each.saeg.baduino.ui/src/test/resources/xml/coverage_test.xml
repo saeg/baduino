@@ -25,6 +25,32 @@
 		<counter covered="0" missed="1" type="METHOD"/>
 		<counter covered="0" missed="1" type="CLASS"/>
 	</class>
+	<class name="br/usp/each/ach2026/HtmlGenerator">
+		<method desc="(J)Ljava/lang/String;" name="readableFileSize">
+			<du covered="0" def="75" target="75" use="75" var="size"/>
+			<du covered="1" def="75" target="77" use="75" var="size"/>
+			<du covered="1" def="75" use="78" var="size"/>
+			<du covered="1" def="75" use="80" var="size"/>
+			<counter covered="3" missed="1" type="DU"/>
+			<counter covered="1" missed="0" type="METHOD"/>
+		</method>
+		<method desc="(Ljava/nio/file/Path;)Lj2html/tags/ContainerTag;" name="lambda$0">
+			<du covered="0" def="63" target="65" use="65" var="path"/>
+			<du covered="1" def="63" target="66" use="65" var="path"/>
+			<du covered="1" def="63" use="64" var="path"/>
+			<du covered="1" def="63" use="68" var="path"/>
+			<du covered="0" def="63" target="69" use="69" var="path"/>
+			<du covered="1" def="63" target="70" use="69" var="path"/>
+			<du covered="1" def="63" use="70" var="path"/>
+			<du covered="0" def="63" use="65" var="path"/>
+			<du covered="1" def="63" use="68" var="sdf"/>
+			<counter covered="6" missed="3" type="DU"/>
+			<counter covered="1" missed="0" type="METHOD"/>
+		</method>
+		<counter covered="9" missed="4" type="DU"/>
+		<counter covered="2" missed="0" type="METHOD"/>
+		<counter covered="1" missed="0" type="CLASS"/>
+	</class>
 	<class name="br/usp/each/ach2026/PropertiesManager">
 		<method desc="(Ljava/lang/String;)V" name="&lt;init&gt;">
 			<du covered="1" def="14" use="28" var="this"/>
@@ -130,26 +156,26 @@
 	</class>
 	<class name="br/usp/each/ach2026/response/HttpResponseOkFile">
 		<method desc="(Ljava/io/DataOutputStream;)V" name="writeBody">
-			<du covered="0" def="33" use="37" var="this"/>
-			<du covered="0" def="33" target="41" use="37" var="this"/>
-			<du covered="0" def="33" target="38" use="37" var="this"/>
-			<du covered="0" def="33" use="41" var="this"/>
-			<du covered="0" def="33" use="38" var="os"/>
-			<du covered="0" def="33" use="37" var="this.fis"/>
-			<du covered="0" def="33" target="41" use="37" var="this.fis"/>
-			<du covered="0" def="33" target="38" use="37" var="this.fis"/>
-			<du covered="0" def="33" use="41" var="this.fis"/>
-			<du covered="0" def="33" use="37" var="buffer"/>
-			<du covered="0" def="33" target="41" use="37" var="buffer"/>
-			<du covered="0" def="33" target="38" use="37" var="buffer"/>
-			<du covered="0" def="33" use="38" var="buffer"/>
-			<du covered="0" def="37" use="38" var="bytes"/>
-			<counter covered="0" missed="14" type="DU"/>
-			<counter covered="0" missed="1" type="METHOD"/>
+			<du covered="1" def="33" use="37" var="this"/>
+			<du covered="1" def="33" target="41" use="37" var="this"/>
+			<du covered="1" def="33" target="38" use="37" var="this"/>
+			<du covered="1" def="33" use="41" var="this"/>
+			<du covered="1" def="33" use="38" var="os"/>
+			<du covered="1" def="33" use="37" var="this.fis"/>
+			<du covered="1" def="33" target="41" use="37" var="this.fis"/>
+			<du covered="1" def="33" target="38" use="37" var="this.fis"/>
+			<du covered="1" def="33" use="41" var="this.fis"/>
+			<du covered="1" def="33" use="37" var="buffer"/>
+			<du covered="1" def="33" target="41" use="37" var="buffer"/>
+			<du covered="1" def="33" target="38" use="37" var="buffer"/>
+			<du covered="1" def="33" use="38" var="buffer"/>
+			<du covered="1" def="37" use="38" var="bytes"/>
+			<counter covered="14" missed="0" type="DU"/>
+			<counter covered="1" missed="0" type="METHOD"/>
 		</method>
-		<counter covered="0" missed="14" type="DU"/>
-		<counter covered="0" missed="1" type="METHOD"/>
-		<counter covered="0" missed="1" type="CLASS"/>
+		<counter covered="14" missed="0" type="DU"/>
+		<counter covered="1" missed="0" type="METHOD"/>
+		<counter covered="1" missed="0" type="CLASS"/>
 	</class>
 	<class name="br/usp/each/ach2026/WebServer">
 		<method desc="([Ljava/lang/String;)V" name="main">
@@ -162,7 +188,7 @@
 		<counter covered="0" missed="1" type="METHOD"/>
 		<counter covered="0" missed="1" type="CLASS"/>
 	</class>
-	<counter covered="70" missed="34" type="DU"/>
-	<counter covered="4" missed="3" type="METHOD"/>
-	<counter covered="3" missed="3" type="CLASS"/>
+	<counter covered="93" missed="24" type="DU"/>
+	<counter covered="7" missed="2" type="METHOD"/>
+	<counter covered="5" missed="2" type="CLASS"/>
 </report>

@@ -11,6 +11,8 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 
 import br.usp.each.saeg.baduino.core.launching.Launcher;
+import br.usp.each.saeg.baduino.core.launching.VMListener;
+import br.usp.each.saeg.baduino.core.logger.LoggerManager;
 import br.usp.each.saeg.baduino.core.model.ProjectModel;
 import br.usp.each.saeg.baduino.core.model.ProjectModelBuilder;
 import br.usp.each.saeg.baduino.core.model.ProjectModelManager;
@@ -23,6 +25,8 @@ public class RunTestsHandler extends AbstractHandler implements IJavaLaunchConfi
 	
 	@Override
 	public Object execute(ExecutionEvent arg) throws ExecutionException {
+		LoggerManager.setupLogger();
+		
 		try {
 			final IJavaProject javaProject = ProjectUtils.getCurrentSelectedJavaProject();
 			final ProjectModel model = ProjectModelBuilder.buildModel(javaProject);
@@ -36,16 +40,22 @@ public class RunTestsHandler extends AbstractHandler implements IJavaLaunchConfi
 			ProjectModelManager.writeToDisk(model);
 			
 			final Launcher launcher = new Launcher(model);
-			launcher.launch((Void v) -> {
-				try {
-					final BaduinoReport report = new BaduinoReport(model);
-					report.reportAll();
-		    		report.writeXML();
-				} 
-				catch (IOException e) {
-					e.printStackTrace();
+			launcher.addListener(new VMListener() {
+				@Override
+				public void terminated() {
+					try {
+						final BaduinoReport report = new BaduinoReport(model);
+						report.reportAll();
+						report.writeXML();
+					} 
+					catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
+				
 			});
+			
+			launcher.launch();
 			
 		} 
 		catch (Exception e) {

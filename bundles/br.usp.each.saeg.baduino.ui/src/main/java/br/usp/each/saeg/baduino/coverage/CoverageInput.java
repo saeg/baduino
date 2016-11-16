@@ -1,4 +1,4 @@
-package br.usp.each.saeg.baduino.contentViews;
+package br.usp.each.saeg.baduino.coverage;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -47,29 +47,6 @@ public class CoverageInput {
 	public CoverageInput() {
 		XMLProject xml = XMLFactory.getInstance();
 		this.project = TreeBuilder.build(xml);
-		
-		/*
-		final List<TreePackage> packages = this.project.getPackages();
-		for (final TreePackage pkg : packages) {
-			final List<TreeClass> classes = pkg.getClasses();
-			logger.debug("tree package: " + pkg);
-			
-			
-			for (final TreeClass clazz : classes) {
-				logger.debug("tree class: " + clazz);
-				
-				final List<TreeMethod> methods = clazz.getMethods();
-				for (final TreeMethod method : methods) {
-					logger.debug("tree method: " + method);
-					
-					final List<TreeDua> duas = method.getDuas();
-					for (final TreeDua dua :  duas) {
-						logger.debug("tree dua: " + dua);
-					}
-				}
-			}
-		}
-		*/
 	}
 	
 	public List<?> getTree() throws JavaModelException, IOException {
@@ -206,9 +183,9 @@ public class CoverageInput {
 					.findFirst()
 					.orElse(null);
 			
-			logger.debug("method node: " + methodName + ", tree method: " + treeMethod);
-			
 			if (treeMethod != null) {
+				logger.debug("method node: " + methodName + ", tree method: " + treeMethod);
+				
 				treeMethod.setName(getMethodName(methodNode, treeClass));
 				treeMethod.setAccess(getMethodAccess(methodNode));
 				treeMethod.getDuas().forEach(dua -> dua.setCompilationUnit(unit));
@@ -224,7 +201,9 @@ public class CoverageInput {
 			name = Signature.toString(methodNode.desc, className, null, false, false);
 		}
 		else if (methodNode.name.equals("<init>")) {
-			name = Signature.toString(methodNode.desc, className, null, false, false);
+			final String signature = Signature.toString(methodNode.desc, className, null, false, false);
+			final int index = signature.lastIndexOf(".");
+			name = signature.substring(index + 1);
 		}
 		else {
 			name = Signature.toString(methodNode.desc, methodNode.name, null, false, true);

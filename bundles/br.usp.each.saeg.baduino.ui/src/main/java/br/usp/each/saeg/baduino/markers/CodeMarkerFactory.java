@@ -16,11 +16,11 @@ import org.eclipse.ui.ide.IDE;
 
 public class CodeMarkerFactory {
 
-	public static final String COVERED_MARKER = "br.usp.each.saeg.baduino.markers.definition";
+	public static final String COVERED_MARKER 	= "br.usp.each.saeg.baduino.markers.definition";
 	public static final String UNCOVERED_MARKER = "br.usp.each.saeg.baduino.markers.use";
-	public static final String TARGET_MARKER = "br.usp.each.saeg.baduino.markers.target";
+	public static final String TARGET_MARKER 	= "br.usp.each.saeg.baduino.markers.target";
 	//public static final String SAMELINE_MARKER = "br.usp.each.saeg.badua.markers.sameLine";
-	public static final String POINTER_MARKER = "br.usp.each.saeg.baduino.markers.pointer";
+	public static final String POINTER_MARKER 	= "br.usp.each.saeg.baduino.markers.pointer";
 
 	public static IMarker defMarker;
 	public static IMarker useMarker;
@@ -49,20 +49,23 @@ public class CodeMarkerFactory {
 			//			}
 			pointerMarker = resource.createMarker(POINTER_MARKER);
 
-			if(covered.equals("true")){
+			if (covered.equals("true")) {
 				defMarker = resource.createMarker(COVERED_MARKER);
 				useMarker = resource.createMarker(COVERED_MARKER);
-			}else{
+			}
+			else {
 				defMarker = resource.createMarker(UNCOVERED_MARKER);
 				useMarker = resource.createMarker(UNCOVERED_MARKER);
 			}
 
-			if(targetOffset != null){
-				if(covered.equals("true")){
+			if (targetOffset != null) {
+				if (covered.equals("true")) {
 					targetMarker = resource.createMarker(COVERED_MARKER);
-				}else{
+				} 
+				else {
 					targetMarker = resource.createMarker(UNCOVERED_MARKER);
 				}
+				
 				markerList.add(targetMarker);
 				targetMarker.setAttribute(IMarker.CHAR_START, targetOffset[0]);
 				targetMarker.setAttribute(IMarker.CHAR_END, targetOffset[1]);
@@ -125,7 +128,8 @@ public class CodeMarkerFactory {
 			result.addAll(asList(resource.findMarkers(POINTER_MARKER, false, IResource.DEPTH_ZERO)));
 
 			return result;
-		} catch (CoreException e) {
+		} 
+		catch (CoreException e) {
 			e.printStackTrace();
 			return Collections.emptyList();
 		}
@@ -135,6 +139,7 @@ public class CodeMarkerFactory {
 		if (arg == null || arg.length == 0) {
 			return Collections.emptyList();
 		}
+		
 		return Arrays.asList(arg);
 	}
 
@@ -153,10 +158,12 @@ public class CodeMarkerFactory {
 
 						marker.delete();
 						
-					} catch (Exception e) {
+					} 
+					catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
+				
 				markerList.removeAll(toDelete);
 //				return Status.OK_STATUS;
 //			}
