@@ -9,8 +9,6 @@ import java.util.Map;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jdt.core.IJavaElement;
@@ -26,6 +24,7 @@ import org.eclipse.ui.PlatformUI;
 /**
  * @author Danilo Mutti (dmutti@gmail.com)
  */
+@SuppressWarnings("restriction")
 public class ProjectUtils {
 
     public static void setPropertyOf(IProject project, String name, Object value) {
@@ -54,7 +53,8 @@ public class ProjectUtils {
         }
     }
 
-    public static Map<String, List<IResource>> javaFilesOf(IProject project) {
+    @SuppressWarnings("unchecked")
+	public static Map<String, List<IResource>> javaFilesOf(IProject project) {
         try {
             return visit(project, "java");
         } catch (Exception e) {
@@ -63,7 +63,8 @@ public class ProjectUtils {
         }
     }
 
-    public static Map<String, List<IResource>> xmlFilesOf(IProject project) {
+    @SuppressWarnings("unchecked")
+	public static Map<String, List<IResource>> xmlFilesOf(IProject project) {
         try {
             return visit(project, "xml");
         } catch (Exception e) {
@@ -97,7 +98,7 @@ public class ProjectUtils {
     	return getCurrentSelectedJavaProject(PlatformUI.getWorkbench().getActiveWorkbenchWindow());
     }
 
-    public static IProject getCurrentSelectedProject(IWorkbenchWindow window) {
+	public static IProject getCurrentSelectedProject(IWorkbenchWindow window) {
         IProject project = null;
         ISelectionService selectionService =  window.getSelectionService();
 
@@ -108,14 +109,17 @@ public class ProjectUtils {
 
             if (element instanceof IResource) {
                 project= ((IResource) element).getProject();
-            } else if (element instanceof PackageFragmentRoot) {
+            } 
+            else if (element instanceof PackageFragmentRoot) {
                 IJavaProject jProject = ((PackageFragmentRoot) element).getJavaProject();
                 project = jProject.getProject();
-            } else if (element instanceof IJavaElement) {
+            } 
+            else if (element instanceof IJavaElement) {
                 IJavaProject jProject = ((IJavaElement) element).getJavaProject();
                 project = jProject.getProject();
             }
         }
+        
         return project;
     }
     

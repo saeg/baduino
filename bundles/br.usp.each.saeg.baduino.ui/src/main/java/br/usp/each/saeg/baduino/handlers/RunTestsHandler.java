@@ -9,8 +9,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
+import org.eclipse.ui.PartInitException;
 
-import br.usp.each.saeg.baduino.core.launching.Launcher;
+import br.usp.each.saeg.baduino.core.launching.VMLauncher;
 import br.usp.each.saeg.baduino.core.launching.VMListener;
 import br.usp.each.saeg.baduino.core.logger.LoggerManager;
 import br.usp.each.saeg.baduino.core.model.ProjectModel;
@@ -39,12 +40,25 @@ public class RunTestsHandler extends AbstractHandler implements IJavaLaunchConfi
 			model.build();
 			ProjectModelManager.writeToDisk(model);
 			
-			final Launcher launcher = new Launcher(model);
+			VMListener reportListener = new VMListener() {
+				@Override
+				public void terminated() {
+					try {
+						VisualizationHandler.openView();
+					}
+					catch (PartInitException e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			
+			final VMLauncher launcher = new VMLauncher(model);
 			launcher.addListener(new VMListener() {
 				@Override
 				public void terminated() {
 					try {
 						final BaduinoReport report = new BaduinoReport(model);
+						report.addListener(reportListener);
 						report.reportAll();
 						report.writeXML();
 					} 
@@ -52,11 +66,9 @@ public class RunTestsHandler extends AbstractHandler implements IJavaLaunchConfi
 						e.printStackTrace();
 					}
 				}
-				
 			});
 			
 			launcher.launch();
-			
 		} 
 		catch (Exception e) {
 			e.printStackTrace();

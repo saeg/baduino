@@ -1,5 +1,7 @@
 package br.usp.each.saeg.baduino.core.runner;
 
+import java.io.File;
+
 import br.usp.each.saeg.baduino.core.logger.LoggerManager;
 import br.usp.each.saeg.baduino.core.model.ProjectModel;
 import br.usp.each.saeg.baduino.core.model.ProjectModelManager;
@@ -30,7 +32,7 @@ public class BaduinoRunner {
 		System.setProperty("output.file", model.getCoverageBinPath());
 		
 		// setting up log4j
-		LoggerManager.setupLogger(model.getBaduinoPath());
+		LoggerManager.setupLogger(model.getBaduinoPath() + File.separator + "baduino.log");
 		
 		final BaduinoRunner runner = new BaduinoRunner(model);
 		runner.run();

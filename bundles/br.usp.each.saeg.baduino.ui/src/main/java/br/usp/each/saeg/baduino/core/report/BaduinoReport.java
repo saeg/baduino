@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
@@ -16,7 +18,9 @@ import br.usp.each.saeg.badua.cli.XMLCoverageWriter;
 import br.usp.each.saeg.badua.core.analysis.Analyzer;
 import br.usp.each.saeg.badua.core.data.ExecutionDataReader;
 import br.usp.each.saeg.badua.core.data.ExecutionDataStore;
+import br.usp.each.saeg.baduino.core.launching.VMListener;
 import br.usp.each.saeg.baduino.core.model.ProjectModel;
+import br.usp.each.saeg.baduino.core.runnable.WatchFolder;
 
 /**
  * 
@@ -31,10 +35,14 @@ public class BaduinoReport {
 	private final Analyzer analyzer;
 	private final File classes;
 	private final File xml;
+	private final ProjectModel model;
+	private final List<VMListener> listeners;
 	
 	public BaduinoReport(final ProjectModel model) throws IOException {
 		this.classes = new File(model.getClassesPath());
 		this.xml = new File(model.getCoverageXmlPath());
+		this.model = model;
+		this.listeners = new ArrayList<>();
 		
 		final File coverage = new File(model.getCoverageBinPath());
 		final PrintCoverage printer = new PrintCoverage(false, true);
@@ -43,6 +51,8 @@ public class BaduinoReport {
 	}
 	
 	public void reportAll() throws IOException {
+		logger.debug("Reporting");
+		
 		try (final Stream<Path> paths = Files.walk(Paths.get(classes.toURI()))) {
 			paths.filter(path -> Files.isRegularFile(path))
 			.map(path -> path.toFile())
@@ -51,10 +61,18 @@ public class BaduinoReport {
 	}
 	
 	public void writeXML() throws IOException {
+		logger.debug("Writing XML");
+		
+		final File file = new File(model.getCoverageXmlPath());
+		new WatchFolder(file, listeners).start();
+		
 		try (final FileOutputStream output = new FileOutputStream(xml)) {
 			XMLCoverageWriter.write(visitor.getClasses(), output);
-			logger.debug("XML file created");
 		}
+	}
+	
+	public void addListener(VMListener listener) {
+		this.listeners.add(listener);
 	}
 	
 	private void analyze(File file) {

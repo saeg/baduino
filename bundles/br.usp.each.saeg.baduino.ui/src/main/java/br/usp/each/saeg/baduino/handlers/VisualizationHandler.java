@@ -1,5 +1,9 @@
 package br.usp.each.saeg.baduino.handlers;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -14,6 +18,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import br.usp.each.saeg.baduino.core.logger.LoggerManager;
+import br.usp.each.saeg.baduino.core.model.ProjectModel;
+import br.usp.each.saeg.baduino.core.model.ProjectModelBuilder;
+import br.usp.each.saeg.baduino.util.ProjectUtils;
 import br.usp.each.saeg.baduino.view.DataFlowMethodView;
 
 
@@ -52,8 +59,22 @@ public class VisualizationHandler extends AbstractHandler {
 		
 		return null;
 	}
+	
+	@Override
+	public boolean isEnabled() {
+		try {
+			final IJavaProject javaProject = ProjectUtils.getCurrentSelectedJavaProject();
+			final ProjectModel model = ProjectModelBuilder.buildModel(javaProject);
+			final Path path = Paths.get(model.getCoverageXmlPath());
+			
+			return Files.exists(path);
+		}
+		catch (Exception ex) {
+			return false;
+		}
+	}
 
-	private void openView() throws PartInitException {
+	public static void openView() throws PartInitException {
 		DataFlowMethodView.closeViews(); // close view if it was already open
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(DataFlowMethodView.ID);//open view DataFlowMethodView.createPartControl()
 	}

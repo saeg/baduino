@@ -25,9 +25,6 @@ import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.monitor.FileAlterationListener;
-import org.apache.commons.io.monitor.FileAlterationMonitor;
-import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -48,6 +45,7 @@ import org.junit.runner.JUnitCore;
 import br.usp.each.saeg.badua.agent.rt.internal.PreMain;
 import br.usp.each.saeg.badua.commons.time.TimeWatch;
 import br.usp.each.saeg.baduino.core.model.ProjectModel;
+import br.usp.each.saeg.baduino.core.runnable.WatchFolder;
 import br.usp.each.saeg.baduino.core.runner.BaduinoRunner;
 
 /**
@@ -55,9 +53,9 @@ import br.usp.each.saeg.baduino.core.runner.BaduinoRunner;
  * @author Mario Concilio
  *
  */
-public class Launcher {
+public class VMLauncher {
 	
-	private static final Logger logger = Logger.getLogger(Launcher.class);
+	private static final Logger logger = Logger.getLogger(VMLauncher.class);
 
 	private final IJavaProject javaProject;
 	private final ProjectModel model;
@@ -66,7 +64,7 @@ public class Launcher {
 	private final List<String> classpath;
 	private final List<VMListener> listeners;
 	
-	public Launcher(final ProjectModel model) throws CoreException, URISyntaxException {
+	public VMLauncher(final ProjectModel model) throws CoreException, URISyntaxException {
 		this.javaProject = model.getJavaProject();
 		this.model = model;
 		this.classpath = new ArrayList<>();
@@ -81,12 +79,8 @@ public class Launcher {
 	public void launch() throws CoreException {
 		logger.debug("Launching new VM");
 		
-		if (isMac()) {
-			new WatchFolderMac(model.getBaduinoPath()).start();
-		}
-		else {
-			new WatchFolderRunnable(model.getBaduinoPath()).start();	
-		}
+		final File file = new File(model.getCoverageBinPath());
+		new WatchFolder(file, listeners).start();
 		
 		final ILaunchConfiguration configuration = workingCopy.doSave();
 		DebugUITools.launch(configuration, ILaunchManager.RUN_MODE);
@@ -203,88 +197,6 @@ public class Launcher {
 	private boolean isMac() {
 		final String os = System.getProperty("os.name").toLowerCase();
 		return (os.indexOf("mac") >= 0);
-	}
-	
-	private final class WatchFolderMac implements Runnable {
-		
-		private Thread thread;
-		private final java.nio.file.Path path;
-		
-		public WatchFolderMac(String path) {
-			this.path = Paths.get(path);
-		}
-
-		@Override
-		public void run() {
-			final File dir = path.toFile();
-			final FileAlterationObserver fao = new FileAlterationObserver(dir);
-			final FileAlterationMonitor monitor = new FileAlterationMonitor(100);
-			monitor.addObserver(fao);
-			fao.addListener(new FileAlterationListener() {
-
-				@Override
-				public void onStart(FileAlterationObserver observer) {}
-
-				@Override
-				public void onDirectoryCreate(File directory) {}
-
-				@Override
-				public void onDirectoryChange(File directory) {}
-
-				@Override
-				public void onDirectoryDelete(File directory) {}
-
-				@Override
-				public void onFileCreate(File file) {
-					if (file.getName().equals("coverage.ser")) {
-						logger.debug(file + " created");
-						for (VMListener listener : listeners) {
-							listener.terminated();
-						}
-						
-						try {
-							monitor.stop();
-						} 
-						catch (Exception e) {/*ignored */}
-					}
-				}
-
-				@Override
-				public void onFileChange(File file) {
-					if (file.getName().equals("coverage.ser")) {
-						logger.debug(file + " changed");
-						for (VMListener listener : listeners) {
-							listener.terminated();
-						}
-						
-						try {
-							monitor.stop();
-						} 
-						catch (Exception e) {/*ignored */}
-					}
-				}
-
-				@Override
-				public void onFileDelete(File file) {}
-
-				@Override
-				public void onStop(FileAlterationObserver observer) {}
-				
-			});
-			
-			try {
-				monitor.start();
-			} 
-			catch (Exception e) {/*ignored */}
-		}
-		
-		public void start() {
-			if (thread == null) {
-				thread = new Thread(this);
-				thread.start();
-			}
-		}
-		
 	}
 	
 	private final class WatchFolderRunnable implements Runnable {
