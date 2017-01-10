@@ -136,7 +136,7 @@ public class VMLauncher {
 		classpath.add(badua);
 
 		// baduino
-//		final String path = "/Users/666mario/Documents/develop/each/baduino/bundles/br.usp.each.saeg.baduino.ui/target/br.usp.each.saeg.baduino.ui-0.3.11.jar";
+//		final String path = "/Users/666mario/Documents/develop/each/baduino/bundles/br.usp.each.saeg.baduino.ui/target/br.usp.each.saeg.baduino.ui-0.3.13.jar";
 //		final IPath ipath = new Path(path);
 //		final IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(ipath);
 //		entry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
