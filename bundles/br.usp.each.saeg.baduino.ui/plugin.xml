@@ -16,7 +16,7 @@
           locationURI= "popup:br.usp.each.saeg.baduino.ui?after=additions">
              <command
                    commandId="br.usp.each.saeg.baduino.dataflow.handler"
-                   icon="src/main/resources/icons/projects.gif"
+                   icon="src/main/resources/icons/projects.png"
                    label="Project Visualization"
                    style="push">
                 <visibleWhen
@@ -35,7 +35,7 @@
              </command>
              <command
                    commandId="br.usp.each.saeg.baduino.dataflow.handler"
-                   icon="src/main/resources/icons/folder.gif"
+                   icon="src/main/resources/icons/folder.png"
                    label="Folder Visualization"
                    style="push">
                 <visibleWhen
@@ -54,7 +54,7 @@
              </command>
              <command
                    commandId="br.usp.each.saeg.baduino.dataflow.handler"
-                   icon="src/main/resources/icons/package.gif"
+                   icon="src/main/resources/icons/package.png"
                    label="Package Visualization"
                    style="push">
                 <visibleWhen
@@ -73,7 +73,7 @@
              </command>
              <command
                    commandId="br.usp.each.saeg.baduino.dataflow.handler"
-                   icon="src/main/resources/icons/classes.gif"
+                   icon="src/main/resources/icons/classes.png"
                    label="Class Visualization"
                    style="push">
                 <visibleWhen
@@ -92,7 +92,7 @@
              </command>
             <command
                   commandId="br.usp.each.saeg.baduino.commands.runbadua"
-                  icon="src/main/resources/icons/junit_launch_icon.gif"
+                  icon="src/main/resources/icons/junit_launch_icon.png"
                   id="br.usp.each.saeg.baduino.menu.item.runbadua"
                   label="Run Tests">
                <visibleWhen
@@ -115,7 +115,7 @@
                 locationURI="toolbar:br.usp.each.saeg.baduino.DataflowView">
              <command
                    commandId="br.usp.each.saeg.baduino.toolbar.handler"
-                   hoverIcon="src/main/resources/icons/classes.gif"
+                   hoverIcon="src/main/resources/icons/classes.png"
                    icon="src/main/resources/icons/Highlighter Yellow-01.png"
                    label="Remove highlight"
                    style="push"

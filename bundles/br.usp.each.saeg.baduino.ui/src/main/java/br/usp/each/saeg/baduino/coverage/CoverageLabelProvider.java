@@ -30,9 +30,9 @@ public class CoverageLabelProvider implements ITableLabelProvider {
 	private static final Image COVERED 		= getImage("check.png");
 	private static final Image UNCOVERED 	= getImage("uncheck.png");
 	private static final Image PERCENT 		= getImage("percent.png");
-	private static final Image PROJECT 		= getImage("projects.gif");
-	private static final Image PACKAGE 		= getImage("package.gif");
-	private static final Image CLASS 		= getImage("classes.gif");
+	private static final Image PROJECT 		= getImage("projects.png");
+	private static final Image PACKAGE 		= getImage("package.png");
+	private static final Image CLASS 		= getImage("classes.png");
 	private static final Image DUA 			= getImage("dua.png");
 
 	// Helper Method to load the images
