@@ -1,7 +1,7 @@
-# Baduino Eclipse Plugin #
-Bitwise-Algorithm Definition-Use assocIatioN visualizatiOn
-
 [![Build Status](https://travis-ci.org/saeg/baduino.svg?branch=dev)](https://travis-ci.org/saeg/baduino)
+
+# Baduino Eclipse Plugin
+Bitwise-Algorithm Definition-Use assocIatioN visualizatiOn
 
 # O que é?
 Baduino é um Plugin do Eclipse para visualização de cobertura de critério de testes baseado em fluxo de dados intraprocedimental, ou seja, exibe as associações definição-uso cobertas em cada método do projeto.
