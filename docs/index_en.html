@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--
+	Interphase by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Baduino</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-layers.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" href="css/style-xlarge.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+	</head>
+	<body class="landing">
+
+		<!-- Header -->
+		<header id="header">
+			<!-- <h1><a href="index.html">Interphase</a></h1> -->
+			<nav id="nav">
+				<ul>
+					<li><a href="index_en.html">Home</a></li>
+					<li><a href="install_en.html">Installation</a></li>
+					<li><a href="howto_en.html">Example</a></li>
+					<li><a href="index.html"><img class="lang_img" src="images/br.png"></a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Banner -->
+		<section id="banner">
+			<h2>Baduino Eclipse Plugin</h2>
+			<p>Bitwise-Algorithm Definition-Use assocIatioN visualizatiOn</p>
+			<ul class="actions">
+				<li><a href="https://github.com/saeg/baduino" class="btn">View on GitHub</a></li>
+				<li><a href="https://github.com/saeg/baduino/archive/v0.3.13.zip" class="btn">Download .zip</a></li>
+				<li><a href="https://github.com/saeg/baduino/archive/v0.3.13.tar.gz" class="btn">Download .tar.gz</a></li>
+			</ul>
+		</section>
+
+		<!-- One -->
+		<section id="one" class="wrapper style2 align-center">
+			<div class="container">
+				<header>
+					<h2>What is?</h2>
+				</header>
+
+				<p>Baduino is an Eclipse Plugin for visualization of coverage of criterion of tests based on intra-procedural Data-Flow, i.e., show the Definition-Use Associations coverage of each project method.</p>
+				<p>Definition-Use Assiciation (DUA) define a relation between a variable definition and your subsequent use.</p>
+
+			</div>
+		</section>
+
+		<!-- Two -->
+		<section id="two" class="wrapper style2 align-center">
+			<div class="container">
+				<header>
+					<h2>Why?</h2>
+				</header>
+
+				<p>The Coverage analysis of criterions based on Data-Flow are very costly, in parts by the high cost of tracking DUAs at runtime. Therefore, are hardly used in practice.</p>
+  				<p>To turn the analysis of the coverage of criterions based on Data-Flow scalable to real programs, Baduino use the calculation strategy of Data-Flow coverage called <a href="http://www.sciencedirect.com/science/article/pii/S0020019013000537">Bitwise-Algorithm</a>.</p>
+
+			</div>
+		</section>
+
+		<!-- Three -->
+		<section id="three" class="wrapper style2 align-center">
+			<div class="container">
+				<header>
+					<h2>How?</h2>
+				</header>
+
+				<p>The coverage is generated executing tests with a JUnit Runner. This Runner run tests with <a href="https://github.com/saeg/ba-dua">BA-DUA</a> tool as agent. AThe BA-DUA (Bitwise Algorithm-powered Definition-Use Association) its the tool that implement the DUAs coverage calculation.</p>
+				<p>The result of the coverage is shown in Eclipse by Baduino.</p>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer id="footer">
+		<div class="container">
+			<p class="align-center copyright"><a href="https://github.com/saeg/baduino/">Baduino</a> is maintained by <a href="https://github.com/saeg">SAEG</a></p>
+
+			<ul class="copyright">
+				<li>&copy; SAEG. All rights reserved.</li>
+				<li>Design: <a href="http://templated.co">Templated</a></li>
+				<!-- <li>Images: <a href="http://unsplash.com">Unsplash</a></li> -->
+
+				<p>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></p>
+			</ul>
+		</div>
+	</footer>
+
+	</body>
+</html>

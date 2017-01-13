@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--
+	Interphase by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Baduino</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-layers.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" href="css/style-xlarge.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+	</head>
+	<body>
+
+		<!-- Header -->
+		<header id="header">
+			<!-- <h1><a href="index.html">Interphase</a></h1> -->
+			<nav id="nav">
+				<ul>
+					<li><a href="index.html">Início</a></li>
+					<li><a href="install.html">Instalação</a></li>
+					<li><a href="howto.html">Exemplo</a></li>
+					<li><a href="howto_en.html"><img class="lang_img" src="images/en.png"></a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Main -->
+		<section id="main" class="wrapper">
+			<div class="container">
+
+				<header class="major">
+					<h2>Exemplo</h2>
+					<p>Como executar o plugin?</p>
+				</header>
+
+				<p>A classe Max contém um método que recebe como entrada dois parâmetros (um vetor de inteiros e um inteiro com o tamanho do vetor) e retorna o maior valor dentro daquele vetor.</p>
+
+				<h3 class="align-center">Código fonte</h3>
+				<img class="image center" src="images/source.png" alt="" />
+
+				<p>O caso de teste a seguir foi feito usando JUnit e verifica se o retorno de <code>max([1,2], 2)</code> é 2.
+
+				<h3 class="align-center">Classe de teste</h3>
+				<img class="image center" src="images/test.png" alt="" />
+
+				<p>Para conseguir a cobertura de DUAs é necessário executar os testes com o <b>JUnit</b>. Isso requer a criação de uma nova <b>JVM (Java Virtual Machine)</b> com o classpath do projeto em questão e com a <a href="https://github.com/saeg/ba-dua">BA-DUA</a> como <b>JavaAgent</b>, de forma a instrumentar as classes utilizadas pelos testes e coletar a cobertura de DUAs.</p>
+
+				<p>A <b>BA-DUA</b>, responsável pela instrumentação das classes, também se encarrega de guardar os dados de cobertura após a finalização dos testes, salvando a cobertura em um arquivo chamado <b>coverage.xml</b> na pasta <b>.baduino/</b> localizada na raíz do projeto.</p>
+
+				<p>Após ter a cobertura no XML, o plugin se encarrega de exibir as DUAs em sua visualização.</p>
+
+				<div class="row">
+					<section class="feature 6u 12u$(small)">
+						<img class="image fit" src="images/runtests.png" alt="" />
+						<p>Todo esse processo é realizado clicando com o botão direito no <b>Projeto → Baduino → Run Tests</b>.</p>
+					</section>
+					<section class="feature 6u$ 12u$(small)">
+						<img class="image fit" src="images/visualization.png" alt="" />
+						<p>Para visualizar as DUAs, é só clicar com o botão direito no <b>projeto/pacote/classe → Project/Package/Class Visualization</b></p>
+					</section>
+				</div>
+
+				<blockquote>
+					<p>A visualização é feita hierarquicamente.</p>
+					<p>Clicando em <b>Project Visualization</b> será exibido a cobertura de DUAs de todo o projeto, e assim por diante.</p>
+				</blockquote>
+
+				<h3 class="align-center">Visualização do plugin</h3>
+				<img class="image center" src="images/baduino.png" alt="" />
+
+				<p>Na visualização é possível clicar nas DUA e as linhas da <b>Definição</b> e do <b>Uso</b> serão pintadas no código fonte como mostram as figuras abaixo. DUAs cobertas e não cobertas serão pintadas de <b><font color="#58b200">verde</font></b> e <b><font color="#dc143c">vermelho</font></b>, respectivamente.</p>
+
+				<p>Também é possível remover todas as DUAs pintadas, clicando no <img src="images/highlighter.png"> <b>Remove Highlight</b> no canto superior direito da View.</p>
+
+				<h3 class="align-center">DUA coberta</h3>
+				<img class="image center" src="images/covered.png" alt="" />
+
+				<h3 class="align-center">DUA não coberta</h3>
+				<img class="image center" src="images/notcovered.png" alt="" />
+
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer id="footer">
+			<div class="container">
+				<p class="align-center copyright"><a href="https://github.com/saeg/baduino/">Baduino</a> is maintained by <a href="https://github.com/saeg">SAEG</a></p>
+
+				<ul class="copyright">
+					<li>&copy; SAEG. All rights reserved.</li>
+					<li>Design: <a href="http://templated.co">Templated</a></li>
+					<!-- <li>Images: <a href="http://unsplash.com">Unsplash</a></li> -->
+
+					<p>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></p>
+				</ul>
+			</div>
+		</footer>
+
+	</body>
+</html>

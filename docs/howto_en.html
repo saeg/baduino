@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--
+	Interphase by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Baduino</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-layers.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" href="css/style-xlarge.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+	</head>
+	<body>
+
+		<!-- Header -->
+		<header id="header">
+			<!-- <h1><a href="index.html">Interphase</a></h1> -->
+			<nav id="nav">
+				<ul>
+					<li><a href="index_en.html">Home</a></li>
+					<li><a href="install_en.html">Installation</a></li>
+					<li><a href="howto_en.html">Example</a></li>
+					<li><a href="howto.html"><img class="lang_img" src="images/br.png"></a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Main -->
+		<section id="main" class="wrapper">
+			<div class="container">
+
+				<header class="major">
+					<h2>Example</h2>
+					<p>How to run?</p>
+				</header>
+
+				<p>The Max class has a method that receive two parameters (an array of integers and an integer with the array length) and return the maximum array value.</p>
+
+				<h3 class="align-center">Source code</h3>
+				<img class="image center" src="images/source.png" alt="" />
+
+				<p>The test case below was done with JUnit and this check if the return of <code>max([1,2], 2)</code> is 2.
+
+				<h3 class="align-center">Test class</h3>
+				<img class="image center" src="images/test.png" alt="" />
+
+				<p>To get the DUAs coverage it is necessary to run the tests with <b>JUnit</b>. This requires a new instance of <b>JVM (Java Virtual Machine)</b> with project classpath and <a href="https://github.com/saeg/ba-dua">BA-DUA</a> as <b>JavaAgent</b> to instrument all classes used by tests and collect DUAs coverage.</p>
+
+				<p>The <b>BA-DUA</b>, responsible for classes instrumentation, is also takes care to store the coverage data after the tests ending, saving coverage in a file called <b>coverage.xml</b> at the <b>.baduino/</b> folder in the root project.</p>
+
+				<p>After you get the coverage in XML, the plugin will show DUAs coverage on interface.</p>
+
+				<div class="row">
+					<section class="feature 6u 12u$(small)">
+						<img class="image fit" src="images/runtests.png" alt="" />
+						<p>TThis procedure is done by right click on <b>Project → Baduino → Run Tests</b>.</p>
+					</section>
+					<section class="feature 6u$ 12u$(small)">
+						<img class="image fit" src="images/visualization.png" alt="" />
+						<p>To visualize DUAs, right Click on <b>project/package/class → Project/Package/Class Visualization</b></p>
+					</section>
+				</div>
+
+				<blockquote>
+					<p>The visualization is hierarchical</p>
+					<p>By clicking in <b>Project Visualization</b> will be shown whole DUAs coverage of the project, and so on.</p>
+				</blockquote>
+
+				<h3 class="align-center">Plugin interface</h3>
+				<img class="image center" src="images/baduino.png" alt="" />
+
+				<p>On the interface, its possible to click on DUAs and the <b>Definition</b> lines and <b>Use</b> lines will be highlighted in the source code like is shown below. Covered DUAs and uncovered DUAs will be highlighted of <b><font color="#58b200">green</font></b> and <b><font color="#dc143c">red</font></b>, respectively.</p>
+
+				<p>Also is possible to remove all highlights by clicking on <img src="images/highlighter.png"> <b>Remove Highlight</b> in the upper right corner of the View.</p>
+
+				<h3 class="align-center">Covered DUA</h3>
+				<img class="image center" src="images/covered.png" alt="" />
+
+				<h3 class="align-center">Uncovered DUA</h3>
+				<img class="image center" src="images/notcovered.png" alt="" />
+
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer id="footer">
+			<div class="container">
+				<p class="align-center copyright"><a href="https://github.com/saeg/baduino/">Baduino</a> is maintained by <a href="https://github.com/saeg">SAEG</a></p>
+
+				<ul class="copyright">
+					<li>&copy; SAEG. All rights reserved.</li>
+					<li>Design: <a href="http://templated.co">Templated</a></li>
+					<!-- <li>Images: <a href="http://unsplash.com">Unsplash</a></li> -->
+
+					<p>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></p>
+				</ul>
+			</div>
+		</footer>
+
+	</body>
+</html>

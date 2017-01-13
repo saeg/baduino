@@ -1,55 +1,106 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#157878">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="assets/css/style.css?v=e1f48f64c461a716e6f5622c739cb9ec954afd2f">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Baduino</h1>
-      <h2 class="project-tagline">BA-DUA Plug-in for Eclipse</h2>
-      
-        <a href="https://github.com/saeg/baduino" class="btn">View on GitHub</a>
-        <a href="https://github.com/saeg/baduino/archive/v0.3.13.zip" class="btn">Download .zip</a>
-        <a href="https://github.com/saeg/baduino/archive/v0.3.13.tar.gz" class="btn">Download .tar.gz</a>
-      
-    </section>
+<!--
+	Interphase by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Baduino</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-layers.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" href="css/style-xlarge.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+	</head>
+	<body class="landing">
 
-    <section class="main-content">
-      <h3>Home</h3>
-      <h3>Instalação</h3>
+		<!-- Header -->
+		<header id="header">
+			<!-- <h1><a href="index.html">Interphase</a></h1> -->
+			<nav id="nav">
+				<ul>
+					<li><a href="index.html">Início</a></li>
+					<li><a href="install.html">Instalação</a></li>
+					<li><a href="howto.html">Exemplo</a></li>
+					<li><a href="index_en.html"><img class="lang_img" src="images/en.png"></a></li>
+				</ul>
+			</nav>
+		</header>
 
-      <h1 id="baduino-eclipse-plugin">Baduino Eclipse Plugin</h1>
-      <h3>Bitwise-Algorithm Definition-Use assocIatioN visualizatiOn</h3>
+		<!-- Banner -->
+		<section id="banner">
+			<h2>Baduino Eclipse Plugin</h2>
+			<p>Bitwise-Algorithm Definition-Use assocIatioN visualizatiOn</p>
+			<ul class="actions">
+				<li><a href="https://github.com/saeg/baduino" class="btn">Ver no GitHub</a></li>
+				<li><a href="https://github.com/saeg/baduino/archive/v0.3.13.zip" class="btn">Download .zip</a></li>
+				<li><a href="https://github.com/saeg/baduino/archive/v0.3.13.tar.gz" class="btn">Download .tar.gz</a></li>
+			</ul>
+		</section>
 
-      <h1 id="o-que-">O que é?</h1>
-      <p>Baduino é um Plugin do Eclipse para visualização de cobertura de critério de testes baseado em fluxo de dados intraprocedimental, ou seja, exibe as associações definição-uso cobertas em cada método do projeto.</p>
+		<!-- One -->
+		<section id="one" class="wrapper style2 align-center">
+			<div class="container">
+				<header>
+					<h2>O que é?</h2>
+				</header>
 
-      <ul>
-        <li>Associaçoes definição-uso (DUA) definem uma relação entre a definição de uma váriavel e o seu subsequente uso.</li>
-      </ul>
+				<p>Baduino é um Plugin do Eclipse para visualização de cobertura de critério de testes baseado em fluxo de dados intraprocedimental, ou seja, exibe as associações definição-uso cobertas em cada método do projeto.</p>
+				<p>Associações definição-uso (DUA) definem uma relação entre a definição de uma váriavel e o seu subsequente uso.</p>
 
-      <h1 id="por-qu">Por quê?</h1>
-      <p>A análise de cobertura de critérios baseado em fluxo de dados é muito custosa, em parte devido ao alto custo de rastrear as DUAs em tempo de execução. Por isso, dificilmente são usadas na prática.</p>
+			</div>
+		</section>
 
-      <p>Para tornar a análise de cobertura de critérios baseado em fluxo de dados escalável para programas reais, a Baduino utiliza a estratégia para cálculo de cobertura de fluxo de dados <a href="http://www.sciencedirect.com/science/article/pii/S0020019013000537">Bitwise-Algorithm</a>.</p>
+		<!-- Two -->
+		<section id="two" class="wrapper style2 align-center">
+			<div class="container">
+				<header>
+					<h2>Por quê?</h2>
+				</header>
 
-      <h1 id="como">Como?</h1>
-      <p>A cobertura é gerada executando os testes com um JUnit Runner. Esse Runner roda os testes com a ferramenta <a href="https://github.com/saeg/ba-dua">ba-dua</a> como agente.</p>
+				<p>A análise de cobertura de critérios baseado em fluxo de dados é muito custosa, em parte devido ao alto custo de rastrear as DUAs em tempo de execução. Por isso, dificilmente são usadas na prática.</p>
+  				<p>Para tornar a análise de cobertura de critérios baseado em fluxo de dados escalável para programas reais, a Baduino utiliza a estratégia para cálculo de cobertura de fluxo de dados <a href="http://www.sciencedirect.com/science/article/pii/S0020019013000537">Bitwise-Algorithm</a>.</p>
 
-      <p>A Ba-dua (Bitwise Algorithm-powered Definition-Use Association) é a ferramenta que implementa o cálculo de cobertura de DUAs.</p>
+			</div>
+		</section>
 
-      <p>O resultado da cobertura obtida é apresentado no Eclipse pela Baduino.</p>
+		<!-- Three -->
+		<section id="three" class="wrapper style2 align-center">
+			<div class="container">
+				<header>
+					<h2>Como?</h2>
+				</header>
 
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/saeg/baduino">Baduino</a> is maintained by <a href="https://github.com/saeg">saeg</a>.</span>
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
-      </footer>
-    </section>
-  </body>
+				<p>A cobertura é gerada executando os testes com um JUnit Runner. Esse Runner roda os testes com a ferramenta <a href="https://github.com/saeg/ba-dua">BA-DUA</a> como agente. A Ba-dua (Bitwise Algorithm-powered Definition-Use Association) é a ferramenta que implementa o cálculo de cobertura de DUAs.</p>
+				<p>O resultado da cobertura obtida é apresentado no Eclipse pela Baduino.</p>
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<footer id="footer">
+			<div class="container">
+				<p class="align-center copyright"><a href="https://github.com/saeg/baduino/">Baduino</a> is maintained by <a href="https://github.com/saeg">SAEG</a></p>
+
+				<ul class="copyright">
+					<li>&copy; SAEG. All rights reserved.</li>
+					<li>Design: <a href="http://templated.co">Templated</a></li>
+					<!-- <li>Images: <a href="http://unsplash.com">Unsplash</a></li> -->
+
+					<p>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></p>
+				</ul>
+			</div>
+		</footer>
+
+	</body>
 </html>
-
