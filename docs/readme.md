@@ -90,7 +90,9 @@ Na visualização é possível clicar nas DUA e as linhas da **Definição** e d
 Também é possível remover todas as DUAs pintadas, clicando no ![highlighter](images/highlighter.png) **Remove Highlight** no canto superior direito da View.
 
 * DUA coberta
+
 ![covered](images/covered.png)
 
 * DUA não coberta
+
 ![notcovered](images/notcovered.png)
