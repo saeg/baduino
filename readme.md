@@ -25,16 +25,16 @@ O resultado da cobertura obtida é apresentado no Eclipse pela Baduino.
 ## Instalação
 
 1. No menu do Eclipse, selecione *Help → Install New Software...*
-![Install01](images/install01.png)
+![Install01](docs/images/install01.png)
 
 2. Na janela *Install*, no campo *Work with*, digite `https://saeg.github.io/update-site`
-![Install02](images/install02.png)
+![Install02](docs/images/install02.png)
 
 3. Selecione a última versão da Baduino e clique em *Next*
-![Install03](images/install03.png)
+![Install03](docs/images/install03.png)
 
 4. Siga os passos do instalador.                        
-![Install04](images/install04.png)
+![Install04](docs/images/install04.png)
 
 ## Requisitos
 * Java 1.8
@@ -52,13 +52,13 @@ A classe Max contém um método que recebe como entrada dois parâmetros (um vet
 
 #### Código fonte
 
-![source](images/source.png)
+![source](docs/images/source.png)
 
 O caso de teste a seguir foi feito usando **JUnit** e verifica se o retorno de `max([1,2], 2)` é 2.
 
 #### Classe de teste
 
-![source](images/test.png)
+![source](docs/images/test.png)
 
 Para conseguir a cobertura de DUAs é necessário executar os testes com o **JUnit**. Isso requer a criação de uma nova **JVM (Java Virtual Machine)** com o classpath do projeto em questão e com a BA-DUA como **JavaAgent**, de forma a instrumentar as classes utilizadas pelos testes e coletar a cobertura de DUAs.
 
@@ -68,27 +68,27 @@ Após ter a cobertura no XML, o plugin se encarrega de exibir as DUAs em sua vis
 
 Todo esse processo é realizado clicando com o botão direito no *Projeto → Baduino → Run Tests*.
 
-![tests](images/runtests.png)
+![tests](docs/images/runtests.png)
 
 Para visualizar as DUAs, é só clicar com o botão direito no *projeto/pacote/classe → Project/Package/Class Visualization*.
 
-![visualization](images/visualization.png)
+![visualization](docs/images/visualization.png)
 
 > A visualização é feita hierarquicamente.
 > Clicando em **Project Visualization** será exibido a cobertura de DUAs de todo o projeto, e assim por diante.
 
 #### Visualização do plugin
 
-![baduino](images/baduino.png)
+![baduino](docs/images/baduino.png)
 
 Na visualização é possível clicar nas DUA e as linhas da **Definição** e do **Uso** serão pintadas no código fonte como mostram as figuras abaixo. DUAs cobertas e não cobertas serão pintadas de **verde** e **vermelho**, respectivamente.
 
-Também é possível remover todas as DUAs pintadas, clicando no ![highlighter](images/highlighter.png) **Remove Highlight** no canto superior direito da View.
+Também é possível remover todas as DUAs pintadas, clicando no ![highlighter](docs/images/highlighter.png) **Remove Highlight** no canto superior direito da View.
 
 #### DUA coberta
 
-![covered](images/covered.png)
+![covered](docs/images/covered.png)
 
 #### DUA não coberta
 
-![notcovered](images/notcovered.png)
+![notcovered](docs/images/notcovered.png)
