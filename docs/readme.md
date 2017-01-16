@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/saeg/baduino.svg?branch=dev)](https://travis-ci.org/saeg/baduino)
+[![Build Status](https://travis-ci.org/saeg/baduino.svg?branch=master)](https://travis-ci.org/saeg/baduino) [![GitHub tag](https://img.shields.io/badge/tag-0.3.13-blue.svg)]()
 
 # Baduino Eclipse Plugin
 Bitwise-Algorithm Definition-Use assocIatioN visualizatiOn
