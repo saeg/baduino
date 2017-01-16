@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/saeg/baduino.svg?branch=dev)](https://travis-ci.org/saeg/baduino)
+
 # Baduino Eclipse Plugin
 Bitwise-Algorithm Definition-Use assocIatioN visualizatiOn
 
@@ -5,23 +7,22 @@ Bitwise-Algorithm Definition-Use assocIatioN visualizatiOn
 * [Requisitos](#requisitos)
 * [Exemplo](#exemplo)
 
-## O que é?
+### O que é?
 Baduino é um Plugin do Eclipse para visualização de cobertura de critério de testes baseado em fluxo de dados intraprocedimental, ou seja, exibe as associações definição-uso cobertas em cada método do projeto.
 
 Associaçoes definição-uso (DUA) definem uma relação entre a definição de uma váriavel e o seu subsequente uso.
 
-## Por quê?
+### Por quê?
 A análise de cobertura de critérios baseado em fluxo de dados é muito custosa, em parte devido ao alto custo de rastrear as DUAs em tempo de execução. Por isso, dificilmente são usadas na prática.
 
 Para tornar a análise de cobertura de critérios baseado em fluxo de dados escalável para programas reais, a Baduino utiliza a estratégia para cálculo de cobertura de fluxo de dados [Bitwise-Algorithm](http://www.sciencedirect.com/science/article/pii/S0020019013000537).
 
-## Como?
+### Como?
 A cobertura é gerada executando os testes com um JUnit Runner. Esse Runner roda os testes com a ferramenta [BA-DUA](https://github.com/saeg/ba-dua) como agente. A Ba-dua (Bitwise Algorithm-powered Definition-Use Association) é a ferramenta que implementa o cálculo de cobertura de DUAs.
 
 O resultado da cobertura obtida é apresentado no Eclipse pela Baduino.
 
----
-# Instalação
+## Instalação
 
 1. No menu do Eclipse, selecione *Help → Install New Software...*
 
@@ -49,18 +50,17 @@ Para uma melhor performance na busca pelas classes, a Baduino usa a nova API Str
 
 É só clicar, executar os testes e visualizar os resultados. Simples.
 
----
-# Exemplo
+## Exemplo
 
 A classe Max contém um método que recebe como entrada dois parâmetros (um vetor de inteiros e um inteiro com o tamanho do vetor) e retorna o maior valor dentro daquele vetor.
 
-* Código fonte
+#### Código fonte
 
 ![source](images/source.png)
 
 O caso de teste a seguir foi feito usando **JUnit** e verifica se o retorno de `max([1,2], 2)` é 2.
 
-* Classe de teste
+#### Classe de teste
 
 ![source](images/test.png)
 
@@ -81,7 +81,7 @@ Para visualizar as DUAs, é só clicar com o botão direito no *projeto/pacote/c
 > A visualização é feita hierarquicamente.
 > Clicando em **Project Visualization** será exibido a cobertura de DUAs de todo o projeto, e assim por diante.
 
-* Visualização do plugin
+#### Visualização do plugin
 
 ![baduino](images/baduino.png)
 
@@ -89,10 +89,10 @@ Na visualização é possível clicar nas DUA e as linhas da **Definição** e d
 
 Também é possível remover todas as DUAs pintadas, clicando no ![highlighter](images/highlighter.png) **Remove Highlight** no canto superior direito da View.
 
-* DUA coberta
+#### DUA coberta
 
 ![covered](images/covered.png)
 
-* DUA não coberta
+#### DUA não coberta
 
 ![notcovered](images/notcovered.png)
