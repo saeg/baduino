@@ -5,7 +5,7 @@ sudo: false
 script: ./mvnw clean verify
 branches:
   only:
-    - dev
+    - master
 notifications:
   email: marioconcilio@gmail.com
   on_success: change
