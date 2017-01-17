@@ -21,21 +21,28 @@ import org.eclipse.jdt.core.JavaModelException;
  */
 public class ProjectModelBuilder {
 	
-	private static final Logger logger = Logger.getLogger(ProjectModel.class);
+	private static final Logger logger = Logger.getLogger(ProjectModelBuilder.class);
 	
-	public static ProjectModel buildModel(IJavaProject javaProject) throws JavaModelException {
+	private IJavaProject javaProject;
+	private IPath locationPath;
+	private IPath outputPath;
+	
+	public ProjectModelBuilder(IJavaProject javaProject) throws JavaModelException {
+		this.javaProject = javaProject;
+		this.locationPath = javaProject.getProject().getLocation();
+		this.outputPath = javaProject.getOutputLocation().removeFirstSegments(1);
+	}
+	
+	public ProjectModel build() throws JavaModelException {
 		final ProjectModel model = new ProjectModel();
-		
-		final IPath locationPath = javaProject.getProject().getLocation();
-		final IPath output = javaProject.getOutputLocation();
 		final String name = javaProject.getProject().getName();
 		
 		model.setJavaProject(javaProject);
 		model.setName(name);
 		model.setLocation(locationPath.toOSString());
-		model.setClassesPath(locationPath.removeLastSegments(1).append(output).toOSString());
+		model.setClassesPath(locationPath.append(outputPath).toOSString());
 		model.setBaduinoPath(locationPath.append(".baduino").toOSString());
-		model.setClasses(searchClasses(javaProject));
+		model.setClasses(getClasses());
 		model.setCoverageBinPath(locationPath.append(".baduino").append("coverage.ser").toOSString());
 		model.setCoverageXmlPath(locationPath.append(".baduino").append("coverage.xml").toOSString());
 		model.setXmlPath(locationPath.append(".baduino").append(name + ".xml").toOSString());
@@ -43,28 +50,23 @@ public class ProjectModelBuilder {
 		return model;
 	}
 	
-	private static List<String> searchClasses(IJavaProject javaProject) throws JavaModelException {
-		return getClassesFiltering(javaProject, ".class");
-	}
-	
-	private static List<String> getClassesFiltering(IJavaProject javaProject, String filter) throws JavaModelException {
-		final IPath locationPath = javaProject.getProject().getLocation();
-		final IPath output = javaProject.getOutputLocation();
-		
+	private List<String> getClasses() throws JavaModelException {
 		// create a list of output IPaths from project classpath
 		Stream<IPath> streamPath = Stream.of(javaProject.readRawClasspath())
 				.map(entry -> entry.getOutputLocation())
-				.filter(path -> path != null);
+				.filter(path -> path != null)
+				.map(entry -> entry.removeFirstSegments(1))
+				.distinct();
 		
 		// add the first output path and make all IPaths absolute
-		streamPath = Stream.concat(streamPath, Stream.of(output))
-				.map(path -> locationPath.removeLastSegments(1).append(path));
+		streamPath = Stream.concat(streamPath, Stream.of(outputPath))
+				.map(path -> locationPath.append(path));
 		
-		// filter all output paths containing Test.class files
-		List<IPath> testPaths = streamPath.filter(path -> {
+		// filter all output paths containing files
+		List<IPath> paths = streamPath.filter(path -> {
 			try (Stream<Path> files = Files.walk(Paths.get(path.toOSString()))) {
 				List<String> filenames = files.map(String::valueOf)
-						.filter(name -> name.endsWith(filter))
+						.filter(name -> name.endsWith(".class"))
 						.collect(Collectors.toList());
 
 				return !filenames.isEmpty();
@@ -78,7 +80,7 @@ public class ProjectModelBuilder {
 				.distinct()
 				.collect(Collectors.toList());
 		
-		List<String> testClasses = testPaths.stream()
+		List<String> classes = paths.stream()
 				.map(ipath -> {
 					final Path absolute = Paths.get(ipath.toOSString());
 
@@ -86,7 +88,7 @@ public class ProjectModelBuilder {
 						List<String> filenames = files
 								.map(path -> absolute.relativize(path)) // get the package, ignoring absolute path
 								.map(String::valueOf)
-								.filter(file -> file.endsWith(filter))
+								.filter(file -> file.endsWith(".class"))
 								.map(file -> file.replace(File.separator, ".").substring(0, file.length() - 6)) // transforming dir notation to package notation and removing '.class'
 								.collect(Collectors.toList());
 
@@ -100,7 +102,12 @@ public class ProjectModelBuilder {
 				.flatMap(x -> x.stream())
 				.collect(Collectors.toList());
 		
-		return testClasses;
+		return classes;
+	}
+	
+	public static ProjectModel buildModel(IJavaProject javaProject) throws JavaModelException {
+		final ProjectModelBuilder builder = new ProjectModelBuilder(javaProject);
+		return builder.build();
 	}
 	
 }
