@@ -1,7 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
  	<groupId>br.usp.each.saeg.baduino</groupId>
  	<artifactId>br.usp.each.saeg.baduino.configuration</artifactId>
@@ -14,15 +11,7 @@
   	<mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
  	</properties>
  	
-  <!-- Repositories should be commented out to only use the target definition
- 	<repositories>
-  	<repository>
-   		<id>mars</id>
-   		<url>${mars-repo.url}</url>
-   		<layout>p2</layout>
-  	</repository>
- 	</repositories>
-  -->
+  
 
   <scm>
     <developerConnection>scm:git:git://github.com/saeg/baduino</developerConnection>
@@ -57,10 +46,10 @@
   			<version>${tycho.version}</version>
   			<configuration>
           <target>
-            <artifact>
+            <artifact id="baduino">
               <groupId>br.usp.each.saeg.baduino</groupId>
               <artifactId>br.usp.each.saeg.baduino.target</artifactId>
-              <version>0.3.14</version>
+              <version>0.3.23</version>
             </artifact>
           </target>
 
@@ -94,15 +83,7 @@
   			</configuration>
  			</plugin>
 
-<!--       <plugin>
-        <groupId>com.rimerosolutions.maven.plugins</groupId>
-        <artifactId>wrapper-maven-plugin</artifactId>
-        <version>0.0.4</version>
-        <inherited>false</inherited>
-        <configuration>
-          <mavenVersion>3.3.1</mavenVersion>
-        </configuration>
-      </plugin> -->
+
 
 		</plugins>
  	</build>

@@ -1,10 +1,5 @@
 package br.usp.each.saeg.baduino.core.launching;
 
-import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
-import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_CLASSPATH;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH;
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME;
@@ -13,15 +8,8 @@ import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ATTR_V
 import static org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION;
 
 import java.io.File;
-import java.io.IOException;
+import java.lang.invoke.MethodHandle;
 import java.net.URISyntaxException;
-import java.nio.file.FileSystem;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchEvent.Kind;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,7 +124,7 @@ public class VMLauncher {
 		classpath.add(badua);
 
 		// baduino
-//		final String path = "/Users/666mario/Documents/develop/each/baduino/bundles/br.usp.each.saeg.baduino.ui/target/br.usp.each.saeg.baduino.ui-0.3.13.jar";
+//		final String path = "/Users/666mario/Documents/develop/each/baduino/bundles/br.usp.each.saeg.baduino.ui/target/br.usp.each.saeg.baduino.ui-0.3.16.jar";
 //		final IPath ipath = new Path(path);
 //		final IRuntimeClasspathEntry entry = JavaRuntime.newArchiveRuntimeClasspathEntry(ipath);
 //		entry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
@@ -148,6 +136,9 @@ public class VMLauncher {
 		// saeg commons
 		final String saeg = mementoForClass(TimeWatch.class);
 		classpath.add(saeg);
+		
+//		final String javaLang = mementoForClass(MethodHandle.class);
+//		classpath.add(javaLang);
 		
 		// setting classpath
 		workingCopy.setAttribute(ATTR_CLASSPATH, classpath);
@@ -192,82 +183,6 @@ public class VMLauncher {
 	private boolean isWindows() {
 		final String os = System.getProperty("os.name").toLowerCase();
 		return (os.indexOf("win") >= 0);
-	}
-	
-	private boolean isMac() {
-		final String os = System.getProperty("os.name").toLowerCase();
-		return (os.indexOf("mac") >= 0);
-	}
-	
-	private final class WatchFolderRunnable implements Runnable {
-		
-		private Thread thread;
-		private final java.nio.file.Path path;
-		
-		public WatchFolderRunnable(String path) {
-			this.path = Paths.get(path);
-		}
-
-		@Override
-		public void run() {
-			try {
-				Boolean isFolder = (Boolean) Files.getAttribute(path, "basic:isDirectory", NOFOLLOW_LINKS);
-				if (!isFolder) {
-					throw new IllegalArgumentException("Path: " + path + " is not a folder");
-				}
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			final FileSystem fs = path.getFileSystem();
-			try (final WatchService service = fs.newWatchService()) {
-				path.register(service, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
-//				path.register(service, new WatchEvent.Kind<?>[]{}, SensitivityWatchEventModifier.HIGH);
-				
-				WatchKey key = null;
-				while (true) {
-					key = service.take();
-					Kind<?> kind = null;
-					for (WatchEvent<?> watchEvent : key.pollEvents()) {
-						kind = watchEvent.kind();
-						
-						@SuppressWarnings("unchecked")
-						WatchEvent<java.nio.file.Path> ev = (WatchEvent<java.nio.file.Path>) watchEvent;
-						java.nio.file.Path fileName = ev.context();
-						
-						if (kind == OVERFLOW) {
-							continue;
-						}
-						else if (kind == ENTRY_CREATE || kind == ENTRY_MODIFY || kind == ENTRY_DELETE) {
-							if (fileName.toString().equals("coverage.ser")) {
-								logger.debug("Coverage file created");
-								for (VMListener listener : listeners) {
-									listener.terminated();
-								}
-								
-								return;
-							}
-						}
-					}
-					
-					if (!key.reset()) {
-						break;
-					}
-				}
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		public void start() {
-			if (thread == null) {
-				thread = new Thread(this);
-				thread.start();
-			}
-		}
-		
 	}
 	
 }

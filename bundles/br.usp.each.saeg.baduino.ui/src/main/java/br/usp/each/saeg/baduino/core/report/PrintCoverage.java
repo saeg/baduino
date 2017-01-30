@@ -12,12 +12,10 @@ public class PrintCoverage implements ICoverageVisitor {
 	
 	private static final Logger logger = Logger.getLogger(PrintCoverage.class);
 
-//	private final PrintStream out;
     private final boolean showClasses;
     private final boolean showMethods;
 
     public PrintCoverage(final boolean showClasses, final boolean showMethods) {
-//        this.out = out;
         this.showClasses = showClasses;
         this.showMethods = showMethods;
     }
@@ -37,31 +35,18 @@ public class PrintCoverage implements ICoverageVisitor {
     }
 
     private void print(final String className, final MethodCoverage coverage) {
-    	logger.info(String.format("%s.%s%s\t(%d/%d)", 
+    	logger.trace(String.format("%s.%s%s\t(%d/%d)", 
     			className,
                 coverage.getName(), coverage.getDesc(),
                 coverage.getDUCounter().getCoveredCount(),
                 coverage.getDUCounter().getTotalCount()));
-    	
-    	/*
-        out.println(String.format("%s.%s%s\t(%d/%d)", className,
-                coverage.getName(), coverage.getDesc(),
-                coverage.getDUCounter().getCoveredCount(),
-                coverage.getDUCounter().getTotalCount()));
-                */
     }
 
     private void print(final ClassCoverage coverage) {
-    	logger.info(String.format("%s\t(%d/%d)", 
+    	logger.trace(String.format("%s\t(%d/%d)", 
     			coverage.getName(),
                 coverage.getDUCounter().getCoveredCount(),
                 coverage.getDUCounter().getTotalCount()));
-    	
-    	/*
-        out.println(String.format("%s\t(%d/%d)", coverage.getName(),
-                coverage.getDUCounter().getCoveredCount(),
-                coverage.getDUCounter().getTotalCount()));
-                */
     }
 
 }

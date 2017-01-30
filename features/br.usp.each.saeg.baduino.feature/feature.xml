@@ -2,7 +2,7 @@
 <feature
       id="br.usp.each.saeg.baduino.feature"
       label="Baduino Feature"
-      version="0.3.14">
+      version="0.3.23">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -220,7 +220,7 @@
          id="br.usp.each.saeg.baduino.ui"
          download-size="0"
          install-size="0"
-         version="0.3.14"
+         version="0.3.23"
          unpack="false"/>
 
 </feature>

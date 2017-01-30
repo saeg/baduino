@@ -25,6 +25,8 @@ public class TestsRunner {
 	}
 	
 	public void run() {
+		logger.debug("Loading classes");
+		
 		// load all classes
 		model.getClasses()
 		.stream()
@@ -37,10 +39,11 @@ public class TestsRunner {
 				logger.error("Unable to find class file for " + clazz);
 			}
 		});
+		logger.debug("Finished loading classes");
 		
 		final Class<?>[] testClasses = model.getClasses()
 				.stream()
-				.filter(clazz -> clazz.endsWith("Test"))
+				.filter(clazz -> clazz.endsWith("Test") || clazz.endsWith("Tests"))
 				.map(name -> {
 					Class<?> clazz = null;
 					try {
@@ -53,13 +56,12 @@ public class TestsRunner {
 					return clazz;
 				})
 				.toArray(Class[]::new);
-
+		logger.debug("Finished loading test classes");
+		logger.debug("Testing with JUnit");
+		
         // Run Tests
-        JUnitCore junit = new JUnitCore();
-        Result result = junit.run(testClasses);
-        
-        String str = String.format("Executed %d tests in %d miliseconds. %d tests failed.", result.getRunCount(), result.getRunTime(), result.getFailureCount());
-        logger.info(str);
+        Result result = JUnitCore.runClasses(testClasses);
+        logger.info(String.format("Executed %d tests in %.3f seconds. %d tests failed.", result.getRunCount(), result.getRunTime()/1000.0, result.getFailureCount()));
         
         if (result.wasSuccessful()) {
         	logger.info("All tests passed.");
