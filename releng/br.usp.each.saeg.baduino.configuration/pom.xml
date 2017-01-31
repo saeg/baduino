@@ -1,99 +1,104 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
- 	<groupId>br.usp.each.saeg.baduino</groupId>
- 	<artifactId>br.usp.each.saeg.baduino.configuration</artifactId>
- 	<version>1.0.0-SNAPSHOT</version>
- 	<packaging>pom</packaging>
- 	
- 	<properties>
-  	<tycho.version>0.26.0</tycho.version>
-  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  	<mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
- 	</properties>
- 	
-  
+	<groupId>br.usp.each.saeg.baduino</groupId>
+	<artifactId>br.usp.each.saeg.baduino.configuration</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-  <scm>
-    <developerConnection>scm:git:git://github.com/saeg/baduino</developerConnection>
-  </scm>
- 	
- 	<build>
+	<name>Baduino</name>
+	<description>BA-DUA Plug-in for Eclipse</description>
+	<url>https://saeg.github.io/baduino/</url>
+	<inceptionYear>2016</inceptionYear>
+	<organization>
+		<name>Software Analysis &amp; Experimentation Group - SAEG</name>
+		<url>https://saeg.github.io</url>
+	</organization>
+
+	<properties>
+		<tycho.version>0.26.0</tycho.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<mars-repo.url>http://download.eclipse.org/releases/mars</mars-repo.url>
+	</properties>
+
+	<scm>
+		<developerConnection>scm:git:git@github.com:saeg/baduino.git</developerConnection>
+		<url>https://github.com/saeg/baduino</url>
+		<tag>HEAD</tag>
+		<connection>scm:git:https://github.com/saeg/baduino.git</connection>
+	</scm>
+
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/saeg/baduino/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis CI</system>
+		<url>https://travis-ci.org/saeg/baduino</url>
+	</ciManagement>
+
+	<build>
 		<plugins>
- 			<plugin>
-  			<groupId>org.eclipse.tycho</groupId>
-  			<artifactId>tycho-maven-plugin</artifactId>
-  			<version>${tycho.version}</version>
-  			<extensions>true</extensions>
- 			</plugin>
-
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-source-plugin</artifactId>
-        <version>${tycho.version}</version>
-        <executions>
-          <execution>
-            <id>plugin-source</id>
-            <goals>
-              <goal>plugin-source</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
- 			<plugin>
-  			<groupId>org.eclipse.tycho</groupId>
-  			<artifactId>target-platform-configuration</artifactId>
-  			<version>${tycho.version}</version>
-  			<configuration>
-          <target>
-            <artifact id="baduino">
-              <groupId>br.usp.each.saeg.baduino</groupId>
-              <artifactId>br.usp.each.saeg.baduino.target</artifactId>
-              <version>0.3.23</version>
-            </artifact>
-          </target>
-
-   				<environments>
-  					<environment>
-   						<os>linux</os>
-   						<ws>gtk</ws>
-   						<arch>x86</arch>
-  					</environment>
-  					<environment>
-   						<os>linux</os>
-   						<ws>gtk</ws>
-   						<arch>x86_64</arch>
-  					</environment>
-  					<environment>
-   						<os>win32</os>
-   						<ws>win32</ws>
-   						<arch>x86</arch>
-  					</environment>
-  					<environment>
-   						<os>win32</os>
-   						<ws>win32</ws>
-   						<arch>x86_64</arch>
-  					</environment>
-  					<environment>
-   						<os>macosx</os>
-   						<ws>cocoa</ws>
-   						<arch>x86_64</arch>
-  					</environment>
-   				</environments>
-  			</configuration>
- 			</plugin>
-
-
-
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>plugin-source</id>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<target>
+						<artifact id="baduino">
+							<groupId>br.usp.each.saeg.baduino</groupId>
+							<artifactId>br.usp.each.saeg.baduino.target</artifactId>
+							<version>0.3.23</version>
+						</artifact>
+					</target>
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
 		</plugins>
- 	</build>
-
-  <distributionManagement>
-    <repository>
-      <id>bintray-marioconcilio-baduino</id>
-      <name>marioconcilio-baduino</name>
-      <url>https://api.bintray.com/maven/marioconcilio/baduino/baduino/;publish=1</url>
-    </repository>
-  </distributionManagement>
- 	
+	</build>
 </project>

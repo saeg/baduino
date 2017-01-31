@@ -16,4 +16,5 @@
   <modules>
   	<module>br.usp.each.saeg.baduino.ui.tests</module>
   </modules>
+  <name>Baduino :: Tests</name>
 </project>

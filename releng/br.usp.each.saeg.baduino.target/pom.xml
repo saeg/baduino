@@ -11,4 +11,5 @@
     <artifactId>br.usp.each.saeg.baduino.releng</artifactId>
     <version>0.3.23</version>
   </parent>
+  <name>Baduino :: Target</name>
 </project>
