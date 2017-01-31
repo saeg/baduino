@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Baduino
 Bundle-SymbolicName: br.usp.each.saeg.baduino.ui;singleton:=true
-Bundle-Version: 0.3.23
+Bundle-Version: 0.3.24
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jdt.ui;bundle-version="3.10.2",
@@ -28,11 +28,6 @@ Export-Package: br.usp.each.saeg.baduino.coverage,
  br.usp.each.saeg.baduino.view,
  br.usp.each.saeg.baduino.xml
 Bundle-ClassPath: .,
- lib/asm-debug-all-4.2.jar,
- lib/asm-defuse-0.0.1.jar,
- lib/saeg-commons-0.0.4.jar,
- lib/jacocoagent.jar,
- lib/jaguarresource.jar,
  lib/ba-dua-agent-rt-0.2.0-all.jar,
  lib/ba-dua-cli-0.2.0-all.jar,
  lib/ba-dua-core-0.2.0.jar

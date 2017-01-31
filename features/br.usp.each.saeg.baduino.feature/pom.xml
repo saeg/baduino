@@ -9,7 +9,7 @@
   <parent>
     <groupId>br.usp.each.saeg.baduino</groupId>
     <artifactId>br.usp.each.saeg.baduino.features</artifactId>
-    <version>0.3.23</version>
+    <version>0.3.24</version>
   </parent>
   <name>Baduino :: Feature</name>
 </project>

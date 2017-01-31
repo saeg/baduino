@@ -24,3 +24,4 @@ tree.write(xml_path)
 
 print "Updating remaining pom in project"
 call("mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=%s -Dtycho.mode=maven" % version, shell=True)
+call("mvn clean verify", shell=True)
