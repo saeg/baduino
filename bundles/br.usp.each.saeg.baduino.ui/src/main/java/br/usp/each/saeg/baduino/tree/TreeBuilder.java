@@ -42,7 +42,8 @@ public class TreeBuilder {
 	}
 	
 	public static TreePackage buildPackage(XMLClass xmlClass) {
-		final int index = xmlClass.getName().lastIndexOf(".");
+		int index = xmlClass.getName().lastIndexOf(".");
+		index = (index < 0)? 0 : index;
 		final String name = xmlClass.getName().substring(0, index);
 		
 		final TreePackage pkg = new TreePackage();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/br.usp.each.saeg.baduino.feature_0.3.24.jar" id="br.usp.each.saeg.baduino.feature" version="0.3.24">
+   <feature url="features/br.usp.each.saeg.baduino.feature_0.3.25.jar" id="br.usp.each.saeg.baduino.feature" version="0.3.25">
       <category name="baduino_category"/>
    </feature>
    <category-def name="baduino_category" label="Baduino Eclipse Plugin">

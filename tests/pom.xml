@@ -9,7 +9,7 @@
   <parent>
     <groupId>br.usp.each.saeg.baduino</groupId>
     <artifactId>br.usp.each.saeg.baduino.root</artifactId>
-    <version>0.3.24</version>
+    <version>0.3.25</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 

@@ -45,7 +45,8 @@ public class TreePackage {
 		this.classes = classes
         		.stream()
         		.filter(clazz -> {
-        			final int index = clazz.getName().lastIndexOf(".");
+        			int index = clazz.getName().lastIndexOf(".");
+        			index = (index < 0)? 0 : index;
         			final String str = clazz.getName().substring(0, index);
         			
         			return str.equals(name);

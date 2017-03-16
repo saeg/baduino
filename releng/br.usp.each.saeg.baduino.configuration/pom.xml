@@ -66,7 +66,7 @@
             <artifact id="baduino">
               <groupId>br.usp.each.saeg.baduino</groupId>
               <artifactId>br.usp.each.saeg.baduino.target</artifactId>
-              <version>0.3.24</version>
+              <version>0.3.25</version>
             </artifact>
           </target>
           <environments>
